@@ -4,10 +4,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>THRProject</groupId>
-  <artifactId>Poker</artifactId>
+  <artifactId>poker</artifactId>
   <version>0.0.1-SNAPSHOT</version>
 
-  <name>Poker</name>
+  <name>poker</name>
   <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
 

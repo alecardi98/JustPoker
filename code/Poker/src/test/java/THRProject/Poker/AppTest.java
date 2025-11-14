@@ -1,4 +1,4 @@
-package THRProject.Poker;
+package THRProject.poker;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

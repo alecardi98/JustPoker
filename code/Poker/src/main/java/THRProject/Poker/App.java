@@ -1,4 +1,4 @@
-package THRProject.Poker;
+package THRProject.poker;
 
 /**
  * Hello world!
