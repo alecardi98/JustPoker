@@ -1,4 +1,4 @@
-package player;
+package THRProject.player;
 
 import THRProject.poker.Carta;
 
