@@ -3,8 +3,9 @@ package THRProject.client;
 public class ClientMain {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+
+		ClientPoker client = new ClientPoker();
+		client.startClient();
 
 	}
-
 }

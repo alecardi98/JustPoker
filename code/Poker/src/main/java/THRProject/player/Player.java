@@ -1,101 +1,131 @@
 package THRProject.player;
 
+import java.io.Serializable;
+import java.util.Objects;
+
 import THRProject.poker.Carta;
 
-public class Player {
-	private String userName;
+public class Player implements Serializable {
+	private final String userName; // userName è l'identificativo del Player
 	private String password;
-	private int fiches;
-	private Carta [] carte;
+	private int fiches; //assegnate dal server
+	private Carta[] carte; //assegnate dal server
 
-	public Player(String userName, String password, int fiches, Carta[] carte) {
+	public Player(String userName, String password) {
 		this.userName = userName;
 		this.password = password;
-		this.fiches = fiches;
-		this.carte = carte;
 	}
-	
-	public void creaPartita(){
-		
+
+	public void creaPartita() {
+
 	}
-	
-	public void partecipaPartita(){
-		
+
+	public void partecipaPartita() {
+
 	}
-	
-	public void esciPartita(){
-		
+
+	public void esciPartita() {
+
 	}
-	
-	public void partecipaInvito(int invito){
-		if(invito>=5 && invito<=100) {			//puntata d'invito tra 5 e 100 
+
+	public void partecipaInvito(int invito) {
+		if (invito >= 5 && invito <= 100) { // puntata d'invito tra 5 e 100
 			punta(invito);
-		}else {
+		} else {
 			System.out.println("errore");
 		}
 	}
-	
-	public void nonPartecipa(){
-												//turno disabilitato per questa mano
+
+	public void nonPartecipa() {
+		// turno disabilitato per questa mano
 	}
-	
-	public void punta(int puntata){				// metodo per effettuare una puntata
-		if(fiches>=puntata) {
-			fiches-=puntata;
-		}else {
+
+	public void punta(int puntata) { // metodo per effettuare una puntata
+		if (fiches >= puntata) {
+			fiches -= puntata;
+		} else {
 			System.out.println("errore");
 		}
-			
+
 	}
-	
-	public void apri(int puntata){
+
+	public void apri(int puntata) {
 		punta(puntata);
 	}
-	
-	public void passa(){
-		
+
+	public void passa() {
+
 	}
-	
-	public void lascia(){
-		
+
+	public void lascia() {
+
 	}
-	
-	public void vedi(){
-		
+
+	public void vedi() {
+
 	}
-	
-	public void cambio(int scelta){
-		
+
+	public void cambio(int scelta) {
+
 	}
-	
-	public void servito(){
-		
+
+	public void servito() {
+
 	}
-	
+
+	/*
+	 * Metodo per confrontare Player
+	 */
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true; // stesso riferimento
+		if (o == null || getClass() != o.getClass())
+			return false;
+
+		Player player = (Player) o;
+		return Objects.equals(userName, player.userName); // confronto solo username
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(userName); // deve essere coerente con equals
+	}
+
+	@Override
+	public String toString() {
+		return userName;
+	}
+
+	/*
+	 * Getter & Setter
+	 */
 	public String getUserName() {
 		return userName;
 	}
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
+
 	public String getPassword() {
 		return password;
 	}
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
 	public int getFiches() {
 		return fiches;
 	}
+
 	public void setFiches(int fiches) {
 		this.fiches = fiches;
 	}
+
 	public Carta[] getCarte() {
 		return carte;
 	}
+
 	public void setCarte(Carta[] carte) {
 		this.carte = carte;
 	}
-	
-	
+
 }

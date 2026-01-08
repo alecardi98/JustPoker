@@ -4,9 +4,9 @@ public class ServerMain {
 
 	public static void main(String[] args) {
 
-		ServerPoker.getServer().startServer();
-		
-		
+		ServerPoker server = ServerPoker.getServerPoker();
+		server.startServer();
+
 	}
 
 }
