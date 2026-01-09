@@ -4,12 +4,15 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 import THRProject.poker.Game;
 import THRProject.poker.Player;
+import THRProject.server.ServerPoker;
 
 public class ClientPoker {
+
+	ObjectOutputStream out;
+	ObjectInputStream in;
 
 	private static final String HOST = "localhost";
 //	private static final String HOST = "204.216.208.188";
@@ -22,27 +25,27 @@ public class ClientPoker {
 	}
 
 	public void startClient() {
-//		Player player = dbConnection();
+		Player player = dbConnection();
+		this.player = player;
 		try {
 			Socket socket = new Socket(HOST, PORT);
-			System.out.println("Connesso al server");
-			ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+			System.out.println(player + " : connesso al server");
+			out = new ObjectOutputStream(socket.getOutputStream());
+			in = new ObjectInputStream(socket.getInputStream());
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("ERRORE! Impossibile connettersi alla partita.\n");
 		}
 
-//		this.player = player;
-//		out.writeObject(player); // invia subito il player al server
-//		out.flush();
-//		System.out.println("Player inviato al server: " + player);
+		while (!player.isQuit()) {
+			// TO DO
+		}
 	}
 
 	/*
 	 * Metodo che permette di creare un player valido da DB
 	 */
 	private Player dbConnection() {
-		// controllo dati
+		// TO DO
 		return new Player("userName", "password"); // creazione Player con dati corretti
 	}
 

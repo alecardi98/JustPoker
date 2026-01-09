@@ -1,25 +1,31 @@
 package THRProject.poker;
 
 import java.io.Serializable;
-import java.util.Objects;
+import java.util.ArrayList;
 
-public class Player implements Serializable {
-	private final String userName; // userName è l'identificativo del Player
+public class Player implements Serializable{
+	
+	private final String userName; 
 	private String password;
-	private int fiches; //assegnate dal server
-	private Carta[] carte; //assegnate dal server
+	private boolean isActive; // indica se il player è attivo al tavolo (non ha foldato)
+	private boolean quit; //indica quando il giocatore ha lasciato la partita
+	private int fiches; 
+	private ArrayList<Carta> hand; 
 
 	public Player(String userName, String password) {
 		this.userName = userName;
 		this.password = password;
+		isActive = true;
+		quit = false;
+		hand = new ArrayList<Carta>();
 	}
 
 	public void creaPartita() {
-
+		//METODO CHE NON SERVE! IL SERVER E' GIA' UNA PARTITA! CANCELLARE ANCHE DOCUMENTAZIONE
 	}
 
 	public void partecipaPartita() {
-
+		//METODO CHE NON SERVE! IL SERVER E' GIA' UNA PARTITA! CANCELLARE ANCHE DOCUMENTAZIONE
 	}
 
 	public void esciPartita() {
@@ -71,25 +77,6 @@ public class Player implements Serializable {
 
 	}
 
-	/*
-	 * Metodo per confrontare Player
-	 */
-	@Override
-	public boolean equals(Object o) {
-		if (this == o)
-			return true; // stesso riferimento
-		if (o == null || getClass() != o.getClass())
-			return false;
-
-		Player player = (Player) o;
-		return Objects.equals(userName, player.userName); // confronto solo username
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(userName); // deve essere coerente con equals
-	}
-
 	@Override
 	public String toString() {
 		return userName;
@@ -118,12 +105,28 @@ public class Player implements Serializable {
 		this.fiches = fiches;
 	}
 
-	public Carta[] getCarte() {
-		return carte;
+	public ArrayList<Carta> getCarte() {
+		return hand;
 	}
 
-	public void setCarte(Carta[] carte) {
-		this.carte = carte;
+	public void setCarte(ArrayList<Carta> hand) {
+		this.hand = hand;
+	}
+	
+	public boolean isActive() {
+		return isActive;
+	}
+
+	public void setIsActive(boolean isActive) {
+		this.isActive = isActive;
+	}
+
+	public boolean isQuit() {
+		return quit;
+	}
+
+	public void setQuit(boolean quit) {
+		this.quit = quit;
 	}
 
 }

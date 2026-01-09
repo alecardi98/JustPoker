@@ -3,28 +3,55 @@ package THRProject.server;
 import java.io.*;
 import java.net.*;
 
-import THRProject.poker.Player;
+import THRProject.message.Message;
 
 /*
  * Classe che rappresenta il thread del server che gestirà la connessione con un client 
  */
 class ClientHandler implements Runnable {
 
-	private Socket socket;
+	private Socket clientSocket;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
-	private Player player;
+	private static int countId = 0;
+	private final int clientId; // identifica il client al quale è connesso il clienthandler
 
-	public ClientHandler(Socket socket) {
-		this.socket = socket;
-
-		// creazione oggetti per i flussi di oggetti tra client/server
+	public ClientHandler(Socket clientSocket) {
+		this.clientSocket = clientSocket;
+		clientId = nextId();
 		try {
-			this.out = new ObjectOutputStream(socket.getOutputStream());
-			this.in = new ObjectInputStream(socket.getInputStream());
+			this.out = new ObjectOutputStream(clientSocket.getOutputStream());
+			this.in = new ObjectInputStream(clientSocket.getInputStream());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	/*
+	 * Metodo per ricevere oggetti dai client: ogni ClientHandler sarà associato ad
+	 * un client, e si occuperà di gestire il flusso di messaggi
+	 */
+	@Override
+	public void run() {
+//		try {
+//			Object obj;
+//			while ((obj = in.readObject()) != null) {
+//				Message msg = (Message) obj;
+
+				// gestione delle richieste del Client
+//				switch (msg.getType()) {
+//				case:
+//					break;
+//
+//				default:
+//					System.out.println("ERRORE! Messaggio sconosciuto.\n");
+//					break;
+//				}
+//
+//			}
+//		} catch (IOException | ClassNotFoundException e) {
+//			System.out.println("Client disconnesso.");
+//		}
 	}
 
 	/*
@@ -40,18 +67,17 @@ class ClientHandler implements Runnable {
 	}
 
 	/*
-	 * Metodo per ricevere oggetti dal client
+	 * Metodo per incrementare il contatore dei client in modo atomico
 	 */
-	@Override
-	public void run() {
-		try {
-			Object obj;
-			while ((obj = in.readObject()) != null) {
-				
-				
-			}
-		} catch (IOException | ClassNotFoundException e) {
-			System.out.println("Client disconnesso.");
-		}
+	public synchronized static int nextId() {
+		return countId++;
 	}
+
+	/*
+	 * Getter & Setter
+	 */
+	public int getClientId() {
+		return clientId;
+	}
+
 }

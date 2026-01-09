@@ -1,50 +1,46 @@
 package THRProject.poker;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /*
  * Classe che rappresenta lo stato del gioco
 */
-public class Game implements Serializable {
+public class Game {
 
-	private ArrayList<Player> turnazione; // rappresenta i player nell'ordine di gioco
-	private ArrayList<Player> table; // rappresenta i player attivi nell'ordine di gioco
-
-	private int piatto; // valore totale scommesso dai giocatori
+	private int currentTurn; // indica a chi tocca (ID del player)
+	private ArrayList<Player> turnOrder; // rappresenta i player nell'ordine di gioco
+	private int bets; // valore totale scommesso dai giocatori
 
 	public Game() {
-		turnazione = new ArrayList<Player>();
-		table = new ArrayList<Player>();
-		piatto = 0;
+		turnOrder = new ArrayList<Player>();
+		currentTurn = 0;
 	}
 
 	/*
 	 * Getter & Setter
 	 */
-	public ArrayList<Player> getTurnazione() {
-		return turnazione;
+	public ArrayList<Player> getTurnOrder() {
+		return turnOrder;
 	}
 
-	public void setTurnazione(ArrayList<Player> turnazione) {
-		this.turnazione = turnazione;
+	public void setTurnOrder(ArrayList<Player> turnOrder) {
+		this.turnOrder = turnOrder;
 	}
 
-	public int getPiatto() {
-		return piatto;
+	public int getBets() {
+		return bets;
 	}
 
-	public void setPiatto(int piatto) {
-		this.piatto = piatto;
+	public void setBets(int bets) {
+		this.bets = bets;
 	}
 
-	public void setTable(ArrayList<Player> table) {
-		this.table = table;
-
+	public int getCurrentTurn() {
+		return currentTurn;
 	}
 
-	public ArrayList<Player> getTable() {
-		return table;
+	public void setCurrentTurn(int currentTurn) {
+		this.currentTurn = currentTurn;
 	}
 
 }
