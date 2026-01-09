@@ -3,8 +3,6 @@ package THRProject.poker;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import THRProject.player.Player;
-
 /*
  * Classe che rappresenta lo stato del gioco
 */

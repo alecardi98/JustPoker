@@ -2,7 +2,8 @@ package THRProject.server;
 
 import java.io.*;
 import java.net.*;
-import THRProject.player.Player;
+
+import THRProject.poker.Player;
 
 /*
  * Classe che rappresenta il thread del server che gestirà la connessione con un client 
@@ -46,10 +47,11 @@ class ClientHandler implements Runnable {
 		try {
 			Object obj;
 			while ((obj = in.readObject()) != null) {
-				// clienthandler leggerà le richieste del client e deciderà se eseguirle o no
+				
+				
 			}
 		} catch (IOException | ClassNotFoundException e) {
-			System.out.println("Client " + player + " disconnesso.");
+			System.out.println("Client disconnesso.");
 		}
 	}
 }

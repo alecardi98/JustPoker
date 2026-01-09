@@ -8,12 +8,11 @@ import java.util.Collections;
 import java.util.List;
 
 import THRProject.poker.Game;
-import THRProject.player.Player;
+import THRProject.poker.Player;
 
 public class ServerPoker {
 
-	private static final int PORT = 45000;
-//	private static final int PORT = 5000;
+	private static final int PORT = 443;
 	private static List<ClientHandler> clientHandlers = Collections.synchronizedList(new ArrayList<>());
 	private static ServerPoker server;
 	private Game game = new Game();

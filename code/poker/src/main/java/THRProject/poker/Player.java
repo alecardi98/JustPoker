@@ -1,9 +1,7 @@
-package THRProject.player;
+package THRProject.poker;
 
 import java.io.Serializable;
 import java.util.Objects;
-
-import THRProject.poker.Carta;
 
 public class Player implements Serializable {
 	private final String userName; // userName è l'identificativo del Player

@@ -6,15 +6,14 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import THRProject.player.Player;
 import THRProject.poker.Game;
+import THRProject.poker.Player;
 
 public class ClientPoker {
 
-	private static final String HOST = "204.216.208.188";
-	private static final int PORT = 45000;
-//	private static final String HOST = "localhost";
-//	private static final int PORT = 5000;
+	private static final String HOST = "localhost";
+//	private static final String HOST = "204.216.208.188";
+	private static final int PORT = 443;
 
 	private Game game;
 	private Player player;
@@ -32,7 +31,7 @@ public class ClientPoker {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 //		this.player = player;
 //		out.writeObject(player); // invia subito il player al server
 //		out.flush();
