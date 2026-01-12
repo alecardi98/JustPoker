@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.*;
 
 import THRProject.message.Message;
+import THRProject.poker.Player;
 
 /*
  * Classe che rappresenta il thread del server che gestirà la connessione con un client 
@@ -13,8 +14,8 @@ class ClientHandler implements Runnable {
 	private Socket clientSocket;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
-	private static int countId = 0;
-	private final int clientId; // identifica il client al quale è connesso il clienthandler
+	private static int countId = 1; // assegazione id incrementale a partire da 1 a 
+	private final int clientId; // client al quale è connesso il clienthandler (funge anche da id turno)
 
 	public ClientHandler(Socket clientSocket) {
 		this.clientSocket = clientSocket;
@@ -33,25 +34,33 @@ class ClientHandler implements Runnable {
 	 */
 	@Override
 	public void run() {
-//		try {
-//			Object obj;
-//			while ((obj = in.readObject()) != null) {
-//				Message msg = (Message) obj;
+		try {
+			Object obj;
+			while ((obj = in.readObject()) != null) {
+				Message msg = (Message) obj;
 
 				// gestione delle richieste del Client
-//				switch (msg.getType()) {
-//				case:
-//					break;
-//
-//				default:
-//					System.out.println("ERRORE! Messaggio sconosciuto.\n");
-//					break;
-//				}
-//
-//			}
-//		} catch (IOException | ClassNotFoundException e) {
-//			System.out.println("Client disconnesso.");
-//		}
+				switch (msg.getType()) {
+				case PLAYER_JOIN:
+					handlePlayerJoin((Player) msg.getData());
+					break;
+
+				default:
+					System.out.println("ERRORE! Messaggio sconosciuto.\n");
+					break;
+				}
+
+			}
+		} catch (IOException | ClassNotFoundException e) {
+			System.out.println("Client disconnesso.");
+		}
+	}
+
+	/*
+	 * Metodo per la gestione del messaggio di PLAYER_JOIN
+	 */
+	private void handlePlayerJoin(Player player) {
+		Server.getServerPoker().registerPlayer(clientId, player);
 	}
 
 	/*
@@ -69,7 +78,7 @@ class ClientHandler implements Runnable {
 	/*
 	 * Metodo per incrementare il contatore dei client in modo atomico
 	 */
-	public synchronized static int nextId() {
+	public static synchronized int nextId() {
 		return countId++;
 	}
 

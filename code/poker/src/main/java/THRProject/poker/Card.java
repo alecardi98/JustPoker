@@ -1,14 +1,21 @@
 package THRProject.poker;
 
-public class Carta {
-	private Seme seme;
+public class Card {
+	private Suit seme;
 	private int valore;
 
-	public Carta(Seme seme, int valore) {
+	public Card(Suit seme, int valore) {
 		this.seme = seme;
 		this.valore = valore;
 	}
 
+	public String toString() {
+		return valore + " " + seme.toString();
+	}
+
+	/*
+	 * Getter & Setter
+	 */
 	public int getValore() {
 		return valore;
 	}
@@ -17,11 +24,12 @@ public class Carta {
 		this.valore = valore;
 	}
 
-	public Seme getSeme() {
+	public Suit getSeme() {
 		return seme;
 	}
 
-	public void setSeme(Seme seme) {
+	public void setSeme(Suit seme) {
 		this.seme = seme;
 	}
+
 }

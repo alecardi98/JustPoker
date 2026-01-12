@@ -4,7 +4,7 @@ public class ClientMain {
 
 	public static void main(String[] args) {
 
-		ClientPoker client = new ClientPoker();
+		Client client = new Client();
 		client.startClient();
 
 	}

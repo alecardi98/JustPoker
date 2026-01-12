@@ -1,6 +1,6 @@
 package THRProject.poker;
 
-import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 
 /*
  * Classe che rappresenta lo stato del gioco
@@ -8,31 +8,26 @@ import java.util.ArrayList;
 public class Game {
 
 	private int currentTurn; // indica a chi tocca (ID del player)
-	private ArrayList<Player> turnOrder; // rappresenta i player nell'ordine di gioco
+	private ConcurrentHashMap<Integer, Player> players; // rappresenta i player abbinati al loro clientId
 	private int bets; // valore totale scommesso dai giocatori
+	private Deck deck; // deck che contiene le informazioni sulle carte da gioco
 
 	public Game() {
-		turnOrder = new ArrayList<Player>();
-		currentTurn = 0;
+		players = new ConcurrentHashMap<Integer, Player>();
+		currentTurn = 1;
+		bets = 0;
+		deck = new Deck();
 	}
 
 	/*
 	 * Getter & Setter
 	 */
-	public ArrayList<Player> getTurnOrder() {
-		return turnOrder;
-	}
-
-	public void setTurnOrder(ArrayList<Player> turnOrder) {
-		this.turnOrder = turnOrder;
+	public ConcurrentHashMap<Integer, Player> getPlayers() {
+		return players;
 	}
 
 	public int getBets() {
 		return bets;
-	}
-
-	public void setBets(int bets) {
-		this.bets = bets;
 	}
 
 	public int getCurrentTurn() {
@@ -41,6 +36,10 @@ public class Game {
 
 	public void setCurrentTurn(int currentTurn) {
 		this.currentTurn = currentTurn;
+	}
+
+	public Deck getDeck() {
+		return deck;
 	}
 
 }

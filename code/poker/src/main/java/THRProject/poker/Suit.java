@@ -1,5 +1,5 @@
 package THRProject.poker;
 
-public enum Seme {
+public enum Suit {
 	CUORI, QUADRI, FIORI, PICCHE
 }

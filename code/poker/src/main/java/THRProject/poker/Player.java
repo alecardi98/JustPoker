@@ -5,19 +5,19 @@ import java.util.ArrayList;
 
 public class Player implements Serializable{
 	
-	private final String userName; 
+	private final String username; 
 	private String password;
 	private boolean isActive; // indica se il player è attivo al tavolo (non ha foldato)
 	private boolean quit; //indica quando il giocatore ha lasciato la partita
 	private int fiches; 
-	private ArrayList<Carta> hand; 
+	private ArrayList<Card> hand; 
 
 	public Player(String userName, String password) {
-		this.userName = userName;
+		this.username = userName;
 		this.password = password;
 		isActive = true;
 		quit = false;
-		hand = new ArrayList<Carta>();
+		hand = new ArrayList<Card>();
 	}
 
 	public void creaPartita() {
@@ -79,14 +79,14 @@ public class Player implements Serializable{
 
 	@Override
 	public String toString() {
-		return userName;
+		return username;
 	}
 
 	/*
 	 * Getter & Setter
 	 */
-	public String getUserName() {
-		return userName;
+	public String getUsername() {
+		return username;
 	}
 
 	public String getPassword() {
@@ -105,14 +105,10 @@ public class Player implements Serializable{
 		this.fiches = fiches;
 	}
 
-	public ArrayList<Carta> getCarte() {
+	public ArrayList<Card> getHand() {
 		return hand;
 	}
 
-	public void setCarte(ArrayList<Carta> hand) {
-		this.hand = hand;
-	}
-	
 	public boolean isActive() {
 		return isActive;
 	}
