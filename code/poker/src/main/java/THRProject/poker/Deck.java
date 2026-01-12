@@ -19,25 +19,12 @@ public class Deck implements Serializable {
 	 */
 	public void createSample() {
 		sample = new ArrayList<Card>();
-		for (int i = 7; i <= 13; i++) {
+		for (int i = 7; i <= 14; i++) {
 			sample.add(new Card(Suit.CUORI, i));
-		}
-		sample.add(new Card(Suit.CUORI, 1));
-
-		for (int i = 7; i <= 13; i++) {
 			sample.add(new Card(Suit.QUADRI, i));
-		}
-		sample.add(new Card(Suit.QUADRI, 1));
-
-		for (int i = 7; i <= 13; i++) {
 			sample.add(new Card(Suit.FIORI, i));
-		}
-		sample.add(new Card(Suit.FIORI, 1));
-
-		for (int i = 7; i <= 13; i++) {
 			sample.add(new Card(Suit.PICCHE, i));
 		}
-		sample.add(new Card(Suit.PICCHE, 1));
 	}
 
 	/*

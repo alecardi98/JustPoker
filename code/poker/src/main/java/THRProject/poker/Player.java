@@ -9,7 +9,6 @@ public class Player implements Serializable {
 	private final String username;
 	private String password;
 	private boolean isActive; // indica se il player è attivo al tavolo (non ha foldato)
-	private boolean quit; // indica quando il giocatore ha lasciato la partita
 	private int fiches;
 	private ArrayList<Card> hand;
 
@@ -17,7 +16,6 @@ public class Player implements Serializable {
 		this.username = userName;
 		this.password = password;
 		isActive = true;
-		quit = false;
 		hand = new ArrayList<Card>();
 	}
 
@@ -31,6 +29,11 @@ public class Player implements Serializable {
 		// DOCUMENTAZIONE
 	}
 
+	/*
+	 * Metodo che permette di abbandonare la partita dalla fine della mano. Il
+	 * client non potrà più connettersi poichè il server non sarà aperto a nuove
+	 * connessioni durante la partita
+	 */
 	public void esciPartita() {
 
 	}
@@ -114,14 +117,6 @@ public class Player implements Serializable {
 
 	public void setIsActive(boolean isActive) {
 		this.isActive = isActive;
-	}
-
-	public boolean isQuit() {
-		return quit;
-	}
-
-	public void setQuit(boolean quit) {
-		this.quit = quit;
 	}
 
 	public List<Card> getHand() {

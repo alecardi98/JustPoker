@@ -12,7 +12,24 @@ public class Card implements Serializable {
 	}
 
 	public String toString() {
-		return valore + " " + seme.toString();
+		String nome;
+		switch (valore) {
+		case 11:
+			nome = "J";
+			break;
+		case 12:
+			nome = "Q";
+			break;
+		case 13:
+			nome = "K";
+			break;
+		case 14:
+			nome = "A";
+			break;
+		default:
+			nome = "" + valore;
+		}
+		return nome + " " + seme.toString();
 	}
 
 	/*

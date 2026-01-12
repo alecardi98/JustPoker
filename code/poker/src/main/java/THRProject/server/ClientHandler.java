@@ -25,7 +25,7 @@ class ClientHandler implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		sendMessage(new Message(MessageType.CLIENT_ID,clientId)); //invio clientId
+		sendMessage(new Message(MessageType.CLIENT_ID, clientId)); // invio clientId
 	}
 
 	/*

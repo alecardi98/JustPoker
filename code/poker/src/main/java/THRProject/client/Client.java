@@ -18,11 +18,13 @@ public class Client {
 //	private static final String HOST = "204.216.208.188";
 	private static final int PORT = 443;
 
+	private boolean quit; // indica quando il client ha lasciato la partita
 	private Game gameView; // variabile che contiene solo i dati personali del game
 	private int clientId;
 	private Player player;
 
 	public Client() {
+		quit = false;
 	}
 
 	public void startClient() {
@@ -92,6 +94,14 @@ public class Client {
 
 	public Player getPlayer() {
 		return player;
+	}
+	
+	public boolean isQuit() {
+		return quit;
+	}
+
+	public void setQuit(boolean quit) {
+		this.quit = quit;
 	}
 
 }
