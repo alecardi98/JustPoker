@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.*;
 
 import THRProject.message.Message;
+import THRProject.message.MessageType;
 import THRProject.poker.Player;
 
 /*
@@ -11,14 +12,12 @@ import THRProject.poker.Player;
  */
 class ClientHandler implements Runnable {
 
-	private Socket clientSocket;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
-	private static int countId = 1; // assegazione id incrementale a partire da 1 a 
+	private static int countId = 0; // assegazione id incrementale a partire da 0
 	private final int clientId; // client al quale è connesso il clienthandler (funge anche da id turno)
 
 	public ClientHandler(Socket clientSocket) {
-		this.clientSocket = clientSocket;
 		clientId = nextId();
 		try {
 			this.out = new ObjectOutputStream(clientSocket.getOutputStream());
@@ -26,6 +25,7 @@ class ClientHandler implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		sendMessage(new Message(MessageType.CLIENT_ID,clientId)); //invio clientId
 	}
 
 	/*
@@ -64,7 +64,7 @@ class ClientHandler implements Runnable {
 	}
 
 	/*
-	 * Metodo per inviare oggetti al client
+	 * Metodo per inviare messaggi al client
 	 */
 	public void sendMessage(Object msg) {
 		try {

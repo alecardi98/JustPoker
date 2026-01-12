@@ -1,9 +1,10 @@
 package THRProject.poker;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Deck {
+public class Deck implements Serializable {
 
 	private ArrayList<Card> cards; // carte effettivamente usate
 	private ArrayList<Card> sample; // variabile per non generare ogni volta il mazzo da zero
@@ -19,24 +20,24 @@ public class Deck {
 	public void createSample() {
 		sample = new ArrayList<Card>();
 		for (int i = 7; i <= 13; i++) {
-			sample.add(new Card(Suit.CUORI,i));
+			sample.add(new Card(Suit.CUORI, i));
 		}
-		sample.add(new Card(Suit.CUORI,1));
-		
+		sample.add(new Card(Suit.CUORI, 1));
+
 		for (int i = 7; i <= 13; i++) {
-			sample.add(new Card(Suit.QUADRI,i));
+			sample.add(new Card(Suit.QUADRI, i));
 		}
-		sample.add(new Card(Suit.QUADRI,1));
-		
+		sample.add(new Card(Suit.QUADRI, 1));
+
 		for (int i = 7; i <= 13; i++) {
-			sample.add(new Card(Suit.FIORI,i));
+			sample.add(new Card(Suit.FIORI, i));
 		}
-		sample.add(new Card(Suit.FIORI,1));
-		
+		sample.add(new Card(Suit.FIORI, 1));
+
 		for (int i = 7; i <= 13; i++) {
-			sample.add(new Card(Suit.PICCHE,i));
+			sample.add(new Card(Suit.PICCHE, i));
 		}
-		sample.add(new Card(Suit.PICCHE,1));
+		sample.add(new Card(Suit.PICCHE, 1));
 	}
 
 	/*

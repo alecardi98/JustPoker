@@ -2,15 +2,16 @@ package THRProject.poker;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
-public class Player implements Serializable{
-	
-	private final String username; 
+public class Player implements Serializable {
+
+	private final String username;
 	private String password;
 	private boolean isActive; // indica se il player è attivo al tavolo (non ha foldato)
-	private boolean quit; //indica quando il giocatore ha lasciato la partita
-	private int fiches; 
-	private ArrayList<Card> hand; 
+	private boolean quit; // indica quando il giocatore ha lasciato la partita
+	private int fiches;
+	private ArrayList<Card> hand;
 
 	public Player(String userName, String password) {
 		this.username = userName;
@@ -21,11 +22,13 @@ public class Player implements Serializable{
 	}
 
 	public void creaPartita() {
-		//METODO CHE NON SERVE! IL SERVER E' GIA' UNA PARTITA! CANCELLARE ANCHE DOCUMENTAZIONE
+		// METODO CHE NON SERVE! IL SERVER E' GIA' UNA PARTITA! CANCELLARE ANCHE
+		// DOCUMENTAZIONE
 	}
 
 	public void partecipaPartita() {
-		//METODO CHE NON SERVE! IL SERVER E' GIA' UNA PARTITA! CANCELLARE ANCHE DOCUMENTAZIONE
+		// METODO CHE NON SERVE! IL SERVER E' GIA' UNA PARTITA! CANCELLARE ANCHE
+		// DOCUMENTAZIONE
 	}
 
 	public void esciPartita() {
@@ -105,10 +108,6 @@ public class Player implements Serializable{
 		this.fiches = fiches;
 	}
 
-	public ArrayList<Card> getHand() {
-		return hand;
-	}
-
 	public boolean isActive() {
 		return isActive;
 	}
@@ -123,6 +122,10 @@ public class Player implements Serializable{
 
 	public void setQuit(boolean quit) {
 		this.quit = quit;
+	}
+
+	public List<Card> getHand() {
+		return hand;
 	}
 
 }

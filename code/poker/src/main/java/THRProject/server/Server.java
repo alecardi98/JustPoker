@@ -7,8 +7,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
+import THRProject.message.Message;
+import THRProject.message.MessageType;
 import THRProject.poker.Card;
 import THRProject.poker.Game;
 import THRProject.poker.Player;
@@ -46,7 +47,7 @@ public class Server {
 				clientHandlers.add(handler);
 				new Thread(handler).start();
 
-			} while (clientHandlers.size() < MAXPLAYERS); // giocano solo PLAYERSNUM giocatori
+			} while (clientHandlers.size() < MAXPLAYERS); // giocano solo MAXPLAYERS giocatori
 
 		} catch (IOException e) {
 			System.err.println("ERRORE! Il server non riesce a creare il socket.\n");
@@ -77,10 +78,10 @@ public class Server {
 	 * Fa partire la partita e gestisce il flusso di gioco
 	 */
 	private void startGame() {
-		//do {
-			manageCards();
-			startHand();
-		//} while (game.getPlayers().size() > 1);
+		// do {
+		manageCards();
+		startHand();
+		// } while (game.getPlayers().size() > 1);
 	}
 
 	/*
@@ -118,10 +119,28 @@ public class Server {
 	 * Metodo che gestisce la turnazione dei giocatori nelle diverse fasi
 	 */
 	private void startHand() {
-		for (ClientHandler c : clientHandlers) {
-			if (game.getCurrentTurn() == c.getClientId()) {
+		generateSafeView();
+		while(true);
+		// TO DO
+	}
 
+	/*
+	 * Metodo per creare una view dello stato di game che non esponga dati sensibili
+	 * agli altri player
+	 */
+	private void generateSafeView() {
+		for (ClientHandler c : clientHandlers) {
+			Game gameView = new Game();
+			gameView.setDeck(null);
+			gameView.setCurrentTurn(game.getCurrentTurn());
+			gameView.setBets(game.getBets());
+			for (Map.Entry<Integer, Player> entry : game.getPlayers().entrySet()) {
+				if (entry.getKey() == c.getClientId()) {
+					gameView.getPlayers().put(entry.getKey(), entry.getValue());
+				}
 			}
+
+			c.sendMessage(new Message(MessageType.UPDATE_GAME, gameView));
 		}
 	}
 
@@ -132,7 +151,7 @@ public class Server {
 	 */
 	private void nextTurn() {
 		if (game.getCurrentTurn() == clientHandlers.size()) {
-			game.setCurrentTurn(1);
+			game.setCurrentTurn(0);
 		} else {
 			game.setCurrentTurn(game.getCurrentTurn() + 1);
 		}
@@ -155,7 +174,6 @@ public class Server {
 	public static Server getServerPoker() {
 		if (server == null)
 			server = new Server();
-
 		return server;
 	}
 

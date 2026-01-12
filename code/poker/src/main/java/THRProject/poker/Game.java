@@ -1,11 +1,12 @@
 package THRProject.poker;
 
+import java.io.Serializable;
 import java.util.concurrent.ConcurrentHashMap;
 
 /*
  * Classe che rappresenta lo stato del gioco
 */
-public class Game {
+public class Game implements Serializable {
 
 	private int currentTurn; // indica a chi tocca (ID del player)
 	private ConcurrentHashMap<Integer, Player> players; // rappresenta i player abbinati al loro clientId
@@ -14,7 +15,7 @@ public class Game {
 
 	public Game() {
 		players = new ConcurrentHashMap<Integer, Player>();
-		currentTurn = 1;
+		currentTurn = 0;
 		bets = 0;
 		deck = new Deck();
 	}
@@ -40,6 +41,14 @@ public class Game {
 
 	public Deck getDeck() {
 		return deck;
+	}
+
+	public void setDeck(Deck deck) {
+		this.deck = deck;
+	}
+
+	public void setBets(int bets) {
+		this.bets = bets;
 	}
 
 }

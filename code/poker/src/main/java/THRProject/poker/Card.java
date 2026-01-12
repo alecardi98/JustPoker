@@ -1,6 +1,8 @@
 package THRProject.poker;
 
-public class Card {
+import java.io.Serializable;
+
+public class Card implements Serializable {
 	private Suit seme;
 	private int valore;
 
