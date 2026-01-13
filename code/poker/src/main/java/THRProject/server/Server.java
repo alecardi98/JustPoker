@@ -140,7 +140,7 @@ public class Server {
 				}
 			}
 
-			c.sendMessage(new Message(MessageType.UPDATE_GAME, gameView));
+			c.sendMessage(new Message(MessageType.START_GAME, gameView));
 		}
 	}
 

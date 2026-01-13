@@ -30,11 +30,6 @@ public class Client {
 	public void startClient() {
 		player = dbConnection();
 		serverConnection();
-
-		while(true);
-		// do {
-
-		// }while(!player.isQuit());
 	}
 
 	/*
@@ -75,10 +70,14 @@ public class Client {
 	}
 
 	/*
-	 * Metodo chiamato dal clienthandler che fa partire la partita del client
+	 * Metodo chiamato dal serverListener che fa partire la partita del client
 	 */
 	public void startToPlay() {
 		// TO DO
+
+		// do {
+
+		// }while(!player.isQuit());
 	}
 
 	/*

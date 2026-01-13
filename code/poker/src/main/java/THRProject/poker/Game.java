@@ -9,11 +9,13 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Game implements Serializable {
 
 	private int currentTurn; // indica a chi tocca (ID del player)
+	private GamePhase phase; // indica la fase di gioco
 	private ConcurrentHashMap<Integer, Player> players; // rappresenta i player abbinati al loro clientId
 	private int bets; // valore totale scommesso dai giocatori
 	private Deck deck; // deck che contiene le informazioni sulle carte da gioco
 
 	public Game() {
+		phase = GamePhase.INVITO;
 		players = new ConcurrentHashMap<Integer, Player>();
 		currentTurn = 0;
 		bets = 0;
