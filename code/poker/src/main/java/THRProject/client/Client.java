@@ -14,8 +14,8 @@ public class Client {
 	ObjectInputStream in;
 	ServerListener serverListener;
 
-	private static final String HOST = "localhost";
-//	private static final String HOST = "204.216.208.188";
+	//private static final String HOST = "localhost";
+	private static final String HOST = "204.216.208.188";
 	private static final int PORT = 443;
 
 	private boolean quit; // indica quando il client ha lasciato la partita
