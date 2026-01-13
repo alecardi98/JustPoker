@@ -30,8 +30,9 @@ public class ServerListener implements Runnable {
 					client.sendMessage(new Message(MessageType.PLAYER_JOIN, client.getPlayer()));
 					break;
 
-				case UPDATE_GAME:
+				case START_GAME:
 					client.setGame((Game) msg.getData());
+					client.startToPlay();
 					break;
 
 				default:

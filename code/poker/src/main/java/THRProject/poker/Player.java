@@ -8,25 +8,16 @@ public class Player implements Serializable {
 
 	private final String username;
 	private String password;
-	private boolean isActive; // indica se il player è attivo al tavolo (non ha foldato)
+	
+	private PlayerStatus status;
 	private int fiches;
 	private ArrayList<Card> hand;
 
 	public Player(String userName, String password) {
 		this.username = userName;
 		this.password = password;
-		isActive = true;
 		hand = new ArrayList<Card>();
-	}
-
-	public void creaPartita() {
-		// METODO CHE NON SERVE! IL SERVER E' GIA' UNA PARTITA! CANCELLARE ANCHE
-		// DOCUMENTAZIONE
-	}
-
-	public void partecipaPartita() {
-		// METODO CHE NON SERVE! IL SERVER E' GIA' UNA PARTITA! CANCELLARE ANCHE
-		// DOCUMENTAZIONE
+		status = new PlayerStatus();
 	}
 
 	/*
@@ -109,14 +100,6 @@ public class Player implements Serializable {
 
 	public void setFiches(int fiches) {
 		this.fiches = fiches;
-	}
-
-	public boolean isActive() {
-		return isActive;
-	}
-
-	public void setIsActive(boolean isActive) {
-		this.isActive = isActive;
 	}
 
 	public List<Card> getHand() {
