@@ -1,6 +1,8 @@
 package THRProject.poker;
 
-public class PlayerStatus {
+import java.io.Serializable;
+
+public class PlayerStatus implements Serializable{
 
 	private boolean fold; // indica se il player ha foldato
 	private boolean open; // indica se il player ha aperto

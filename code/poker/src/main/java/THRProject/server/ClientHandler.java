@@ -12,13 +12,16 @@ import THRProject.poker.Player;
  */
 class ClientHandler implements Runnable {
 
+	private Socket socket;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
+
 	private static int countId = 0; // assegazione id incrementale a partire da 0
 	private final int clientId; // client al quale è connesso il clienthandler (funge anche da id turno)
 
 	public ClientHandler(Socket clientSocket) {
 		clientId = nextId();
+		socket = clientSocket;
 		try {
 			this.out = new ObjectOutputStream(clientSocket.getOutputStream());
 			this.in = new ObjectInputStream(clientSocket.getInputStream());
@@ -36,23 +39,29 @@ class ClientHandler implements Runnable {
 	public void run() {
 		try {
 			Object obj;
-			while ((obj = in.readObject()) != null) {
+			while (true) {
+				obj = in.readObject();
 				Message msg = (Message) obj;
 
-				// gestione delle richieste del Client
 				switch (msg.getType()) {
+
 				case PLAYER_JOIN:
 					handlePlayerJoin((Player) msg.getData());
 					break;
 
+				case QUIT:
+					handleQuit((int) msg.getData());
+					cleanup();
+					return;
+
 				default:
-					System.out.println("ERRORE! Messaggio sconosciuto.\n");
+					System.out.println("ERRORE! Messaggio sconosciuto.");
 					break;
 				}
-
 			}
 		} catch (IOException | ClassNotFoundException e) {
-			System.out.println("Client disconnesso.");
+			System.out.println("Errore di comunicazione col client.");
+			cleanup();
 		}
 	}
 
@@ -60,7 +69,14 @@ class ClientHandler implements Runnable {
 	 * Metodo per la gestione del messaggio di PLAYER_JOIN
 	 */
 	private void handlePlayerJoin(Player player) {
-		Server.getServerPoker().registerPlayer(clientId, player);
+		Server.getServer().registerPlayer(clientId, player);
+	}
+
+	/*
+	 * Metodo per la gestione del messaggio di QUIT
+	 */
+	private void handleQuit(int clientId) {
+		Server.getServer().removePlayer(clientId);
 	}
 
 	/*
@@ -73,6 +89,21 @@ class ClientHandler implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	/*
+	 * Metodo per chiudere correttamente il clientHandler
+	 */
+	private void cleanup() {
+		try {
+			in.close();
+			out.close();
+			socket.close();
+		} catch (IOException e) {
+			System.out.println("BHO");
+		}
+		System.out.println("ClientHandler rimosso.");
+		Server.getServer().removeClient(this);
 	}
 
 	/*

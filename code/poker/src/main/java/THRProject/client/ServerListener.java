@@ -9,8 +9,8 @@ import THRProject.poker.Game;
 
 public class ServerListener implements Runnable {
 
-	ObjectInputStream in;
-	Client client;
+	private ObjectInputStream in;
+	private Client client;
 
 	public ServerListener(ObjectInputStream in, Client client) {
 		this.in = in;
@@ -33,6 +33,9 @@ public class ServerListener implements Runnable {
 				case START_GAME:
 					client.setGame((Game) msg.getData());
 					client.startToPlay();
+					break;
+
+				case YOUR_TURN:
 					break;
 
 				default:

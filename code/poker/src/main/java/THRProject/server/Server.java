@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import THRProject.message.Message;
 import THRProject.message.MessageType;
@@ -35,12 +36,12 @@ public class Server {
 		try {
 			serverSocket = new ServerSocket(PORT);
 			System.out.println("Server avviato sulla porta " + PORT);
+			System.out.println("In attesa di client...");
 
 			// attesa unione giocatori
 			do {
-				System.out.println("In attesa di client...\n");
 				Socket clientSocket = serverSocket.accept(); // accetta nuovo client
-				System.out.println("Nuovo client connesso: " + clientSocket.getInetAddress() + "\n");
+				System.out.println("\nNuovo client connesso: " + clientSocket.getInetAddress());
 
 				ClientHandler handler = new ClientHandler(clientSocket);
 				System.out.println("Creato Handler per Client " + handler.getClientId());
@@ -74,14 +75,27 @@ public class Server {
 		}
 	}
 
+	public synchronized void removePlayer(int clientId) {
+		game.getPlayers().remove(clientId);
+	}
+
 	/*
 	 * Fa partire la partita e gestisce il flusso di gioco
 	 */
 	private void startGame() {
-		// do {
-		manageCards();
-		startHand();
-		// } while (game.getPlayers().size() > 1);
+		do {
+			manageCards();
+			generateSafeView();
+			faseDiInvito();
+			faseDiApertura();
+			faseDiAccomodo();
+			faseDiPuntata();
+			faseDiShowdown();
+
+			// TO DO
+
+		} while (game.getPlayers().size() > 1);// fine mano
+		System.out.println("Partita finita per mancanza di giocatori.");
 	}
 
 	/*
@@ -116,15 +130,6 @@ public class Server {
 	}
 
 	/*
-	 * Metodo che gestisce la turnazione dei giocatori nelle diverse fasi
-	 */
-	private void startHand() {
-		generateSafeView();
-		while(true);
-		// TO DO
-	}
-
-	/*
 	 * Metodo per creare una view dello stato di game che non esponga dati sensibili
 	 * agli altri player
 	 */
@@ -145,20 +150,69 @@ public class Server {
 	}
 
 	/*
+	 * Metodo che
+	 */
+	private void faseDiInvito() {
+		
+	}
+
+	/*
+	 * Metodo che
+	 */
+	private void faseDiApertura() {
+
+	}
+
+	/*
+	 * Metodo che
+	 */
+	private void faseDiAccomodo() {
+
+	}
+
+	/*
+	 * Metodo che
+	 */
+	private void faseDiPuntata() {
+
+	}
+
+	/*
+	 * Metodo che
+	 */
+	private void faseDiShowdown() {
+
+	}
+
+	/*
 	 * Metodo con il quale il server cede il turno al giocatore successivo: gli ID
 	 * dei client vengono dati in modo incrementale in base al primo che arriva al
 	 * tavolo e questo ordine sarà anche quello di gioco
 	 */
 	private void nextTurn() {
-		if (game.getCurrentTurn() == clientHandlers.size()) {
-			game.setCurrentTurn(0);
+		Set<Integer> ids = game.getPlayers().keySet();
+
+		int next = Integer.MAX_VALUE;
+		int min = Integer.MAX_VALUE;
+
+		for (int id : ids) {
+			if (id > game.getCurrentTurn() && id < next) {
+				next = id;
+			}
+			if (id < min) {
+				min = id;
+			}
+		}
+
+		if (next != Integer.MAX_VALUE) {
+			game.setCurrentTurn(next);
 		} else {
-			game.setCurrentTurn(game.getCurrentTurn() + 1);
+			game.setCurrentTurn(min);
 		}
 	}
 
 	/*
-	 * Invia messaggio a tutti i client
+	 * Metodo con il quale il server invia un messaggio a tutti i client
 	 */
 	private void broadcast(Object msg) {
 		synchronized (clientHandlers) {
@@ -169,9 +223,16 @@ public class Server {
 	}
 
 	/*
+	 * Metodo per rimuovere il clientHandler dalla lista
+	 */
+	public synchronized void removeClient(ClientHandler clientHandler) {
+		clientHandlers.remove(clientHandler);
+	}
+
+	/*
 	 * Getter & Setter
 	 */
-	public static Server getServerPoker() {
+	public static Server getServer() {
 		if (server == null)
 			server = new Server();
 		return server;
