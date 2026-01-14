@@ -5,6 +5,7 @@ import java.net.*;
 
 import THRProject.message.Message;
 import THRProject.message.MessageType;
+import THRProject.poker.Card;
 import THRProject.poker.Player;
 
 /*
@@ -16,11 +17,10 @@ class ClientHandler implements Runnable {
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
 
-	private static int countId = 0; // assegazione id incrementale a partire da 0
 	private final int clientId; // client al quale è connesso il clienthandler (funge anche da id turno)
 
-	public ClientHandler(Socket clientSocket) {
-		clientId = nextId();
+	public ClientHandler(Socket clientSocket, int clientId) {
+		this.clientId = clientId;
 		socket = clientSocket;
 		try {
 			this.out = new ObjectOutputStream(clientSocket.getOutputStream());
@@ -46,12 +46,36 @@ class ClientHandler implements Runnable {
 				switch (msg.getType()) {
 
 				case PLAYER_JOIN:
-					handlePlayerJoin((Player) msg.getData());
+					Server.getServer().registerPlayer(clientId, (Player) msg.getData());
+					break;
+
+				case INVITO:
+					Server.getServer().checkInvito(clientId);
+					break;
+
+//				case APRI:
+//					Server.getServer().checkApertura(clientId, (Integer) msg.getData());
+//					break;
+					
+				case CAMBIO:
+					Server.getServer().checkCambio(clientId, (Card[]) msg.getData());
+					break;
+					
+				case SERVITO:
+					Server.getServer().checkServito(clientId);
+					break;
+
+				case FOLD:
+					Server.getServer().foldPlayer(clientId);
+					break;
+
+				case READY:
+					Server.getServer().countReady();
 					break;
 
 				case QUIT:
-					handleQuit((int) msg.getData());
-					cleanup();
+					cleanup(clientId);
+					Server.getServer().checkStart();
 					return;
 
 				default:
@@ -60,23 +84,9 @@ class ClientHandler implements Runnable {
 				}
 			}
 		} catch (IOException | ClassNotFoundException e) {
-			System.out.println("Errore di comunicazione col client.");
-			cleanup();
+			System.out.println("ERRORE! Comunicazione con il Client " + clientId + " persa.");
+			cleanup(clientId);
 		}
-	}
-
-	/*
-	 * Metodo per la gestione del messaggio di PLAYER_JOIN
-	 */
-	private void handlePlayerJoin(Player player) {
-		Server.getServer().registerPlayer(clientId, player);
-	}
-
-	/*
-	 * Metodo per la gestione del messaggio di QUIT
-	 */
-	private void handleQuit(int clientId) {
-		Server.getServer().removePlayer(clientId);
 	}
 
 	/*
@@ -92,25 +102,19 @@ class ClientHandler implements Runnable {
 	}
 
 	/*
-	 * Metodo per chiudere correttamente il clientHandler
+	 * Metodo per chiudere correttamente la connessione con il client - rimuove il
+	 * player - chiude il clientHandler
 	 */
-	private void cleanup() {
+	private void cleanup(int clientId) {
+		Server.getServer().removePlayer(clientId);
 		try {
 			in.close();
 			out.close();
 			socket.close();
 		} catch (IOException e) {
-			System.out.println("BHO");
+			e.printStackTrace();
 		}
-		System.out.println("ClientHandler rimosso.");
-		Server.getServer().removeClient(this);
-	}
-
-	/*
-	 * Metodo per incrementare il contatore dei client in modo atomico
-	 */
-	public static synchronized int nextId() {
-		return countId++;
+		Server.getServer().removeClient(clientId);
 	}
 
 	/*

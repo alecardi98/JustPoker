@@ -21,8 +21,10 @@ public class ServerListener implements Runnable {
 	public void run() {
 		try {
 			Object obj;
-			while ((obj = in.readObject()) != null) {
+			while (true) {
+				obj = in.readObject();
 				Message msg = (Message) obj;
+
 				// gestione delle risposte del Server
 				switch (msg.getType()) {
 				case CLIENT_ID:
@@ -32,7 +34,40 @@ public class ServerListener implements Runnable {
 
 				case START_GAME:
 					client.setGame((Game) msg.getData());
-					client.startToPlay();
+					client.startGame();
+					break;
+
+				case INVALID_ACTION:
+					String invalidAction = (String) msg.getData();
+					if (invalidAction.equals("invito")) {
+						System.out.println("ERRORE! Invito non valido.");
+					}
+					if (invalidAction.equals("apertura")) {
+						System.out.println("ERRORE! Apertura non valida.");
+					}
+					if (invalidAction.equals("cambio")) {
+						System.out.println("ERRORE! Cambio non valido.");
+					}
+					break;
+
+				case VALID_ACTION:
+					String validAction = (String) msg.getData();
+					if (validAction.equals("invito")) {
+						System.out.println("Invito registrato.");
+					}
+					if (validAction.equals("apertura")) {
+						System.out.println("Apertura registrata.");
+					}
+					if (validAction.equals("cambio")) {
+						System.out.println("Cambio registrato.");
+					}
+					if (validAction.equals("servito")) {
+						System.out.println("Servito registrato.");
+					}
+					break;
+
+				case UPDATE_GAME:
+					client.setGame((Game) msg.getData());
 					break;
 
 				case YOUR_TURN:
@@ -45,7 +80,20 @@ public class ServerListener implements Runnable {
 
 			}
 		} catch (IOException | ClassNotFoundException e) {
-			System.out.println("Server Disconnesso.");
+			System.out.println("ERRORE! Comunicazione con il Server persa.");
+			cleanup();
+			client.serverDisconnection();
+		}
+	}
+
+	/*
+	 * Permette di chiudere correttamente il ServerListener
+	 */
+	private void cleanup() {
+		try {
+			in.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 

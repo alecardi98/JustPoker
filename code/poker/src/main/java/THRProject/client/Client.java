@@ -8,8 +8,10 @@ import java.util.Scanner;
 
 import THRProject.message.Message;
 import THRProject.message.MessageType;
+import THRProject.poker.Card;
 import THRProject.poker.Game;
 import THRProject.poker.Player;
+import THRProject.server.Server;
 
 public class Client {
 
@@ -31,9 +33,21 @@ public class Client {
 		quit = false;
 	}
 
+	/*
+	 * Metodo per avviare il client
+	 */
 	public void startClient() {
 		player = dbConnection();
 		serverConnection();
+		// dopo la connessione sarà attivo solo il thread ServerListener, poichè Client
+		// è attivo ma ha finito
+	}
+
+	/*
+	 * Metodo per avviare la partita del client
+	 */
+	public void startGame() {
+		// sarà il main della GUI
 	}
 
 	/*
@@ -64,11 +78,12 @@ public class Client {
 	/*
 	 * Metodo con il quale il client si disconnette dal server
 	 */
-	private void serverDisconnection() {
+	public void serverDisconnection() {
 		try {
 			in.close();
 			out.close();
 			socket.close();
+			serverListener = null;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -76,17 +91,70 @@ public class Client {
 	}
 
 	/*
-	 * Metodo chiamato dal serverListener che fa partire la partita del client
+	 * Metodo che serve per inviare l'invito al server
 	 */
-	public void startToPlay() {
+	private void invioInvito() {
+		Message msg = gameView.getPlayers().get(clientId).invito();
+		sendMessage(msg);
+	}
 
-		do {
-			
-			
-			
-		} while (!isQuit());
-		serverDisconnection();
+	/*
+	 * Metodo che serve per inviare la punatata al server
+	 */
+	private void invioPuntata(int puntata) {
+		Message msg = gameView.getPlayers().get(clientId).punta(puntata);
+		sendMessage(msg);
+	}
+	
+	/*
+	 * Metodo che serve per inviare l'invito al server
+	 */
+	private void invioApertura(int puntata) {
+		Message msg = gameView.getPlayers().get(clientId).apri(puntata);
+		sendMessage(msg);
+	}
 
+	/*
+	 * Metodo che serve per inviare il passa al server
+	 */
+	private void invioPassa() {
+		Message msg = gameView.getPlayers().get(clientId).passa();
+		sendMessage(msg);
+	}
+	
+	/*
+	 * Metodo che serve per inviare il lascia al server
+	 */
+	private void invioLascia() {
+		Message msg = gameView.getPlayers().get(clientId).lascia();
+		sendMessage(msg);
+	}
+	
+	/*
+	 * Metodo che serve per inviare il vedi al server
+	 */
+	private void invioVedi() {
+		Message msg = gameView.getPlayers().get(clientId).vedi();
+		sendMessage(msg);
+	}
+	
+	/*
+	 * Metodo che serve per inviare il cambio al server
+	 */
+	private void invioCambio(Card[] cards) {
+		if (cards.length > 0 && cards.length <= 5) {
+			Message msg = gameView.getPlayers().get(clientId).cambio(cards);
+			sendMessage(msg);
+		} else
+			System.out.println("ERRORE! Cambio non valido.");
+	}
+
+	/*
+	 * Metodo che serve per inviare il servito al server
+	 */
+	private void invioServito() {
+		Message msg = gameView.getPlayers().get(clientId).servito();
+		sendMessage(msg);
 	}
 
 	/*
@@ -104,9 +172,16 @@ public class Client {
 	/*
 	 * Metodo che permette di uscire dalla partita e disconnettersi dal server
 	 */
+	public void ready() {
+		sendMessage(new Message(MessageType.READY, clientId));
+	}
+
+	/*
+	 * Metodo che permette di uscire dalla partita e disconnettersi dal server
+	 */
 	public void quit() {
 		sendMessage(new Message(MessageType.QUIT, clientId));
-		quit = true;
+		serverDisconnection();
 	}
 
 	/*
