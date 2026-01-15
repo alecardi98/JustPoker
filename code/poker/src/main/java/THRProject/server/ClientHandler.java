@@ -53,30 +53,30 @@ class ClientHandler implements Runnable {
 					Server.getServer().checkInvito(clientId);
 					break;
 
-//				case APRI:
-//					Server.getServer().checkApertura(clientId, (Integer) msg.getData());
+				case APRI:
+					Server.getServer().checkApertura(clientId, (Integer) msg.getData());
+					break;
+
+//				case CAMBIO:
+//					Server.getServer().checkCambio(clientId, (Card[]) msg.getData());
 //					break;
-					
-				case CAMBIO:
-					Server.getServer().checkCambio(clientId, (Card[]) msg.getData());
-					break;
-					
-				case SERVITO:
-					Server.getServer().checkServito(clientId);
-					break;
-
-				case FOLD:
-					Server.getServer().foldPlayer(clientId);
-					break;
-
-				case READY:
-					Server.getServer().countReady();
-					break;
-
-				case QUIT:
-					cleanup(clientId);
-					Server.getServer().checkStart();
-					return;
+//
+//				case SERVITO:
+//					Server.getServer().checkServito(clientId);
+//					break;
+//
+//				case FOLD:
+//					Server.getServer().foldPlayer(clientId);
+//					break;
+//
+//				case READY:
+//					Server.getServer().countReady();
+//					break;
+//
+//				case QUIT:
+//					cleanup(clientId);
+//					Server.getServer().checkStart();
+//					return;
 
 				default:
 					System.out.println("ERRORE! Messaggio sconosciuto.");

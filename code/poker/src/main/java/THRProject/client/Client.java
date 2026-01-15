@@ -4,19 +4,16 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.Scanner;
 
 import THRProject.message.Message;
 import THRProject.message.MessageType;
 import THRProject.poker.Card;
 import THRProject.poker.Game;
 import THRProject.poker.Player;
-import THRProject.server.Server;
 
 public class Client {
 
 	private ObjectOutputStream out;
-	private ObjectInputStream in;
 	private ServerListener serverListener;
 	private Socket socket;
 
@@ -47,7 +44,10 @@ public class Client {
 	 * Metodo per avviare la partita del client
 	 */
 	public void startGame() {
-		// sarà il main della GUI
+
+		invioInvito();
+		invioApertura(50);
+
 	}
 
 	/*
@@ -62,17 +62,18 @@ public class Client {
 	 * Metodo con il quale il client si connette al server
 	 */
 	private void serverConnection() {
+		ObjectInputStream in;
 		try {
 			socket = new Socket(HOST, PORT);
 			System.out.println("Client connesso al server");
 			out = new ObjectOutputStream(socket.getOutputStream());
 			in = new ObjectInputStream(socket.getInputStream());
+			serverListener = new ServerListener(in, this);
+			new Thread(serverListener).start();
 		} catch (IOException e) {
 			System.out.println("ERRORE! Impossibile connettersi alla partita. Disconnessione.\n");
 			System.exit(1);
 		}
-		serverListener = new ServerListener(in, this);
-		new Thread(serverListener).start();
 	}
 
 	/*
@@ -80,7 +81,6 @@ public class Client {
 	 */
 	public void serverDisconnection() {
 		try {
-			in.close();
 			out.close();
 			socket.close();
 			serverListener = null;
@@ -88,6 +88,10 @@ public class Client {
 			e.printStackTrace();
 		}
 		System.out.println("Disconnessione riuscita.");
+	}
+
+	public void checkMoment() {
+		System.out.println("Fase di " + gameView.getPhase() + " : tocca a Client " + gameView.getCurrentTurn());
 	}
 
 	/*
@@ -105,7 +109,7 @@ public class Client {
 		Message msg = gameView.getPlayers().get(clientId).punta(puntata);
 		sendMessage(msg);
 	}
-	
+
 	/*
 	 * Metodo che serve per inviare l'invito al server
 	 */
@@ -121,7 +125,7 @@ public class Client {
 		Message msg = gameView.getPlayers().get(clientId).passa();
 		sendMessage(msg);
 	}
-	
+
 	/*
 	 * Metodo che serve per inviare il lascia al server
 	 */
@@ -129,7 +133,7 @@ public class Client {
 		Message msg = gameView.getPlayers().get(clientId).lascia();
 		sendMessage(msg);
 	}
-	
+
 	/*
 	 * Metodo che serve per inviare il vedi al server
 	 */
@@ -137,7 +141,7 @@ public class Client {
 		Message msg = gameView.getPlayers().get(clientId).vedi();
 		sendMessage(msg);
 	}
-	
+
 	/*
 	 * Metodo che serve per inviare il cambio al server
 	 */
@@ -158,6 +162,25 @@ public class Client {
 	}
 
 	/*
+	 * Metodo che permette al client di uscire dalla partita e disconnettersi dal
+	 * server
+	 */
+	public void ready() {
+		Message msg = new Message(MessageType.READY, clientId);
+		sendMessage(msg);
+	}
+
+	/*
+	 * Metodo che permette al client di uscire dalla partita e disconnettersi dal
+	 * server
+	 */
+	public void quit() {
+		Message msg = new Message(MessageType.QUIT, clientId);
+		sendMessage(msg);
+		serverDisconnection();
+	}
+
+	/*
 	 * Metodo per inviare messaggi al server
 	 */
 	public void sendMessage(Object msg) {
@@ -167,21 +190,6 @@ public class Client {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	/*
-	 * Metodo che permette di uscire dalla partita e disconnettersi dal server
-	 */
-	public void ready() {
-		sendMessage(new Message(MessageType.READY, clientId));
-	}
-
-	/*
-	 * Metodo che permette di uscire dalla partita e disconnettersi dal server
-	 */
-	public void quit() {
-		sendMessage(new Message(MessageType.QUIT, clientId));
-		serverDisconnection();
 	}
 
 	/*

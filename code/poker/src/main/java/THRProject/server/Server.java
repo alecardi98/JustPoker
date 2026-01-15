@@ -15,6 +15,9 @@ import THRProject.poker.Card;
 import THRProject.poker.Game;
 import THRProject.poker.GamePhase;
 import THRProject.poker.Player;
+import THRProject.poker.PlayerStatus;
+import THRProject.poker.Pot;
+import THRProject.poker.Rank;
 
 public class Server {
 
@@ -29,7 +32,7 @@ public class Server {
 	private ConcurrentHashMap<Integer, ClientHandler> clientHandlers = new ConcurrentHashMap<Integer, ClientHandler>();
 	private static int countId = 0; // assegazione id incrementale a partire da 0
 	private static int readyCount = 0; // indica i giocatori pronti per la prossima mano (alla fine del turno)
-	private Game game = new Game();
+	private Game game = new Game(MINBET);
 
 	private Server() {
 	}
@@ -76,10 +79,11 @@ public class Server {
 	public void registerPlayer(int clientId, Player player) {
 		synchronized (game) {
 			player.getStatus().setFiches(MAXFICHES);
-			player.getStatus().setLastBet(0);
 			game.getPlayers().put(clientId, player);
 			if (game.getPlayers().size() == MAXPLAYERS) {
 				startGame(); // sarà il ClientHandler che aggiunge l'ultimo Player a far partire il gioco
+				broadcast(new Message(MessageType.START_GAME, null));
+
 			}
 		}
 	}
@@ -94,6 +98,26 @@ public class Server {
 	}
 
 	/*
+	 * Metodo per rimuovere il clientHandler dalla lista
+	 */
+	public void removeClient(int clientId) {
+		synchronized (clientHandlers) {
+			clientHandlers.remove(clientId);
+			System.out.println("ClientHandler " + clientId + " rimosso.");
+		}
+	}
+
+	/*
+	 * Fa partire la partita dalla fase di invito
+	 */
+	private void startGame() {
+		// resetGame(); //per ricominciare un'altra mano finita la precedente
+		resetPhase();
+		manageCards();
+		broadcastSafeGameView();
+	}
+
+	/*
 	 * Metodo per validare l'azione INVITO del client
 	 */
 	public void checkInvito(int clientId) {
@@ -101,68 +125,71 @@ public class Server {
 			if (clientId == game.getCurrentTurn() && !game.getPlayers().get(clientId).getStatus().isFold()
 					&& !game.getPlayers().get(clientId).getStatus().isEnd()) {
 
+				int invito = MINBET;
 				Player player = game.getPlayers().get(clientId);
 				ClientHandler clientHandler = clientHandlers.get(clientId);
 
-				if (MINBET > player.getStatus().getFiches()) {
+				if (invito > player.getStatus().getFiches()) {
 					System.out.println("ERRORE! Invito Client " + clientId + " non valido.");
 					clientHandler.sendMessage(new Message(MessageType.INVALID_ACTION, "invito"));
 				} else {
 					System.out.println("Invito Client " + clientId + " registrato.");
-					game.getPot().setTotal(game.getPot().getTotal() + MINBET);
+					game.getPot().setTotal(game.getPot().getTotal() + invito);
 					player.getStatus().setEnd(true);
-					player.getStatus().setFiches(player.getStatus().getFiches() - MINBET);
+					player.getStatus().setFiches(player.getStatus().getFiches() - invito);
 					nextTurn();
 
 					clientHandler.sendMessage(new Message(MessageType.VALID_ACTION, "invito"));
-					broadcast(new Message(MessageType.UPDATE_GAME, game));
+					checkNextPhase();
+					broadcastSafeGameView();
 				}
-			}
-
-			checkNextPhase();
+			} else
+				System.out.println("ERRORE! Non puoi giocare.");
 		}
 	}
 
-//	/*
-//	 * Metodo per validare l'azione APRI del client
-//	 */
-//	public void checkApertura(int clientId, int puntata) {
-//		synchronized (game) {
-//			if (clientId == game.getCurrentTurn() && !game.getPlayers().get(clientId).getStatus().isFold()
-//					&& !game.getPlayers().get(clientId).getStatus().isEnd()) {
-//
-//				Player player = game.getPlayers().get(clientId);
-//				ClientHandler clientHandler = clientHandlers.get(clientId);
-//
-//				//if(//controllo coppia J) {
-//					if (puntata > player.getStatus().getFiches() || puntata < game.getPot().getMaxBet()) {
-//						System.out.println("ERRORE! Apertura Client " + clientId + " non valida.");
-//						clientHandler.sendMessage(new Message(MessageType.INVALID_ACTION, "apertura"));
-//					} else {
-//						System.out.println("Apertura Client " + clientId + " registrata.");
-//						game.getPot().setTotal(game.getPot().getTotal() + puntata);
-//						player.getStatus().setEnd(true);
-//						player.getStatus().setFiches(player.getStatus().getFiches() - puntata);
-//						nextTurn();
-//	
-//						if(puntata > game.getPot().getMaxBet()) {
-//							game.getPot().setMaxBet(puntata);
-//							
-//						}
-//						
-//						clientHandler.sendMessage(new Message(MessageType.VALID_ACTION, "apertura"));
-//						broadcast(new Message(MessageType.UPDATE_GAME, game));
-//					}
-////				}
-////				else {
-////					System.out.println("ERRORE! Client " + clientId + " non possiede almeno una coppia di J");
-////					clientHandler.sendMessage(new Message(MessageType.INVALID_ACTION, "apertura"));
-////				}	
-//			}
-//
-//			checkNextPhase();
-//		}
-//	}
+	/*
+	 * Metodo per validare l'azione APRI del client
+	 */
+	public void checkApertura(int clientId, int puntata) {
+		synchronized (game) {
+			if (clientId == game.getCurrentTurn() && !game.getPlayers().get(clientId).getStatus().isFold()
+					&& !game.getPlayers().get(clientId).getStatus().isEnd()) {
+
+				Player player = game.getPlayers().get(clientId);
+				player.getHand().checkRank();
+				ClientHandler clientHandler = clientHandlers.get(clientId);
+
+				if ((player.getHand().getRank().getLevel() == 2 && player.getHand().getRank().getValue() >= 22)
+						|| player.getHand().getRank().getLevel() > 2) { // controllo almeno coppia di Jack
+					if (puntata > player.getStatus().getFiches() || puntata < game.getPot().getMaxBet()) {
+						System.out.println("ERRORE! Apertura Client " + clientId + " non valida.");
+						clientHandler.sendMessage(new Message(MessageType.INVALID_ACTION, "apertura"));
+					} else {
+						System.out.println("Apertura Client " + clientId + " registrata.");
+						game.setOpen(true);
+						game.getPot().setTotal(game.getPot().getTotal() + puntata);
+						player.getStatus().setTotalBet(player.getStatus().getTotalBet() + puntata);
+						player.getStatus().setEnd(true);
+						player.getStatus().setFiches(player.getStatus().getFiches() - puntata);
+						nextTurn();
+
+						if (puntata > game.getPot().getMaxBet()) {
+							game.getPot().setMaxBet(puntata);
+
+						}
+
+						clientHandler.sendMessage(new Message(MessageType.VALID_ACTION, "apertura"));
+						checkNextPhase();
+						broadcastSafeGameView();
+					}
+				} else {
+					System.out.println("ERRORE! Client " + clientId + " non possiede almeno una coppia di J");
+					clientHandler.sendMessage(new Message(MessageType.INVALID_ACTION, "apertura"));
+				}
+			}
+		}
+	}
 
 	/*
 	 * Metodo per validare l'azione CAMBIO del client
@@ -183,23 +210,22 @@ public class Server {
 
 					// rimuovo le carte
 					for (int i = 0; i < cards.length; i++) {
-						player.getHand().remove(cards[i]);
+						player.getHand().getCards().remove(cards[i]);
 					}
 
 					// pesca le carte
 					for (int i = 0; i < cards.length; i++) {
 						Card c = game.getDeck().getCards().get(0);
-						player.getHand().add(c);
+						player.getHand().getCards().add(c);
 						game.getDeck().getCards().remove(c);
 					}
 					player.getStatus().setEnd(true);
 					nextTurn();
 					clientHandler.sendMessage(new Message(MessageType.VALID_ACTION, "cambio"));
-					broadcast(new Message(MessageType.UPDATE_GAME, game));
+					checkNextPhase();
+					broadcastSafeGameView();
 				}
 			}
-
-			checkNextPhase();
 		}
 	}
 
@@ -213,8 +239,8 @@ public class Server {
 		player.getStatus().setEnd(true);
 		nextTurn();
 		clientHandler.sendMessage(new Message(MessageType.VALID_ACTION, "servito"));
-		broadcast(new Message(MessageType.UPDATE_GAME, game));
 		checkNextPhase();
+		broadcastSafeGameView();
 	}
 
 	/*
@@ -225,7 +251,7 @@ public class Server {
 			int count = 0;
 			for (Map.Entry<Integer, Player> p : game.getPlayers().entrySet()) {
 				if (p.getValue().getStatus().isEnd())
-					count++;
+					count++; // conta chi ha finito il proprio turno
 			}
 			if (count == game.getPlayers().size())
 				nextPhase();
@@ -233,39 +259,27 @@ public class Server {
 	}
 
 	/*
-	 * Fa partire la partita
+	 * Metodo per resettare il game per la prossima fase
 	 */
-	private void startGame() {
-		resetGame();
-		manageCards();
-		generateSafeView();
-	}
-
-	private void resetGame() {
-		game.checkCurrentTurn();
+	private void resetPhase() {
+		game.checkFirstTurn();
+		game.getPot().setMaxBet(game.getPot().getMinBet());
+		for (Map.Entry<Integer, Player> p : game.getPlayers().entrySet())
+			p.getValue().getStatus().resetStatus();
 	}
 
 	/*
-	 * Metodo che crea il mazzo di carte, lo mescola e distribuisce
+	 * Metodo che gestisce le carte
 	 */
 	private void manageCards() {
 		synchronized (game) {
 			game.getDeck().resetDeck();
 			game.getDeck().shuffle();
-			assignCards();
-		}
-	}
-
-	/*
-	 * Metodo che distribuisce le carte ai giocatori
-	 */
-	private void assignCards() {
-		synchronized (game) {
 			for (Map.Entry<Integer, Player> entry : game.getPlayers().entrySet()) {
 				Player p = entry.getValue();
 				for (int i = 0; i < 5; i++) {
 					Card card = game.getDeck().getCards().get(0);
-					p.getHand().add(card);
+					p.getHand().getCards().add(card);
 					game.getDeck().getCards().remove(0);
 				}
 			}
@@ -281,22 +295,24 @@ public class Server {
 	}
 
 	/*
-	 * Metodo per creare una view dello stato di game che non esponga dati sensibili
-	 * agli altri player
+	 * Metodo per creare ed inviare broadcast a tutti i client una view dello stato
+	 * di game che non esponga dati sensibili agli altri client
 	 */
-	private void generateSafeView() {
+	private void broadcastSafeGameView() {
 		synchronized (game) {
 			for (Map.Entry<Integer, ClientHandler> c : clientHandlers.entrySet()) {
-				Game gameView = new Game();
-				gameView.setDeck(null);
+				Game gameView = new Game(MINBET);
 				gameView.setCurrentTurn(game.getCurrentTurn());
-				gameView.setPot(game.getPot());
+				gameView.setPhase(game.getPhase());
 				for (Map.Entry<Integer, Player> p : game.getPlayers().entrySet()) {
 					if (Objects.equals(p.getKey(), c.getKey())) {
 						gameView.getPlayers().put(p.getKey(), p.getValue());
 					}
 				}
-				c.getValue().sendMessage(new Message(MessageType.START_GAME, gameView));
+				gameView.setPot(game.getPot());
+				gameView.setDeck(null);
+
+				c.getValue().sendMessage(new Message(MessageType.UPDATE, gameView));
 			}
 		}
 	}
@@ -308,25 +324,37 @@ public class Server {
 	 */
 	private void nextTurn() {
 		synchronized (game) {
-			Set<Integer> ids = game.getPlayers().keySet();
 
-			int next = Integer.MAX_VALUE;
-			int min = Integer.MAX_VALUE;
-
-			for (int id : ids) {
-				if (id > game.getCurrentTurn() && id < next) {
-					next = id;
-				}
-				if (id < min) {
-					min = id;
-				}
+			ConcurrentHashMap<Integer, Player> players = new ConcurrentHashMap<Integer, Player>(game.getPlayers());
+			for (Map.Entry<Integer, Player> p : game.getPlayers().entrySet()) {
+				if (p.getValue().getStatus().isFold())
+					players.remove(p.getKey()); // rimuovo dalla turnazione attuale chi ha foldato
 			}
 
-			if (next != Integer.MAX_VALUE) {
-				game.setCurrentTurn(next);
-			} else {
+			Set<Integer> turns = players.keySet();
+
+			int max = game.getCurrentTurn();
+			for (int id : turns) {
+				if (id > max)
+					max = id;
+			}
+
+			if (max == game.getCurrentTurn()) { // se il massimo è il turno corrente devo tornare al minimo
+				int min = game.getCurrentTurn();
+				for (int id : turns) {
+					if (id < min)
+						min = id;
+				}
 				game.setCurrentTurn(min);
+				return;
 			}
+
+			int minGreat = max; // è il minore tra i valori maggiori del turno corrente
+			for (int id : turns) {
+				if (id > game.getCurrentTurn() && id < max)
+					max = id;
+			}
+			game.setCurrentTurn(max);
 		}
 	}
 
@@ -336,56 +364,33 @@ public class Server {
 	public void nextPhase() {
 		synchronized (game) {
 			switch (game.getPhase()) {
-			case INVITO:
+			case INVITO: // preparazione alla fase di Apertura
 				game.setPhase(GamePhase.APERTURA);
+				resetPhase();
+				broadcastSafeGameView();
 				break;
 
-			case APERTURA:
+			case APERTURA: // preparazione alla fase di Accomodo
 				game.setPhase(GamePhase.ACCOMODO);
 				break;
 
-			case ACCOMODO:
+			case ACCOMODO: // preparazione alla fase di Puntata
 				game.setPhase(GamePhase.PUNTATA);
 				break;
 
-			case PUNTATA:
+			case PUNTATA: // preparazione alla fase di Showdown
 				game.setPhase(GamePhase.SHOWDOWN);
 				break;
 
-			case SHOWDOWN:
+			case SHOWDOWN: // preparazione alla fase di End
 				game.setPhase(GamePhase.END);
 				break;
 
-			case END:
+			case END: // preparazione alla fase di Invito
 				game.setPhase(GamePhase.INVITO);
+				startGame();
 				break;
 			}
-
-			// alla fine di ogni fase resetta lo stato dei player
-			for (Map.Entry<Integer, Player> p : game.getPlayers().entrySet()) {
-				p.getValue().getStatus().resetStatus();
-			}
-		}
-	}
-
-	/*
-	 * Metodo con il quale il server invia un messaggio a tutti i client
-	 */
-	private void broadcast(Object msg) {
-		synchronized (clientHandlers) {
-			for (Map.Entry<Integer, ClientHandler> c : clientHandlers.entrySet()) {
-				c.getValue().sendMessage(msg);
-			}
-		}
-	}
-
-	/*
-	 * Metodo per rimuovere il clientHandler dalla lista
-	 */
-	public void removeClient(int clientId) {
-		synchronized (clientHandlers) {
-			clientHandlers.remove(clientId);
-			System.out.println("ClientHandler " + clientId + " rimosso.");
 		}
 	}
 
@@ -399,30 +404,41 @@ public class Server {
 		}
 	}
 
-	/*
-	 * Metodo per incrementare il contatore dei client pronti per la prossima mano
-	 * in modo atomico
-	 */
-	public synchronized void countReady() {
-		readyCount++;
-		checkStart();
-	}
-
-	/*
-	 * Metodo per iniziare una partita se l'ultimo client a scegliere si disconnette
-	 */
-	public synchronized void checkStart() {
-		if (readyCount == game.getPlayers().size()) {
-			readyCount = 0;
-			startGame();
-		}
-	}
+//	/*
+//	 * Metodo per incrementare il contatore dei client pronti per la prossima mano
+//	 * in modo atomico
+//	 */
+//	public synchronized void countReady() {
+//		readyCount++;
+//		checkStart();
+//	}
+//
+//	/*
+//	 * Metodo per iniziare una partita se l'ultimo client a scegliere si disconnette
+//	 */
+//	public synchronized void checkStart() {
+//		if (readyCount == game.getPlayers().size()) {
+//			readyCount = 0;
+//			startInvito();
+//		}
+//	}
 
 	/*
 	 * Metodo per incrementare il contatore dei client in modo atomico
 	 */
 	public synchronized int nextId() {
 		return countId++;
+	}
+
+	/*
+	 * Metodo con il quale il server invia un messaggio a tutti i client
+	 */
+	private void broadcast(Object msg) {
+		synchronized (clientHandlers) {
+			for (Map.Entry<Integer, ClientHandler> c : clientHandlers.entrySet()) {
+				c.getValue().sendMessage(msg);
+			}
+		}
 	}
 
 	/*

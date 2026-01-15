@@ -6,19 +6,18 @@ import java.util.List;
 
 import THRProject.message.Message;
 import THRProject.message.MessageType;
-import THRProject.server.Server;
 
 public class Player implements Serializable {
 
 	private final String username;
 	private String password;
 	private PlayerStatus status;
-	private ArrayList<Card> hand;
+	private Hand hand;
 
 	public Player(String userName, String password) {
 		this.username = userName;
 		this.password = password;
-		hand = new ArrayList<Card>();
+		hand = new Hand();
 		status = new PlayerStatus();
 	}
 
@@ -72,7 +71,7 @@ public class Player implements Serializable {
 		this.password = password;
 	}
 
-	public List<Card> getHand() {
+	public Hand getHand() {
 		return hand;
 	}
 
@@ -84,7 +83,7 @@ public class Player implements Serializable {
 		this.status = status;
 	}
 
-	public void setHand(ArrayList<Card> hand) {
+	public void setHand(Hand hand) {
 		this.hand = hand;
 	}
 

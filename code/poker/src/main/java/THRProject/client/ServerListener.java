@@ -33,7 +33,6 @@ public class ServerListener implements Runnable {
 					break;
 
 				case START_GAME:
-					client.setGame((Game) msg.getData());
 					client.startGame();
 					break;
 
@@ -48,6 +47,7 @@ public class ServerListener implements Runnable {
 					if (invalidAction.equals("cambio")) {
 						System.out.println("ERRORE! Cambio non valido.");
 					}
+					client.checkMoment();
 					break;
 
 				case VALID_ACTION:
@@ -66,11 +66,9 @@ public class ServerListener implements Runnable {
 					}
 					break;
 
-				case UPDATE_GAME:
+				case UPDATE:
 					client.setGame((Game) msg.getData());
-					break;
-
-				case YOUR_TURN:
+					client.checkMoment();
 					break;
 
 				default:
@@ -82,7 +80,6 @@ public class ServerListener implements Runnable {
 		} catch (IOException | ClassNotFoundException e) {
 			System.out.println("ERRORE! Comunicazione con il Server persa.");
 			cleanup();
-			client.serverDisconnection();
 		}
 	}
 
@@ -95,6 +92,7 @@ public class ServerListener implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		client.serverDisconnection();
 	}
 
 }

@@ -2,16 +2,16 @@ package THRProject.poker;
 
 import java.io.Serializable;
 
-import THRProject.server.Server;
-
-public class Pot implements Serializable{
+public class Pot implements Serializable {
 
 	private int total; // valore totale scommesso dai giocatori
 	private int maxBet; // puntata massima attuale
+	private int minBet; // valore puntata minima decisa dal server
 
-	public Pot() {
+	public Pot(int minBet) {
 		total = 0;
-		maxBet = Server.getMinbet();
+		this.minBet = minBet;
+		maxBet = this.minBet;
 	}
 
 	/*
@@ -31,6 +31,10 @@ public class Pot implements Serializable{
 
 	public void setMaxBet(int maxBet) {
 		this.maxBet = maxBet;
+	}
+
+	public int getMinBet() {
+		return minBet;
 	}
 
 }

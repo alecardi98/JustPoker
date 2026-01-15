@@ -5,31 +5,34 @@ import java.io.Serializable;
 public class PlayerStatus implements Serializable {
 
 	private int fiches;
-	private int lastBet;
+	private int totalBet;
 	private boolean fold; // indica se il player ha foldato
-	private boolean open; // indica se il player ha aperto
-	private boolean debt; // indica se il player è in debito con il piatto
-	private boolean pass; // indica se il giocatore ha passato durante la fase di apertura
-	private boolean end; // indica se il giocatore ha terminato la fase di corrente
+	private boolean open; // indica se il player ha aperto (serve solo per l'apertura)
+	private boolean pass; // indica se il giocatore ha passato (serve solo per l'apertura)
+	private boolean end; // indica se il giocatore ha terminato il proprio turno nella fase corrente
 
 	public PlayerStatus() {
+		totalBet = 0;
 		fold = false;
 		open = false;
-		debt = false;
 		pass = false;
+		end = false;
 	}
 
-	public void checkDebt(int maxBet) {
-		if(lastBet < maxBet)
-			debt = true;
-	}
-	
+	/*
+	 * Metodo che serve per resettare tra una fase e l'altra le fiches puntate nella
+	 * fase precedente
+	 */
 	public void resetStatus() {
-		lastBet = 0;
-		fold = false;
-		open = false;
-		debt = false;
-		pass = false;
+		totalBet = 0;
+		resetEnd();
+	}
+
+	/*
+	 * Metodo che rimette in gioco il player nella fase, poichè qualcuno ha puntato
+	 * di più ed è quindi in debito
+	 */
+	public void resetEnd() {
 		end = false;
 	}
 
@@ -44,12 +47,12 @@ public class PlayerStatus implements Serializable {
 		this.fiches = fiches;
 	}
 
-	public int getLastBet() {
-		return lastBet;
+	public int getTotalBet() {
+		return totalBet;
 	}
 
-	public void setLastBet(int lastBet) {
-		this.lastBet = lastBet;
+	public void setTotalBet(int totalBet) {
+		this.totalBet = totalBet;
 	}
 
 	public boolean isFold() {
@@ -66,14 +69,6 @@ public class PlayerStatus implements Serializable {
 
 	public void setOpen(boolean open) {
 		this.open = open;
-	}
-
-	public boolean isDebt() {
-		return debt;
-	}
-
-	public void setDebt(boolean debt) {
-		this.debt = debt;
 	}
 
 	public boolean isPass() {
