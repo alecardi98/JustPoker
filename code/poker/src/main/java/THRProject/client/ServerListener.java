@@ -47,6 +47,12 @@ public class ServerListener implements Runnable {
 					if (invalidAction.equals("cambio")) {
 						System.out.println("ERRORE! Cambio non valido.");
 					}
+					if (invalidAction.equals("puntata")) {
+						System.out.println("ERRORE! Puntata non valida.");
+					}
+					if (invalidAction.equals("ready")) {
+						System.out.println("ERRORE! Hai già scelto.");
+					}
 					client.checkMoment();
 					break;
 
@@ -58,17 +64,38 @@ public class ServerListener implements Runnable {
 					if (validAction.equals("apertura")) {
 						System.out.println("Apertura registrata.");
 					}
+					if (validAction.equals("passa")) {
+						System.out.println("Passa registrato.");
+					}
 					if (validAction.equals("cambio")) {
 						System.out.println("Cambio registrato.");
 					}
 					if (validAction.equals("servito")) {
 						System.out.println("Servito registrato.");
 					}
+					if (validAction.equals("puntata")) {
+						System.out.println("Puntata registrata.");
+					}
+					if (validAction.equals("fold")) {
+						System.out.println("Fold registrato.");
+					}
+					if (validAction.equals("ready")) {
+						System.out.println("Ready registrato.");
+					}
+					client.checkMoment();
 					break;
 
 				case UPDATE:
 					client.setGame((Game) msg.getData());
 					client.checkMoment();
+					break;
+				
+				case WINNER:
+					System.out.println("Hai vinto la mano!");
+					break;
+					
+				case LOSER:
+					System.out.println("Hai perso la mano.");
 					break;
 
 				default:

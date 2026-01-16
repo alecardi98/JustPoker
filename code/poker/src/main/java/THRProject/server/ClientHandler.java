@@ -2,6 +2,7 @@ package THRProject.server;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 
 import THRProject.message.Message;
 import THRProject.message.MessageType;
@@ -57,26 +58,34 @@ class ClientHandler implements Runnable {
 					Server.getServer().checkApertura(clientId, (Integer) msg.getData());
 					break;
 
-//				case CAMBIO:
-//					Server.getServer().checkCambio(clientId, (Card[]) msg.getData());
-//					break;
-//
-//				case SERVITO:
-//					Server.getServer().checkServito(clientId);
-//					break;
-//
-//				case FOLD:
-//					Server.getServer().foldPlayer(clientId);
-//					break;
-//
-//				case READY:
-//					Server.getServer().countReady();
-//					break;
-//
-//				case QUIT:
-//					cleanup(clientId);
-//					Server.getServer().checkStart();
-//					return;
+				case PASSA:
+					Server.getServer().checkPassa(clientId);
+					break;
+
+				case CAMBIO:
+					Server.getServer().checkCambio(clientId, (ArrayList<Card>) msg.getData());
+					break;
+
+				case SERVITO:
+					Server.getServer().checkServito(clientId);
+					break;
+
+				case PUNTA:
+					Server.getServer().checkPuntata(clientId, (Integer) msg.getData());
+					break;
+
+				case FOLD:
+					Server.getServer().foldPlayer(clientId);
+					break;
+
+				case READY:
+					Server.getServer().countReady(clientId);
+					break;
+
+				case QUIT:
+					cleanup(clientId);
+					Server.getServer().checkStart();
+					return;
 
 				default:
 					System.out.println("ERRORE! Messaggio sconosciuto.");
@@ -106,7 +115,7 @@ class ClientHandler implements Runnable {
 	 * player - chiude il clientHandler
 	 */
 	private void cleanup(int clientId) {
-		Server.getServer().removePlayer(clientId);
+		Server.getServer().getGame().removePlayer(clientId);
 		try {
 			in.close();
 			out.close();

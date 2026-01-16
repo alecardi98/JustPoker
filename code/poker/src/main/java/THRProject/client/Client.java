@@ -44,10 +44,6 @@ public class Client {
 	 * Metodo per avviare la partita del client
 	 */
 	public void startGame() {
-
-		invioInvito();
-		invioApertura(50);
-
 	}
 
 	/*
@@ -135,22 +131,11 @@ public class Client {
 	}
 
 	/*
-	 * Metodo che serve per inviare il vedi al server
-	 */
-	private void invioVedi() {
-		Message msg = gameView.getPlayers().get(clientId).vedi();
-		sendMessage(msg);
-	}
-
-	/*
 	 * Metodo che serve per inviare il cambio al server
 	 */
-	private void invioCambio(Card[] cards) {
-		if (cards.length > 0 && cards.length <= 5) {
-			Message msg = gameView.getPlayers().get(clientId).cambio(cards);
-			sendMessage(msg);
-		} else
-			System.out.println("ERRORE! Cambio non valido.");
+	private void invioCambio() {
+		Message msg = gameView.getPlayers().get(clientId).cambio();
+		sendMessage(msg);
 	}
 
 	/*

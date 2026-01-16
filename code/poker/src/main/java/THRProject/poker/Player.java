@@ -28,30 +28,53 @@ public class Player implements Serializable {
 		return new Message(MessageType.INVITO, null);
 	}
 
+	/*
+	 * Metodo per creare la puntata
+	 */
 	public Message punta(int puntata) { // metodo per effettuare una puntata
 		return new Message(MessageType.PUNTA, puntata);
 	}
 
+	/*
+	 * Metodo per creare l'apertura
+	 */
 	public Message apri(int puntata) {
 		return new Message(MessageType.APRI, puntata);
 	}
 
+	/*
+	 * Metodo per creare il passa
+	 */
 	public Message passa() {
 		return new Message(MessageType.PASSA, null);
 	}
 
+	/*
+	 * Metodo per creare il lascia
+	 */
 	public Message lascia() {
 		return new Message(MessageType.FOLD, null);
 	}
 
-	public Message vedi() {
-		return new Message(MessageType.VEDI, null);
+	/*
+	 * Metodo per creare il cambio
+	 */
+	public Message cambio() {
+		return new Message(MessageType.CAMBIO, changeCards());
 	}
 
-	public Message cambio(Card[] cards) {
-		return new Message(MessageType.CAMBIO, cards);
+	/*
+	 * Metodo per scegliere le carte da cambiare
+	 */
+	public ArrayList<Card> changeCards() {
+		ArrayList<Card> cards = new ArrayList<Card>();
+		// TO DO scelta carte
+		return cards;
 	}
 
+	/*
+	 * Metodo per creare il servito
+	 */
 	public Message servito() {
 		return new Message(MessageType.SERVITO, null);
 	}

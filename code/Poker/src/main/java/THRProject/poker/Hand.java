@@ -1,8 +1,9 @@
 package THRProject.poker;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Hand {
+public class Hand implements Serializable{
 
 	private ArrayList<Card> cards;
 	private Rank rank;

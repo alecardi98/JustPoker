@@ -1,6 +1,8 @@
 package THRProject.poker;
 
-public class Rank {
+import java.io.Serializable;
+
+public class Rank implements Serializable{
 
 	private int level; // indica la scala del punteggio
 	private int value; // indica il valore del punteggio

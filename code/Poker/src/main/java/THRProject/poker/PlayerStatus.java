@@ -7,24 +7,40 @@ public class PlayerStatus implements Serializable {
 	private int fiches;
 	private int totalBet;
 	private boolean fold; // indica se il player ha foldato
-	private boolean open; // indica se il player ha aperto (serve solo per l'apertura)
 	private boolean pass; // indica se il giocatore ha passato (serve solo per l'apertura)
 	private boolean end; // indica se il giocatore ha terminato il proprio turno nella fase corrente
 
 	public PlayerStatus() {
+		// fiches fissate dal server
 		totalBet = 0;
 		fold = false;
-		open = false;
 		pass = false;
 		end = false;
+	}
+
+	/*
+	 * Metodo che serve per resettare il Player tra la fine di un game e l'altro
+	 */
+	public void resetStatusForGame() {
+		fold = false;
+		pass = false;
+		resetStatusForPhase();
 	}
 
 	/*
 	 * Metodo che serve per resettare tra una fase e l'altra le fiches puntate nella
 	 * fase precedente
 	 */
-	public void resetStatus() {
+	public void resetStatusForPhase() {
 		totalBet = 0;
+		resetEnd();
+	}
+
+	/*
+	 * Metodo che serve per resettare player quando uno apre
+	 */
+	public void resetOpen() {
+		pass = false;
 		resetEnd();
 	}
 
@@ -61,14 +77,6 @@ public class PlayerStatus implements Serializable {
 
 	public void setFold(boolean fold) {
 		this.fold = fold;
-	}
-
-	public boolean isOpen() {
-		return open;
-	}
-
-	public void setOpen(boolean open) {
-		this.open = open;
 	}
 
 	public boolean isPass() {
