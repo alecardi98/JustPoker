@@ -1,4 +1,4 @@
-package THRProject.poker;
+package THRProject.card;
 
 import java.io.Serializable;
 
@@ -39,16 +39,7 @@ public class Card implements Serializable {
 		return valore;
 	}
 
-	public void setValore(int valore) {
-		this.valore = valore;
-	}
-
 	public Suit getSeme() {
 		return seme;
 	}
-
-	public void setSeme(Suit seme) {
-		this.seme = seme;
-	}
-
 }

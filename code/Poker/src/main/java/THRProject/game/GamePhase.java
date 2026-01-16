@@ -1,4 +1,4 @@
-package THRProject.poker;
+package THRProject.game;
 
 public enum GamePhase {
 	INVITO, // fase iniziale nel quale tutti devono puntare

@@ -6,6 +6,10 @@ import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
+import THRProject.card.Card;
+import THRProject.card.Hand;
+import THRProject.card.Suit;
+
 class HandTest {
 	
 	@Test

@@ -1,8 +1,9 @@
-package THRProject.poker;
+package THRProject.card;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class Deck implements Serializable {
 
@@ -44,7 +45,7 @@ public class Deck implements Serializable {
 	/*
 	 * Getter & Setter
 	 */
-	public ArrayList<Card> getCards() {
+	public List<Card> getCards() {
 		return cards;
 	}
 

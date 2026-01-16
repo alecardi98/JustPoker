@@ -9,12 +9,12 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import THRProject.card.Card;
+import THRProject.game.Game;
+import THRProject.game.GamePhase;
 import THRProject.message.Message;
-import THRProject.message.MessageType;
-import THRProject.poker.Card;
-import THRProject.poker.Game;
-import THRProject.poker.GamePhase;
-import THRProject.poker.Player;
+import THRProject.message.ControlType;
+import THRProject.player.Player;
 
 public class Server {
 
@@ -43,19 +43,15 @@ public class Server {
 			serverSocket = new ServerSocket(PORT);
 			System.out.println("Server avviato sulla porta " + PORT);
 			System.out.println("In attesa di client...");
-
 			// attesa unione giocatori
 			do {
 				Socket clientSocket = serverSocket.accept(); // accetta nuovo client
 				System.out.println("\nNuovo client connesso: " + clientSocket.getInetAddress());
-
 				ClientHandler handler = new ClientHandler(clientSocket, nextId());
 				System.out.println("Creato Handler per Client " + handler.getClientId());
 				clientHandlers.put(handler.getClientId(), handler);
 				new Thread(handler).start();
-
 			} while (clientHandlers.size() < MAXPLAYERS); // giocano solo MAXPLAYERS giocatori
-
 		} catch (IOException e) {
 			System.err.println("ERRORE! Il server non riesce a creare il socket.\n");
 			e.printStackTrace();
@@ -79,8 +75,7 @@ public class Server {
 			game.getPlayers().put(clientId, player);
 			if (game.getPlayers().size() == MAXPLAYERS) {
 				startGame(); // sarà il ClientHandler che aggiunge l'ultimo Player a far partire il gioco
-				broadcast(new Message(MessageType.START_GAME, null));
-
+				broadcast(new Message(ControlType.START_GAME, null));
 			}
 		}
 	}
@@ -110,24 +105,19 @@ public class Server {
 		synchronized (game) {
 			Player player = game.getPlayers().get(clientId);
 			ClientHandler clientHandler = clientHandlers.get(clientId);
-
 			if (clientId == game.getCurrentTurn() && !player.getStatus().isFold() && !player.getStatus().isEnd()) {
-
 				int invito = MINBET;
-
 				if (invito > player.getStatus().getFiches()) {
 					System.out.println("ERRORE! Invito Client " + clientId + " non valido.");
-					clientHandler.sendMessage(new Message(MessageType.INVALID_ACTION, "invito"));
+					clientHandler.sendMessage(new Message(ControlType.INVALID_ACTION, "invito"));
 				} else {
-
 					// registra invito
 					System.out.println("Invito Client " + clientId + " registrato.");
 					game.getPot().setTotal(game.getPot().getTotal() + invito);
 					player.getStatus().setEnd(true);
 					player.getStatus().setFiches(player.getStatus().getFiches() - invito);
 					game.nextTurn();
-
-					clientHandler.sendMessage(new Message(MessageType.VALID_ACTION, "invito"));
+					clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "invito"));
 					checkNextPhase();
 					broadcastSafeGameView();
 				}
@@ -157,7 +147,6 @@ public class Server {
 		synchronized (game) {
 			Player player = game.getPlayers().get(clientId);
 			ClientHandler clientHandler = clientHandlers.get(clientId);
-
 			if (clientId == game.getCurrentTurn() && !player.getStatus().isFold() && !player.getStatus().isEnd()) {
 				player.getHand().checkRank();
 				if ((player.getHand().getRank().getLevel() == 2 && player.getHand().getRank().getValue() >= 22)
@@ -165,9 +154,8 @@ public class Server {
 					if (puntata > player.getStatus().getFiches()
 							|| player.getStatus().getTotalBet() + puntata < game.getPot().getMaxBet()) {
 						System.out.println("ERRORE! Apertura Client " + clientId + " non valida.");
-						clientHandler.sendMessage(new Message(MessageType.INVALID_ACTION, "apertura"));
+						clientHandler.sendMessage(new Message(ControlType.INVALID_ACTION, "apertura"));
 					} else {
-
 						// registra apertura
 						System.out.println("Apertura Client " + clientId + " registrata.");
 						game.setOpen(true);
@@ -176,22 +164,19 @@ public class Server {
 						player.getStatus().setEnd(true);
 						player.getStatus().setFiches(player.getStatus().getFiches() - puntata);
 						game.nextTurn();
-						clientHandler.sendMessage(new Message(MessageType.VALID_ACTION, "apertura"));
-
+						clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "apertura"));
 						for (Map.Entry<Integer, Player> p : game.getPlayers().entrySet()) {
 							if (p.getKey() != clientId) {
 								p.getValue().getStatus().resetOpen();
 							}
 						}
-
-						resetBet(clientId);
-
+						game.resetBet(clientId);
 						checkNextPhase();
 						broadcastSafeGameView();
 					}
 				} else {
 					System.out.println("ERRORE! Client " + clientId + " non possiede almeno una coppia di J");
-					clientHandler.sendMessage(new Message(MessageType.INVALID_ACTION, "apertura"));
+					clientHandler.sendMessage(new Message(ControlType.INVALID_ACTION, "apertura"));
 				}
 			}
 		}
@@ -204,25 +189,21 @@ public class Server {
 		synchronized (game) {
 			Player player = game.getPlayers().get(clientId);
 			ClientHandler clientHandler = clientHandlers.get(clientId);
-
 			if (clientId == game.getCurrentTurn() && !player.getStatus().isFold() && !player.getStatus().isEnd()) {
 
 				if (puntata > player.getStatus().getFiches()
 						|| player.getStatus().getTotalBet() + puntata < game.getPot().getMaxBet()) {
 					System.out.println("ERRORE! Puntata Client " + clientId + " non valida.");
-					clientHandler.sendMessage(new Message(MessageType.INVALID_ACTION, "puntata"));
+					clientHandler.sendMessage(new Message(ControlType.INVALID_ACTION, "puntata"));
 				} else {
-
 					// registra puntata
 					System.out.println("Puntata Client " + clientId + " registrata.");
 					game.getPot().setTotal(game.getPot().getTotal() + puntata);
 					player.getStatus().setEnd(true);
 					player.getStatus().setFiches(player.getStatus().getFiches() - puntata);
 					game.nextTurn();
-					clientHandler.sendMessage(new Message(MessageType.VALID_ACTION, "puntata"));
-
-					resetBet(clientId);
-
+					clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "puntata"));
+					game.resetBet(clientId);
 					checkNextPhase();
 					broadcastSafeGameView();
 				}
@@ -238,24 +219,19 @@ public class Server {
 		synchronized (game) {
 			Player player = game.getPlayers().get(clientId);
 			ClientHandler clientHandler = clientHandlers.get(clientId);
-
 			if (clientId == game.getCurrentTurn() && !player.getStatus().isFold() && !player.getStatus().isEnd()) {
-
 				// registra passa
 				System.out.println("Passa Client " + clientId + " registrato.");
 				player.getStatus().setEnd(true);
 				player.getStatus().setPass(true);
 				game.nextTurn();
-				clientHandler.sendMessage(new Message(MessageType.VALID_ACTION, "passa"));
-
+				clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "passa"));
 				checkRestart();
 				checkNextPhase();
 				broadcastSafeGameView();
-
 			} else
 				System.out.println("ERRORE! Non puoi giocare.");
 		}
-
 	}
 
 	/*
@@ -265,31 +241,26 @@ public class Server {
 		synchronized (game) {
 			if (clientId == game.getCurrentTurn() && !game.getPlayers().get(clientId).getStatus().isFold()
 					&& !game.getPlayers().get(clientId).getStatus().isEnd()) {
-
 				Player player = game.getPlayers().get(clientId);
 				ClientHandler clientHandler = clientHandlers.get(clientId);
-
 				if (cardsToRemove.isEmpty() || cardsToRemove.size() > 5) {
 					System.out.println("ERRORE! Cambio Client " + clientId + " non valido.");
-					clientHandler.sendMessage(new Message(MessageType.INVALID_ACTION, "cambio"));
+					clientHandler.sendMessage(new Message(ControlType.INVALID_ACTION, "cambio"));
 				} else {
 					System.out.println("Cambio Client " + clientId + " registrato.");
-
 					// rimuovo le carte
 					for (Card c : cardsToRemove) {
 						player.getHand().getCards().remove(c);
 					}
-
 					// pesca le carte
 					for (int i = 0; i < cardsToRemove.size(); i++) {
 						Card c = game.getDeck().getCards().get(0);
 						player.getHand().getCards().add(c);
 						game.getDeck().getCards().remove(c);
 					}
-
 					player.getStatus().setEnd(true);
 					game.nextTurn();
-					clientHandler.sendMessage(new Message(MessageType.VALID_ACTION, "cambio"));
+					clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "cambio"));
 					checkNextPhase();
 					broadcastSafeGameView();
 				}
@@ -307,7 +278,7 @@ public class Server {
 			System.out.println("Servito Client " + clientId + " registrato.");
 			player.getStatus().setEnd(true);
 			game.nextTurn();
-			clientHandler.sendMessage(new Message(MessageType.VALID_ACTION, "servito"));
+			clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "servito"));
 			checkNextPhase();
 			broadcastSafeGameView();
 		}
@@ -327,113 +298,72 @@ public class Server {
 	 */
 	private void checkWinner() {
 		synchronized (game) {
-
 			// estraggo solo i player attivi
 			ConcurrentHashMap<Integer, Player> activePlayers = new ConcurrentHashMap<Integer, Player>();
 			for (Map.Entry<Integer, Player> p : game.getPlayers().entrySet()) {
 				if (!p.getValue().getStatus().isFold())
 					activePlayers.put(p.getKey(), p.getValue());
 			}
-
 			// calcolo del rank
 			for (Map.Entry<Integer, Player> p : activePlayers.entrySet()) {
 				p.getValue().getHand().checkRank();
 			}
-
 			// calcolo del massimo level
 			int maxLevel = 1;
 			for (Map.Entry<Integer, Player> p : activePlayers.entrySet()) {
 				if (p.getValue().getHand().getRank().getLevel() > maxLevel)
 					maxLevel = p.getValue().getHand().getRank().getLevel();
 			}
-
 			// calcolo quanti hanno il massimo level
 			int countMaxLevel = 0;
 			for (Map.Entry<Integer, Player> p : activePlayers.entrySet()) {
 				if (p.getValue().getHand().getRank().getLevel() == maxLevel)
 					countMaxLevel++;
 			}
-
 			if (countMaxLevel == 1) {// un solo vincitore
 				for (Map.Entry<Integer, Player> p : activePlayers.entrySet()) {
 					if (p.getValue().getHand().getRank().getLevel() == maxLevel) {
-						clientHandlers.get(p.getKey()).sendMessage(new Message(MessageType.WINNER, null));
+						clientHandlers.get(p.getKey()).sendMessage(new Message(ControlType.WINNER, null));
 						game.getPlayers().get(p.getKey()).getStatus().setFiches(
 								game.getPlayers().get(p.getKey()).getStatus().getFiches() + game.getPot().getTotal());
 					} else {
-						clientHandlers.get(p.getKey()).sendMessage(new Message(MessageType.LOSER, null));
+						clientHandlers.get(p.getKey()).sendMessage(new Message(ControlType.LOSER, null));
 					}
 				}
 			} else { // spareggio level
-
 				// calcolo massimo valore di value
 				int maxValue = 0;
 				for (Map.Entry<Integer, Player> p : activePlayers.entrySet()) {
 					if (p.getValue().getHand().getRank().getValue() > maxValue)
 						maxValue = p.getValue().getHand().getRank().getValue();
 				}
-
 				// calcolo quanti hanno massimo valore di value
 				int countMaxValue = 0;
 				for (Map.Entry<Integer, Player> p : activePlayers.entrySet()) {
 					if (p.getValue().getHand().getRank().getValue() == maxValue)
 						countMaxValue++;
 				}
-
 				if (countMaxValue == 1) { // un solo vincitore
 					for (Map.Entry<Integer, Player> p : activePlayers.entrySet()) {
 						if (p.getValue().getHand().getRank().getValue() == maxValue) {
-							clientHandlers.get(p.getKey()).sendMessage(new Message(MessageType.WINNER, null));
+							clientHandlers.get(p.getKey()).sendMessage(new Message(ControlType.WINNER, null));
 							game.getPlayers().get(p.getKey()).getStatus()
 									.setFiches(game.getPlayers().get(p.getKey()).getStatus().getFiches()
 											+ game.getPot().getTotal());
 						} else {
-							clientHandlers.get(p.getKey()).sendMessage(new Message(MessageType.LOSER, null));
+							clientHandlers.get(p.getKey()).sendMessage(new Message(ControlType.LOSER, null));
 						}
 					}
 				} else { // pareggio
 					for (Map.Entry<Integer, Player> p : activePlayers.entrySet()) {
-						if (p.getValue().getHand().getRank().getLevel() == maxLevel) {
-							clientHandlers.get(p.getKey()).sendMessage(new Message(MessageType.WINNER, null));
+						if (p.getValue().getHand().getRank().getLevel() == maxLevel && countMaxValue != 0) {
+							clientHandlers.get(p.getKey()).sendMessage(new Message(ControlType.WINNER, null));
 							game.getPlayers().get(p.getKey()).getStatus()
 									.setFiches(game.getPlayers().get(p.getKey()).getStatus().getFiches()
 											+ (game.getPot().getTotal() / countMaxValue));
 						} else {
-							clientHandlers.get(p.getKey()).sendMessage(new Message(MessageType.LOSER, null));
+							clientHandlers.get(p.getKey()).sendMessage(new Message(ControlType.LOSER, null));
 						}
-					}
-				}
-			}
-		}
-	}
-
-	/*
-	 * Metodo per far foldare il player
-	 */
-	public void foldPlayer(int clientId) {
-		synchronized (game) {
-			Player player = game.getPlayers().get(clientId);
-			ClientHandler clientHandler = clientHandlers.get(clientId);
-			player.getStatus().setEnd(true);
-			player.getStatus().setFold(true);
-			clientHandler.sendMessage(new Message(MessageType.VALID_ACTION, "fold"));
-		}
-	}
-
-	/*
-	 * Metodo che resetta lo stato dei player in debito dopo un rilancio
-	 */
-	private void resetBet(int clientId) {
-		synchronized (game) {
-			Player player = game.getPlayers().get(clientId);
-			if (player.getStatus().getTotalBet() > game.getPot().getMaxBet()) {
-				game.getPot().setMaxBet(player.getStatus().getTotalBet());
-
-				Set<Integer> ids = game.getPlayers().keySet();
-				for (int id : ids) {
-					if (game.getPlayers().get(id).getStatus().getTotalBet() < game.getPot().getMaxBet()
-							&& !game.getPlayers().get(id).getStatus().isFold()) { // solo se attivi
-						game.getPlayers().get(id).getStatus().setEnd(false);
 					}
 				}
 			}
@@ -469,11 +399,9 @@ public class Server {
 			for (Map.Entry<Integer, Player> p : game.getPlayers().entrySet()) {
 				if (p.getValue().getStatus().isPass() && !p.getValue().getStatus().isFold())
 					count++; // conta chi ha passato e non ha foldato
-
 				if (!p.getValue().getStatus().isFold())
 					active++; // conta chi non ha foldato
 			}
-
 			if (count == active)
 				game.setPhase(GamePhase.ENDPASS);
 		}
@@ -490,26 +418,22 @@ public class Server {
 				game.resetPhase();
 				broadcastSafeGameView();
 				break;
-
 			case APERTURA: // preparazione alla fase di Accomodo
 				game.setPhase(GamePhase.ACCOMODO);
 				game.resetPhase();
 				broadcastSafeGameView();
 				break;
-
 			case ACCOMODO: // preparazione alla fase di Puntata
 				game.setPhase(GamePhase.PUNTATA);
 				game.resetPhase();
 				broadcastSafeGameView();
 				break;
-
 			case PUNTATA: // preparazione alla fase di Showdown
 				game.setPhase(GamePhase.SHOWDOWN);
 				game.resetPhase();
 				broadcastSafeGameView();
 				startShowdown();
 				break;
-
 			default:
 				System.out.println("ERRORE! Fase di gioco non esistente.");
 			}
@@ -523,11 +447,11 @@ public class Server {
 	public synchronized void countReady(int clientId) {
 		if (!game.getPlayers().get(clientId).getStatus().isEnd()) {
 			game.getPlayers().get(clientId).getStatus().setEnd(true);
-			clientHandlers.get(clientId).sendMessage(new Message(MessageType.VALID_ACTION, "ready"));
+			clientHandlers.get(clientId).sendMessage(new Message(ControlType.VALID_ACTION, "ready"));
 			readyCount++;
 			checkStart();
 		} else {
-			clientHandlers.get(clientId).sendMessage(new Message(MessageType.INVALID_ACTION, "ready"));
+			clientHandlers.get(clientId).sendMessage(new Message(ControlType.INVALID_ACTION, "ready"));
 		}
 	}
 
@@ -538,11 +462,10 @@ public class Server {
 		if (readyCount == game.getPlayers().size()) {
 			if (readyCount == 1) {
 				System.out.println("ERRORE! Partita terminata per mancanza di giocatori.");
-				clientHandlers.get(0).sendMessage(new Message(MessageType.WINNER, null));
+				clientHandlers.get(0).sendMessage(new Message(ControlType.WINNER, null));
 				System.exit(1);
 			} else {
 				readyCount = 0;
-
 				if (game.getPhase().equals(GamePhase.END)) {
 					game.setPhase(GamePhase.INVITO);
 					startGame();
@@ -553,7 +476,6 @@ public class Server {
 					startGame();
 				}
 			}
-
 		}
 	}
 
@@ -561,7 +483,7 @@ public class Server {
 	 * Metodo per creare ed inviare broadcast a tutti i client una view dello stato
 	 * di game che non esponga dati sensibili agli altri client
 	 */
-	private void broadcastSafeGameView() {
+	public void broadcastSafeGameView() {
 		synchronized (game) {
 			for (Map.Entry<Integer, ClientHandler> c : clientHandlers.entrySet()) {
 				Game gameView = new Game(MINBET);
@@ -574,8 +496,7 @@ public class Server {
 				}
 				gameView.setPot(game.getPot());
 				gameView.setDeck(null);
-
-				c.getValue().sendMessage(new Message(MessageType.UPDATE, gameView));
+				c.getValue().sendMessage(new Message(ControlType.UPDATE, gameView));
 			}
 		}
 	}
@@ -599,6 +520,13 @@ public class Server {
 	}
 
 	/*
+	 * Metodo per il testing
+	 */
+	static void resetInstance() {
+		server = null;
+	}
+
+	/*
 	 * Getter & Setter
 	 */
 	public static Server getServer() {
@@ -607,16 +535,15 @@ public class Server {
 		return server;
 	}
 
-	public static int getMaxPlayers() {
-		return MAXPLAYERS;
-	}
-
 	public Game getGame() {
 		return game;
 	}
 
-	public static int getMinbet() {
-		return MINBET;
+	public void setGame(Game game) {
+		this.game = game;
 	}
 
+	public void setClientHandlers(ConcurrentHashMap<Integer, ClientHandler> clientHandlers) {
+		this.clientHandlers = clientHandlers;
+	}
 }

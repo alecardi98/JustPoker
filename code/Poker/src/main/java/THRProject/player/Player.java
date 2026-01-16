@@ -1,11 +1,12 @@
-package THRProject.poker;
+package THRProject.player;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
+import THRProject.card.Card;
+import THRProject.card.Hand;
 import THRProject.message.Message;
-import THRProject.message.MessageType;
+import THRProject.message.ActionType;
 
 public class Player implements Serializable {
 
@@ -25,42 +26,42 @@ public class Player implements Serializable {
 	 * Metodo per creare l'invito (fisso a MINBET)
 	 */
 	public Message invito() {
-		return new Message(MessageType.INVITO, null);
+		return new Message(ActionType.INVITO, null);
 	}
 
 	/*
 	 * Metodo per creare la puntata
 	 */
 	public Message punta(int puntata) { // metodo per effettuare una puntata
-		return new Message(MessageType.PUNTA, puntata);
+		return new Message(ActionType.PUNTA, puntata);
 	}
 
 	/*
 	 * Metodo per creare l'apertura
 	 */
 	public Message apri(int puntata) {
-		return new Message(MessageType.APRI, puntata);
+		return new Message(ActionType.APRI, puntata);
 	}
 
 	/*
 	 * Metodo per creare il passa
 	 */
 	public Message passa() {
-		return new Message(MessageType.PASSA, null);
+		return new Message(ActionType.PASSA, null);
 	}
 
 	/*
 	 * Metodo per creare il lascia
 	 */
 	public Message lascia() {
-		return new Message(MessageType.FOLD, null);
+		return new Message(ActionType.FOLD, null);
 	}
 
 	/*
 	 * Metodo per creare il cambio
 	 */
 	public Message cambio() {
-		return new Message(MessageType.CAMBIO, changeCards());
+		return new Message(ActionType.CAMBIO, changeCards());
 	}
 
 	/*
@@ -76,34 +77,18 @@ public class Player implements Serializable {
 	 * Metodo per creare il servito
 	 */
 	public Message servito() {
-		return new Message(MessageType.SERVITO, null);
+		return new Message(ActionType.SERVITO, null);
 	}
 
 	/*
 	 * Getter & Setter
 	 */
-	public String getUsername() {
-		return username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
 	public Hand getHand() {
 		return hand;
 	}
 
 	public PlayerStatus getStatus() {
 		return status;
-	}
-
-	public void setStatus(PlayerStatus status) {
-		this.status = status;
 	}
 
 	public void setHand(Hand hand) {

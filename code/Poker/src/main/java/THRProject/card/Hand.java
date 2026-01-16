@@ -1,4 +1,4 @@
-package THRProject.poker;
+package THRProject.card;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -125,10 +125,6 @@ public class Hand implements Serializable{
 
 	public Rank getRank() {
 		return rank;
-	}
-
-	public void setRank(Rank rank) {
-		this.rank = rank;
 	}
 
 }

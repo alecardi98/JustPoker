@@ -1,10 +1,15 @@
-package THRProject.poker;
+package THRProject.game;
 
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+
+import THRProject.card.Card;
+import THRProject.card.Deck;
+import THRProject.card.Hand;
+import THRProject.player.Player;
 
 public class Game implements Serializable {
 
@@ -35,7 +40,7 @@ public class Game implements Serializable {
 			}
 
 			Set<Integer> turns = players.keySet();
-			int min = currentTurn;
+			int min = Integer.MAX_VALUE;
 			for (int id : turns) {
 				if (id < min)
 					min = id;
@@ -76,12 +81,30 @@ public class Game implements Serializable {
 				return;
 			}
 
-			int minGreat = max; // è il minore tra i valori maggiori del turno corrente
 			for (int id : turns) {
 				if (id > currentTurn && id < max)
 					max = id;
 			}
 			currentTurn = max;
+		}
+	}
+
+	/*
+	 * Metodo che resetta lo stato dei player in debito dopo un rilancio
+	 */
+	public void resetBet(int clientId) {
+		synchronized (this) {
+			Player player = players.get(clientId);
+			if (player.getStatus().getTotalBet() > pot.getMaxBet()) {
+				pot.setMaxBet(player.getStatus().getTotalBet());
+				Set<Integer> ids = players.keySet();
+				for (int id : ids) {
+					if (players.get(id).getStatus().getTotalBet() < pot.getMaxBet()
+							&& !players.get(id).getStatus().isFold()) { // solo se attivi
+						players.get(id).getStatus().setEnd(false);
+					}
+				}
+			}
 		}
 	}
 
@@ -129,7 +152,7 @@ public class Game implements Serializable {
 	 */
 	public void splitPot() {
 		synchronized (this) {
-			int active = 1;
+			int active = 0;
 			for (Map.Entry<Integer, Player> p : players.entrySet()) {
 				if (!p.getValue().getStatus().isFold())
 					active++;
@@ -140,6 +163,18 @@ public class Game implements Serializable {
 					p.getValue().getStatus()
 							.setFiches(p.getValue().getStatus().getFiches() + (pot.getTotal() / active));
 			}
+		}
+	}
+
+	/*
+	 * Metodo per far foldare il player
+	 */
+	public void foldPlayer(int clientId) {
+		synchronized (this) {
+			Player player = players.get(clientId);
+			player.getStatus().setEnd(true);
+			player.getStatus().setFold(true);
+			checkFirstTurn();
 		}
 	}
 
@@ -213,6 +248,10 @@ public class Game implements Serializable {
 
 	public void setOpen(boolean open) {
 		this.open = open;
+	}
+
+	public void setPlayers(ConcurrentHashMap<Integer, Player> players) {
+		this.players = players;
 	}
 
 }

@@ -1,4 +1,4 @@
-package THRProject.poker;
+package THRProject.card;
 
 import java.io.Serializable;
 

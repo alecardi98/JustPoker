@@ -5,11 +5,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import THRProject.game.Game;
 import THRProject.message.Message;
-import THRProject.message.MessageType;
-import THRProject.poker.Card;
-import THRProject.poker.Game;
-import THRProject.poker.Player;
+import THRProject.message.ControlType;
+import THRProject.player.Player;
 
 public class Client {
 
@@ -21,13 +20,11 @@ public class Client {
 //	private static final String HOST = "204.216.208.188";
 	private static final int PORT = 443;
 
-	private boolean quit; // indica quando il client ha lasciato la partita disconnettendosi dal server
 	private Game gameView; // variabile che contiene solo i dati personali del game
 	private int clientId;
 	private Player player;
 
 	public Client() {
-		quit = false;
 	}
 
 	/*
@@ -151,7 +148,7 @@ public class Client {
 	 * server
 	 */
 	public void ready() {
-		Message msg = new Message(MessageType.READY, clientId);
+		Message msg = new Message(ControlType.READY, clientId);
 		sendMessage(msg);
 	}
 
@@ -160,7 +157,7 @@ public class Client {
 	 * server
 	 */
 	public void quit() {
-		Message msg = new Message(MessageType.QUIT, clientId);
+		Message msg = new Message(ControlType.QUIT, clientId);
 		sendMessage(msg);
 		serverDisconnection();
 	}
@@ -191,13 +188,4 @@ public class Client {
 	public Player getPlayer() {
 		return player;
 	}
-
-	public boolean isQuit() {
-		return quit;
-	}
-
-	public void setQuit(boolean quit) {
-		this.quit = quit;
-	}
-
 }
