@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import THRProject.card.Card;
 import THRProject.message.ActionType;
+import THRProject.message.Communicator;
 import THRProject.message.ControlType;
 import THRProject.message.Message;
 import THRProject.player.Player;
@@ -13,7 +14,7 @@ import THRProject.player.Player;
 /*
  * Classe che rappresenta il thread del server che gestirà la connessione con un client 
  */
-class ClientHandler implements Runnable {
+class ClientHandler implements Runnable, Communicator {
 
 	private Socket socket;
 	private ObjectOutputStream out;
@@ -111,18 +112,6 @@ class ClientHandler implements Runnable {
 	}
 
 	/*
-	 * Metodo per inviare messaggi al client
-	 */
-	public void sendMessage(Object msg) {
-		try {
-			out.writeObject(msg);
-			out.flush();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/*
 	 * Metodo per chiudere correttamente la connessione con il client - rimuove il
 	 * player - chiude il clientHandler
 	 */
@@ -143,6 +132,16 @@ class ClientHandler implements Runnable {
 	 */
 	public int getClientId() {
 		return clientId;
+	}
+
+	@Override
+	public void sendMessage(Object msg) {
+		try {
+			out.writeObject(msg);
+			out.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -7,10 +7,11 @@ import java.net.Socket;
 
 import THRProject.game.Game;
 import THRProject.message.Message;
+import THRProject.message.Communicator;
 import THRProject.message.ControlType;
 import THRProject.player.Player;
 
-public class Client {
+public class Client implements Communicator {
 
 	private ObjectOutputStream out;
 	private ServerListener serverListener;
@@ -161,10 +162,8 @@ public class Client {
 		sendMessage(msg);
 		serverDisconnection();
 	}
-
-	/*
-	 * Metodo per inviare messaggi al server
-	 */
+	
+	@Override
 	public void sendMessage(Object msg) {
 		try {
 			out.writeObject(msg);

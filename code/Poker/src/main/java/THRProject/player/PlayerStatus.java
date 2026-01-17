@@ -51,6 +51,10 @@ public class PlayerStatus implements Serializable {
 	public void resetEnd() {
 		end = false;
 	}
+	
+	public boolean isActive() {
+		return !fold && !end;
+	}
 
 	/*
 	 * Getter & Setter

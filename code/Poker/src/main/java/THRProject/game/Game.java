@@ -33,13 +33,7 @@ public class Game implements Serializable {
 	 */
 	public void checkFirstTurn() {
 		synchronized (this) {
-			ConcurrentHashMap<Integer, Player> players = new ConcurrentHashMap<Integer, Player>(this.players);
-			for (Map.Entry<Integer, Player> p : players.entrySet()) {
-				if (p.getValue().getStatus().isFold())
-					players.remove(p.getKey()); // rimuovo dalla turnazione attuale chi ha foldato
-			}
-
-			Set<Integer> turns = players.keySet();
+			Set<Integer> turns = getPossibleTurns();
 			int min = Integer.MAX_VALUE;
 			for (int id : turns) {
 				if (id < min)
@@ -56,21 +50,12 @@ public class Game implements Serializable {
 	 */
 	public void nextTurn() {
 		synchronized (this) {
-
-			ConcurrentHashMap<Integer, Player> players = new ConcurrentHashMap<Integer, Player>(getPlayers());
-			for (Map.Entry<Integer, Player> p : this.players.entrySet()) {
-				if (p.getValue().getStatus().isFold())
-					players.remove(p.getKey()); // rimuovo dalla turnazione attuale chi ha foldato
-			}
-
-			Set<Integer> turns = players.keySet();
-
+			Set<Integer> turns = getPossibleTurns();
 			int max = currentTurn;
 			for (int id : turns) {
 				if (id > max)
 					max = id;
 			}
-
 			if (max == currentTurn) { // se il massimo è il turno corrente devo tornare al minimo
 				int min = currentTurn;
 				for (int id : turns) {
@@ -80,13 +65,34 @@ public class Game implements Serializable {
 				currentTurn = min;
 				return;
 			}
-
 			for (int id : turns) {
 				if (id > currentTurn && id < max)
 					max = id;
 			}
 			currentTurn = max;
 		}
+	}
+
+	/*
+	 * Metodo che restituisce il set di turni sul quale turnare
+	 */
+	public Set<Integer> getPossibleTurns() {
+		ConcurrentHashMap<Integer, Player> activePlayers = new ConcurrentHashMap<Integer, Player>(players);
+		for (Map.Entry<Integer, Player> p : players.entrySet()) {
+			if (p.getValue().getStatus().isFold())
+				activePlayers.remove(p.getKey()); // rimuovo dalla turnazione attuale chi ha foldato
+		}
+		return activePlayers.keySet();
+	}
+
+	/*
+	 * Metodo che serve per registrare la puntata nel game
+	 */
+	public void punta(Player player, int puntata) {
+		pot.setTotal(pot.getTotal() + puntata);
+		player.getStatus().setTotalBet(player.getStatus().getTotalBet() + puntata);
+		player.getStatus().setFiches(player.getStatus().getFiches() - puntata);
+		player.getStatus().setEnd(true);
 	}
 
 	/*

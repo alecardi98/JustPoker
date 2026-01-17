@@ -79,9 +79,7 @@ public class Hand implements Serializable{
 					&& counters[i + 3] == counters[i + 4]) { // scala
 				rank.setLevel(5);
 				rank.setValue(45 + (5 * i));
-				if (cards.get(0).getSeme() == cards.get(1).getSeme() && cards.get(1).getSeme() == cards.get(2).getSeme()
-						&& cards.get(2).getSeme() == cards.get(3).getSeme()
-						&& cards.get(3).getSeme() == cards.get(4).getSeme()) {// scala colore
+				if (isColore()) {// scala colore
 					rank.setLevel(9);
 				}
 				return;
@@ -90,9 +88,7 @@ public class Hand implements Serializable{
 
 		// ricerca colore
 		boolean color = false;
-		if (cards.get(0).getSeme() == cards.get(1).getSeme() && cards.get(1).getSeme() == cards.get(2).getSeme()
-				&& cards.get(2).getSeme() == cards.get(3).getSeme()
-				&& cards.get(3).getSeme() == cards.get(4).getSeme()) {
+		if (isColore()) {
 			rank.setLevel(6);
 
 			int sum = 0;
@@ -112,6 +108,12 @@ public class Hand implements Serializable{
 		rank.setValue(max);
 	}
 
+	private boolean isColore() {
+		return cards.get(0).getSeme() == cards.get(1).getSeme() && cards.get(1).getSeme() == cards.get(2).getSeme()
+				&& cards.get(2).getSeme() == cards.get(3).getSeme()
+				&& cards.get(3).getSeme() == cards.get(4).getSeme();
+	}
+	
 	/*
 	 * Getter & Setter
 	 */

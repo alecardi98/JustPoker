@@ -6,7 +6,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import THRProject.card.Card;
@@ -16,7 +15,7 @@ import THRProject.message.Message;
 import THRProject.message.ControlType;
 import THRProject.player.Player;
 
-public class Server {
+public final class Server {
 
 	private static Server server; // singleton Server
 	private static final int PORT = 443; // porta per la connessione
@@ -105,7 +104,7 @@ public class Server {
 		synchronized (game) {
 			Player player = game.getPlayers().get(clientId);
 			ClientHandler clientHandler = clientHandlers.get(clientId);
-			if (clientId == game.getCurrentTurn() && !player.getStatus().isFold() && !player.getStatus().isEnd()) {
+			if (clientId == game.getCurrentTurn() && player.getStatus().isActive()) {
 				int invito = MINBET;
 				if (invito > player.getStatus().getFiches()) {
 					System.out.println("ERRORE! Invito Client " + clientId + " non valido.");
@@ -113,9 +112,7 @@ public class Server {
 				} else {
 					// registra invito
 					System.out.println("Invito Client " + clientId + " registrato.");
-					game.getPot().setTotal(game.getPot().getTotal() + invito);
-					player.getStatus().setEnd(true);
-					player.getStatus().setFiches(player.getStatus().getFiches() - invito);
+					game.punta(player, invito);
 					game.nextTurn();
 					clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "invito"));
 					checkNextPhase();
@@ -147,22 +144,18 @@ public class Server {
 		synchronized (game) {
 			Player player = game.getPlayers().get(clientId);
 			ClientHandler clientHandler = clientHandlers.get(clientId);
-			if (clientId == game.getCurrentTurn() && !player.getStatus().isFold() && !player.getStatus().isEnd()) {
+			if (clientId == game.getCurrentTurn() && player.getStatus().isActive()) {
 				player.getHand().checkRank();
 				if ((player.getHand().getRank().getLevel() == 2 && player.getHand().getRank().getValue() >= 22)
 						|| player.getHand().getRank().getLevel() > 2) { // controllo almeno coppia di Jack
-					if (puntata > player.getStatus().getFiches()
-							|| player.getStatus().getTotalBet() + puntata < game.getPot().getMaxBet()) {
+					if (!valorePuntataValido(puntata, player)) {
 						System.out.println("ERRORE! Apertura Client " + clientId + " non valida.");
 						clientHandler.sendMessage(new Message(ControlType.INVALID_ACTION, "apertura"));
 					} else {
 						// registra apertura
 						System.out.println("Apertura Client " + clientId + " registrata.");
 						game.setOpen(true);
-						game.getPot().setTotal(game.getPot().getTotal() + puntata);
-						player.getStatus().setTotalBet(player.getStatus().getTotalBet() + puntata);
-						player.getStatus().setEnd(true);
-						player.getStatus().setFiches(player.getStatus().getFiches() - puntata);
+						game.punta(player, puntata);
 						game.nextTurn();
 						clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "apertura"));
 						for (Map.Entry<Integer, Player> p : game.getPlayers().entrySet()) {
@@ -189,18 +182,15 @@ public class Server {
 		synchronized (game) {
 			Player player = game.getPlayers().get(clientId);
 			ClientHandler clientHandler = clientHandlers.get(clientId);
-			if (clientId == game.getCurrentTurn() && !player.getStatus().isFold() && !player.getStatus().isEnd()) {
+			if (clientId == game.getCurrentTurn() && player.getStatus().isActive()) {
 
-				if (puntata > player.getStatus().getFiches()
-						|| player.getStatus().getTotalBet() + puntata < game.getPot().getMaxBet()) {
+				if (!valorePuntataValido(puntata, player)) {
 					System.out.println("ERRORE! Puntata Client " + clientId + " non valida.");
 					clientHandler.sendMessage(new Message(ControlType.INVALID_ACTION, "puntata"));
 				} else {
 					// registra puntata
 					System.out.println("Puntata Client " + clientId + " registrata.");
-					game.getPot().setTotal(game.getPot().getTotal() + puntata);
-					player.getStatus().setEnd(true);
-					player.getStatus().setFiches(player.getStatus().getFiches() - puntata);
+					game.punta(player, puntata);
 					game.nextTurn();
 					clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "puntata"));
 					game.resetBet(clientId);
@@ -213,13 +203,21 @@ public class Server {
 	}
 
 	/*
+	 * Metodo per controllare se la puntata ha un valore esatto
+	 */
+	public boolean valorePuntataValido(int puntata, Player player) {
+		return puntata <= player.getStatus().getFiches()
+				&& player.getStatus().getTotalBet() + puntata >= game.getPot().getMaxBet();
+	}
+
+	/*
 	 * Metodo per validare l'azione PASSA del client
 	 */
 	public void checkPassa(int clientId) {
 		synchronized (game) {
 			Player player = game.getPlayers().get(clientId);
 			ClientHandler clientHandler = clientHandlers.get(clientId);
-			if (clientId == game.getCurrentTurn() && !player.getStatus().isFold() && !player.getStatus().isEnd()) {
+			if (clientId == game.getCurrentTurn() && player.getStatus().isActive()) {
 				// registra passa
 				System.out.println("Passa Client " + clientId + " registrato.");
 				player.getStatus().setEnd(true);
@@ -323,6 +321,7 @@ public class Server {
 			if (countMaxLevel == 1) {// un solo vincitore
 				for (Map.Entry<Integer, Player> p : activePlayers.entrySet()) {
 					if (p.getValue().getHand().getRank().getLevel() == maxLevel) {
+
 						clientHandlers.get(p.getKey()).sendMessage(new Message(ControlType.WINNER, null));
 						game.getPlayers().get(p.getKey()).getStatus().setFiches(
 								game.getPlayers().get(p.getKey()).getStatus().getFiches() + game.getPot().getTotal());
