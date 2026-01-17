@@ -51,7 +51,10 @@ public class PlayerStatus implements Serializable {
 	public void resetEnd() {
 		end = false;
 	}
-	
+
+	/*
+	 * Metodo che permette di capire se un giocatore è attivo
+	 */
 	public boolean isActive() {
 		return !fold && !end;
 	}

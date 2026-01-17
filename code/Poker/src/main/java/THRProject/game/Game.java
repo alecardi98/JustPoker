@@ -175,9 +175,8 @@ public class Game implements Serializable {
 	/*
 	 * Metodo per far foldare il player
 	 */
-	public void foldPlayer(int clientId) {
+	public void foldPlayer(Player player) {
 		synchronized (this) {
-			Player player = players.get(clientId);
 			player.getStatus().setEnd(true);
 			player.getStatus().setFold(true);
 			checkFirstTurn();

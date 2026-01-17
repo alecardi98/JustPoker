@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import THRProject.game.Game;
 import THRProject.message.Message;
@@ -13,6 +15,7 @@ import THRProject.player.Player;
 
 public class Client implements Communicator {
 
+	private static final Logger logger = LogManager.getLogger("client");
 	private ObjectOutputStream out;
 	private ServerListener serverListener;
 	private Socket socket;
@@ -59,13 +62,13 @@ public class Client implements Communicator {
 		ObjectInputStream in;
 		try {
 			socket = new Socket(HOST, PORT);
-			System.out.println("Client connesso al server");
+			logger.info("Client connesso al server");
 			out = new ObjectOutputStream(socket.getOutputStream());
 			in = new ObjectInputStream(socket.getInputStream());
 			serverListener = new ServerListener(in, this);
 			new Thread(serverListener).start();
 		} catch (IOException e) {
-			System.out.println("ERRORE! Impossibile connettersi alla partita. Disconnessione.\n");
+			logger.error("ERRORE! Impossibile connettersi alla partita. Disconnessione.");
 			System.exit(1);
 		}
 	}
@@ -81,11 +84,11 @@ public class Client implements Communicator {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println("Disconnessione riuscita.");
+		logger.info("Disconnessione riuscita.");
 	}
 
-	public void checkMoment() {
-		System.out.println("Fase di " + gameView.getPhase() + " : tocca a Client " + gameView.getCurrentTurn());
+	public void checkMoment() { 
+		logger.info("Fase di " + gameView.getPhase() + " : tocca a Client " + gameView.getCurrentTurn());
 	}
 
 	/*
@@ -162,7 +165,7 @@ public class Client implements Communicator {
 		sendMessage(msg);
 		serverDisconnection();
 	}
-	
+
 	@Override
 	public void sendMessage(Object msg) {
 		try {

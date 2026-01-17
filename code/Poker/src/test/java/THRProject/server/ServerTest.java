@@ -3,7 +3,6 @@ package THRProject.server;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -97,7 +96,8 @@ class ServerTest {
 
 	@Test
 	void testCheckInvito() {
-		game.foldPlayer(0);
+		Player foldedPlayer = game.getPlayers().get(0); //player che folda
+		game.foldPlayer(foldedPlayer);
 		server.checkInvito(0);
 		server.checkInvito(2); // fuori turno
 		server.checkInvito(1);

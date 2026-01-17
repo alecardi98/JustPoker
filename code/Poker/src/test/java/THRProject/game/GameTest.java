@@ -15,7 +15,7 @@ class GameTest {
 		Game game = new Game(10);
 		ConcurrentHashMap<Integer, Player> playersAll = new ConcurrentHashMap<Integer, Player>();
 		game.setPlayers(playersAll);
-		game.setCurrentTurn(0);
+		game.setCurrentTurn(5);
 
 		// player 1 ha foldato
 		Player p1 = new Player("prova", "prova");
@@ -30,11 +30,11 @@ class GameTest {
 		p3.getStatus().setFold(false);
 
 		playersAll.put(1, p1);
-		playersAll.put(3, p2);
-		playersAll.put(2, p3);
+		playersAll.put(5, p2);
+		playersAll.put(7, p3);
 		game.checkFirstTurn();
 
-		assertEquals(2, game.getCurrentTurn());
+		assertEquals(5, game.getCurrentTurn());
 	}
 
 	@Test
@@ -73,7 +73,7 @@ class GameTest {
 		Game game = new Game(10);
 		ConcurrentHashMap<Integer, Player> playersAll = new ConcurrentHashMap<Integer, Player>();
 		game.setPlayers(playersAll);
-		game.setCurrentTurn(2);
+		game.setCurrentTurn(3);
 
 		Player p1 = new Player("prova", "prova");
 		p1.getStatus().setFold(false);
@@ -88,15 +88,15 @@ class GameTest {
 		p4.getStatus().setFold(false);
 
 		playersAll.put(1, p1);
-		playersAll.put(2, p2);
-		playersAll.put(3, p3);
-		playersAll.put(4, p4);
+		playersAll.put(3, p2);
+		playersAll.put(5, p3);
+		playersAll.put(9, p4);
 		game.nextTurn();
 
 		/*
 		 * Controlla che l'attuale che ha foldato non cambi nulla
 		 */
-		assertEquals(3, game.getCurrentTurn());
+		assertEquals(5, game.getCurrentTurn());
 	}
 
 	@Test

@@ -4,6 +4,9 @@ import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import THRProject.card.Card;
 import THRProject.message.ActionType;
 import THRProject.message.Communicator;
@@ -16,6 +19,7 @@ import THRProject.player.Player;
  */
 class ClientHandler implements Runnable, Communicator {
 
+	private static final Logger logger = LogManager.getLogger("handler");
 	private Socket socket;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
@@ -73,13 +77,11 @@ class ClientHandler implements Runnable, Communicator {
 						break;
 
 					case FOLD:
-						Server.getServer().getGame().foldPlayer(clientId);
-						Server.getServer().broadcastSafeGameView();
-						sendMessage(new Message(ControlType.VALID_ACTION, "fold"));
+						Server.getServer().checkFold(clientId);
 						break;
 
 					default:
-						System.out.println("ERRORE! Messaggio sconosciuto.");
+						logger.error("ERRORE! Messaggio sconosciuto.");
 						break;
 					}
 				}
@@ -99,14 +101,14 @@ class ClientHandler implements Runnable, Communicator {
 						return;
 
 					default:
-						System.out.println("ERRORE! Messaggio sconosciuto.");
+						logger.error("ERRORE! Messaggio sconosciuto.");
 						break;
 					}
 				}
 
 			}
 		} catch (IOException | ClassNotFoundException e) {
-			System.out.println("ERRORE! Comunicazione con il Client " + clientId + " persa.");
+			logger.error("ERRORE! Comunicazione con il Client " + clientId + " persa.");
 			cleanup(clientId);
 		}
 	}

@@ -2,6 +2,8 @@ package THRProject.client;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import THRProject.game.Game;
 import THRProject.message.ControlType;
@@ -9,6 +11,7 @@ import THRProject.message.Message;
 
 public class ServerListener implements Runnable {
 
+	private static final Logger logger = LogManager.getLogger("listener");
 	private ObjectInputStream in;
 	private Client client;
 
@@ -40,47 +43,47 @@ public class ServerListener implements Runnable {
 					case INVALID_ACTION:
 						String invalidAction = (String) msg.getData();
 						if (invalidAction.equals("invito")) {
-							System.out.println("ERRORE! Invito non valido.");
+							logger.info("ERRORE! Invito non valido.");
 						}
 						if (invalidAction.equals("apertura")) {
-							System.out.println("ERRORE! Apertura non valida.");
+							logger.info("ERRORE! Apertura non valida.");
 						}
 						if (invalidAction.equals("cambio")) {
-							System.out.println("ERRORE! Cambio non valido.");
+							logger.info("ERRORE! Cambio non valido.");
 						}
 						if (invalidAction.equals("puntata")) {
-							System.out.println("ERRORE! Puntata non valida.");
+							logger.info("ERRORE! Puntata non valida.");
 						}
 						if (invalidAction.equals("ready")) {
-							System.out.println("ERRORE! Hai già scelto.");
+							logger.info("ERRORE! Hai già scelto.");
 						}
 						break;
 
 					case VALID_ACTION:
 						String validAction = (String) msg.getData();
 						if (validAction.equals("invito")) {
-							System.out.println("Invito registrato.");
+							logger.info("Invito registrato.");
 						}
 						if (validAction.equals("apertura")) {
-							System.out.println("Apertura registrata.");
+							logger.info("Apertura registrata.");
 						}
 						if (validAction.equals("passa")) {
-							System.out.println("Passa registrato.");
+							logger.info("Passa registrato.");
 						}
 						if (validAction.equals("cambio")) {
-							System.out.println("Cambio registrato.");
+							logger.info("Cambio registrato.");
 						}
 						if (validAction.equals("servito")) {
-							System.out.println("Servito registrato.");
+							logger.info("Servito registrato.");
 						}
 						if (validAction.equals("puntata")) {
-							System.out.println("Puntata registrata.");
+							logger.info("Puntata registrata.");
 						}
 						if (validAction.equals("fold")) {
-							System.out.println("Fold registrato.");
+							logger.info("Fold registrato.");
 						}
 						if (validAction.equals("ready")) {
-							System.out.println("Ready registrato.");
+							logger.info("Ready registrato.");
 						}
 						break;
 
@@ -90,21 +93,21 @@ public class ServerListener implements Runnable {
 						break;
 
 					case WINNER:
-						System.out.println("Hai vinto la mano!");
+						logger.info("Hai vinto la mano!");
 						break;
 
 					case LOSER:
-						System.out.println("Hai perso la mano.");
+						logger.info("Hai perso la mano.");
 						break;
 
 					default:
-						System.out.println("ERRORE! Messaggio sconosciuto.\n");
+						logger.error("ERRORE! Messaggio sconosciuto.");
 						break;
 					}
 				}
 			}
 		} catch (IOException | ClassNotFoundException e) {
-			System.out.println("ERRORE! Comunicazione con il Server persa.");
+			logger.error("ERRORE! Comunicazione con il Server persa.");
 			cleanup();
 		}
 	}
