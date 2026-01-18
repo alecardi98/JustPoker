@@ -154,7 +154,7 @@ public class Game implements Serializable {
 	}
 
 	/*
-	 * Metodo per dividere il piatto in caso di parità
+	 * Metodo per dividere il piatto in caso di parità o di fold generale
 	 */
 	public void splitPot() {
 		synchronized (this) {

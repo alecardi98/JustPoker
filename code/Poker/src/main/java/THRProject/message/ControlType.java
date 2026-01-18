@@ -11,4 +11,5 @@ public enum ControlType implements MessageType{
 	QUIT, // il client il quit al server per uscire dalla partita
 	WINNER, // il server invia al client il risultato di vittoria
 	LOSER, // il server invia al client il risultato di sconfitta
+	ENDGAME // il server invia al client la bancarotta
 }

@@ -45,6 +45,7 @@ public class Client implements Communicator {
 	 * Metodo per avviare la partita del client
 	 */
 	public void startGame() {
+
 	}
 
 	/*
@@ -87,7 +88,7 @@ public class Client implements Communicator {
 		logger.info("Disconnessione riuscita.");
 	}
 
-	public void checkMoment() { 
+	public void checkMoment() {
 		logger.info("Fase di " + gameView.getPhase() + " : tocca a Client " + gameView.getCurrentTurn());
 	}
 

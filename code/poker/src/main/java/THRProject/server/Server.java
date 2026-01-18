@@ -112,17 +112,16 @@ public final class Server {
 			if (clientId == game.getCurrentTurn() && player.getStatus().isActive()) {
 				int invito = MINBET;
 				if (invito > player.getStatus().getFiches()) {
-					logger.info("ERRORE! Invito Client " + clientId + " non valido.");
-					clientHandler.sendMessage(new Message(ControlType.INVALID_ACTION, "invito"));
+					logger.info("All-in Client " + clientId + " registrato.");
+					game.punta(player, player.getStatus().getFiches());
 				} else {
-					// registra invito
 					logger.info("Invito Client " + clientId + " registrato.");
 					game.punta(player, invito);
-					game.nextTurn();
-					clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "invito"));
-					checkNextPhase();
-					broadcastSafeGameView();
 				}
+				game.nextTurn();
+				clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "invito"));
+				checkNextPhase();
+				broadcastSafeGameView();
 			} else
 				logger.info("ERRORE! Client " + clientId + " non può giocare.");
 		}
@@ -157,10 +156,14 @@ public final class Server {
 						logger.info("ERRORE! Apertura Client " + clientId + " non valida.");
 						clientHandler.sendMessage(new Message(ControlType.INVALID_ACTION, "apertura"));
 					} else {
-						// registra apertura
-						logger.info("Apertura Client " + clientId + " registrata.");
+						if (puntata > player.getStatus().getFiches()) {
+							logger.info("All-in Client " + clientId + " registrato.");
+							game.punta(player, player.getStatus().getFiches());
+						} else {
+							logger.info("Apertura Client " + clientId + " registrata.");
+							game.punta(player, puntata);
+						}
 						game.setOpen(true);
-						game.punta(player, puntata);
 						game.nextTurn();
 						clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "apertura"));
 						for (Map.Entry<Integer, Player> p : game.getPlayers().entrySet()) {
@@ -189,14 +192,17 @@ public final class Server {
 			Player player = game.getPlayers().get(clientId);
 			ClientHandler clientHandler = clientHandlers.get(clientId);
 			if (clientId == game.getCurrentTurn() && player.getStatus().isActive()) {
-
 				if (!valorePuntataValido(puntata, player)) {
 					logger.info("ERRORE! Puntata Client " + clientId + " non valida.");
 					clientHandler.sendMessage(new Message(ControlType.INVALID_ACTION, "puntata"));
 				} else {
-					// registra puntata
-					logger.info("Puntata Client " + clientId + " registrata.");
-					game.punta(player, puntata);
+					if (puntata > player.getStatus().getFiches()) {
+						logger.info("All-in Client " + clientId + " registrato.");
+						game.punta(player, player.getStatus().getFiches());
+					} else {
+						logger.info("Puntata Client " + clientId + " registrata.");
+						game.punta(player, puntata);
+					}
 					game.nextTurn();
 					clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "puntata"));
 					game.resetBet(clientId);
@@ -212,8 +218,7 @@ public final class Server {
 	 * Metodo per controllare se la puntata ha un valore esatto
 	 */
 	public boolean valorePuntataValido(int puntata, Player player) {
-		return puntata <= player.getStatus().getFiches()
-				&& player.getStatus().getTotalBet() + puntata >= game.getPot().getMaxBet();
+		return player.getStatus().getTotalBet() + puntata >= game.getPot().getMaxBet();
 	}
 
 	/*
@@ -316,6 +321,7 @@ public final class Server {
 	 */
 	private void startShowdown() {
 		checkWinner();
+		checkBankrupt();
 		game.setPhase(GamePhase.END);
 		broadcastSafeGameView();
 	}
@@ -384,7 +390,8 @@ public final class Server {
 					}
 				} else { // pareggio
 					for (Map.Entry<Integer, Player> p : activePlayers.entrySet()) {
-						if (p.getValue().getHand().getRank().getLevel() == maxLevel && countMaxValue != 0) {
+						if (p.getValue().getHand().getRank().getLevel() == maxLevel
+								&& p.getValue().getHand().getRank().getValue() == maxValue) {
 							clientHandlers.get(p.getKey()).sendMessage(new Message(ControlType.WINNER, null));
 							game.getPlayers().get(p.getKey()).getStatus()
 									.setFiches(game.getPlayers().get(p.getKey()).getStatus().getFiches()
@@ -393,6 +400,20 @@ public final class Server {
 							clientHandlers.get(p.getKey()).sendMessage(new Message(ControlType.LOSER, null));
 						}
 					}
+				}
+			}
+		}
+	}
+
+	/*
+	 * Metodo per controllare che il player non sia in bancarotta, e che quindi
+	 * possa continuare a giocare
+	 */
+	private void checkBankrupt() {
+		synchronized (game) {
+			for (Map.Entry<Integer, Player> p : game.getPlayers().entrySet()) {
+				if (p.getValue().getStatus().getFiches() == 0) {
+					clientHandlers.get(p.getKey()).sendMessage(new Message(ControlType.ENDGAME, null));
 				}
 			}
 		}

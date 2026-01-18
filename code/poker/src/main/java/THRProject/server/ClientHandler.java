@@ -86,7 +86,7 @@ class ClientHandler implements Runnable, Communicator {
 					}
 				}
 				if (msg.getType() instanceof ControlType control) {
-					switch (control) {
+					switch (control) {	
 					case PLAYER_JOIN:
 						Server.getServer().registerPlayer(clientId, (Player) msg.getData());
 						break;

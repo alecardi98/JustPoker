@@ -100,6 +100,11 @@ public class ServerListener implements Runnable {
 						logger.info("Hai perso la mano.");
 						break;
 
+					case ENDGAME:
+						logger.info("Bancarotta! Hai perso.");
+						client.serverDisconnection();
+						break;
+						
 					default:
 						logger.error("ERRORE! Messaggio sconosciuto.");
 						break;
