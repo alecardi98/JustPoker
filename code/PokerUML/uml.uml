@@ -1,0 +1,685 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:Codegen="http://www.eclipse.org/papyrus/Codegen/1" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:standard="http://www.eclipse.org/uml2/5.0.0/UML/Profile/Standard" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">
+  <uml:Model xmi:id="_ylIJQPSPEfC_wPHBNP0Szw" name="uml">
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_ys7aYPSPEfC_wPHBNP0Szw">
+      <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+    </packageImport>
+    <packagedElement xmi:type="uml:Package" xmi:id="_JTYp4PSQEfC2GY0EF-5XEw" name="poker">
+      <packagedElement xmi:type="uml:Package" xmi:id="_JTbGIPSQEfC2GY0EF-5XEw" name="THRProject">
+        <packagedElement xmi:type="uml:Package" xmi:id="_JTbGIfSQEfC2GY0EF-5XEw" name="card">
+          <packagedElement xmi:type="uml:Class" xmi:id="_JTcUQPSQEfC2GY0EF-5XEw" name="Card" visibility="public">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_JTia4PSQEfC2GY0EF-5XEw" name="seme" visibility="private" type="_WVSZ8PSQEfC2GY0EF-5XEw" isUnique="false" aggregation="composite" association="_x3-S4PSQEfC2GY0EF-5XEw"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_JTjpAvSQEfC2GY0EF-5XEw" name="valore" visibility="private" type="_JTjpAfSQEfC2GY0EF-5XEw" isUnique="false"/>
+            <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_JTfXkPSQEfC2GY0EF-5XEw" name="Card implements Serializable" client="_JTcUQPSQEfC2GY0EF-5XEw" supplier="_JTcURPSQEfC2GY0EF-5XEw" contract="_JTcURPSQEfC2GY0EF-5XEw"/>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_JTmFQfSQEfC2GY0EF-5XEw" name="Card" specification="_JTjpA_SQEfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>this.seme = seme;&#xD;
+this.valore = valore;</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_JTohgfSQEfC2GY0EF-5XEw" name="toString" specification="_JTmsUPSQEfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>String nome;&#xD;
+switch(valore) {&#xD;
+    case 11:&#xD;
+        nome = &quot;J&quot;;&#xD;
+        break;&#xD;
+    case 12:&#xD;
+        nome = &quot;Q&quot;;&#xD;
+        break;&#xD;
+    case 13:&#xD;
+        nome = &quot;K&quot;;&#xD;
+        break;&#xD;
+    case 14:&#xD;
+        nome = &quot;A&quot;;&#xD;
+        break;&#xD;
+    default:&#xD;
+        nome = &quot;&quot; + valore;&#xD;
+}&#xD;
+return nome + &quot; &quot; + seme.toString();</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_JTpIk_SQEfC2GY0EF-5XEw" name="getValore" specification="_JTpIkPSQEfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>return valore;</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_JTpvovSQEfC2GY0EF-5XEw" name="getSeme" specification="_JTpvoPSQEfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>return seme;</body>
+            </ownedBehavior>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_JTjpA_SQEfC2GY0EF-5XEw" name="Card" visibility="public" method="_JTmFQfSQEfC2GY0EF-5XEw">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_JTleMPSQEfC2GY0EF-5XEw" name="seme" type="_WVSZ8PSQEfC2GY0EF-5XEw"/>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_JTmFQPSQEfC2GY0EF-5XEw" name="valore" type="_JTjpAfSQEfC2GY0EF-5XEw"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_JTmsUPSQEfC2GY0EF-5XEw" name="toString" visibility="public" method="_JTohgfSQEfC2GY0EF-5XEw">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_JTohgPSQEfC2GY0EF-5XEw" type="_JTmsUvSQEfC2GY0EF-5XEw" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_JTpIkPSQEfC2GY0EF-5XEw" name="getValore" visibility="public" method="_JTpIk_SQEfC2GY0EF-5XEw">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_JTpIkfSQEfC2GY0EF-5XEw">
+                <body>Getter &amp; Setter</body>
+              </ownedComment>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_JTpIkvSQEfC2GY0EF-5XEw" type="_JTjpAfSQEfC2GY0EF-5XEw" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_JTpvoPSQEfC2GY0EF-5XEw" name="getSeme" visibility="public" method="_JTpvovSQEfC2GY0EF-5XEw">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_JTpvofSQEfC2GY0EF-5XEw" type="_WVSZ8PSQEfC2GY0EF-5XEw" direction="return"/>
+            </ownedOperation>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Enumeration" xmi:id="_WVSZ8PSQEfC2GY0EF-5XEw" name="Suit" visibility="public">
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_WVUPIPSQEfC2GY0EF-5XEw" name="CUORI"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_WVVdQPSQEfC2GY0EF-5XEw" name="QUADRI"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_WVVdQfSQEfC2GY0EF-5XEw" name="FIORI"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_WVVdQvSQEfC2GY0EF-5XEw" name="PICCHE"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_UDBcYPSQEfC2GY0EF-5XEw" name="Deck" visibility="public">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_UDEfsPSQEfC2GY0EF-5XEw" name="cards" visibility="private" type="_JTcUQPSQEfC2GY0EF-5XEw" isUnique="false" aggregation="composite" association="_7l6X0PSQEfC2GY0EF-5XEw">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_UDEfsfSQEfC2GY0EF-5XEw">
+                <body>carte effettivamente usate</body>
+              </ownedComment>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_UDFt0PSQEfC2GY0EF-5XEw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_UDFt0fSQEfC2GY0EF-5XEw" value="*"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_UDFt0vSQEfC2GY0EF-5XEw" name="sample" visibility="private" type="_JTcUQPSQEfC2GY0EF-5XEw" isUnique="false" aggregation="composite" association="_-QAmkPSQEfC2GY0EF-5XEw">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_UDFt0_SQEfC2GY0EF-5XEw">
+                <body>variabile per non generare ogni volta il mazzo da zero</body>
+              </ownedComment>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_UDGU4PSQEfC2GY0EF-5XEw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_UDGU4fSQEfC2GY0EF-5XEw" value="*"/>
+            </ownedAttribute>
+            <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_UDCDcPSQEfC2GY0EF-5XEw" name="Deck implements Serializable" client="_UDBcYPSQEfC2GY0EF-5XEw" supplier="_JTcURPSQEfC2GY0EF-5XEw" contract="_JTcURPSQEfC2GY0EF-5XEw"/>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_UDG78fSQEfC2GY0EF-5XEw" name="Deck" specification="_UDGU4vSQEfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>createSample();&#xD;
+resetDeck();</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_UDHjAPSQEfC2GY0EF-5XEw" name="createSample" specification="_UDG78vSQEfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>sample = new ArrayList&lt;Card>();&#xD;
+for (int i = 7; i &lt;= 14; i++) {&#xD;
+    sample.add(new Card(Suit.CUORI, i));&#xD;
+    sample.add(new Card(Suit.QUADRI, i));&#xD;
+    sample.add(new Card(Suit.FIORI, i));&#xD;
+    sample.add(new Card(Suit.PICCHE, i));&#xD;
+}</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_UDHjA_SQEfC2GY0EF-5XEw" name="shuffle" specification="_UDHjAfSQEfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>Collections.shuffle(cards);</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_UDIKEfSQEfC2GY0EF-5XEw" name="resetDeck" specification="_UDHjBPSQEfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>cards = new ArrayList&lt;Card>(sample);</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_UDIxI_SQEfC2GY0EF-5XEw" name="getCards" specification="_UDIKEvSQEfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>return cards;</body>
+            </ownedBehavior>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_UDGU4vSQEfC2GY0EF-5XEw" name="Deck" visibility="public" method="_UDG78fSQEfC2GY0EF-5XEw"/>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_UDG78vSQEfC2GY0EF-5XEw" name="createSample" visibility="public" method="_UDHjAPSQEfC2GY0EF-5XEw">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_UDG78_SQEfC2GY0EF-5XEw">
+                <body>Metodo che genera le carte all'interno del deck</body>
+              </ownedComment>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_UDHjAfSQEfC2GY0EF-5XEw" name="shuffle" visibility="public" method="_UDHjA_SQEfC2GY0EF-5XEw">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_UDHjAvSQEfC2GY0EF-5XEw">
+                <body>Metodo che mescola le carte del deck</body>
+              </ownedComment>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_UDHjBPSQEfC2GY0EF-5XEw" name="resetDeck" visibility="public" method="_UDIKEfSQEfC2GY0EF-5XEw">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_UDIKEPSQEfC2GY0EF-5XEw">
+                <body>Metodo che riempie nuovamente il mazzo di carte all'inizio della mano</body>
+              </ownedComment>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_UDIKEvSQEfC2GY0EF-5XEw" name="getCards" visibility="public" method="_UDIxI_SQEfC2GY0EF-5XEw">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_UDIKE_SQEfC2GY0EF-5XEw">
+                <body>Getter &amp; Setter</body>
+              </ownedComment>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_UDIxIPSQEfC2GY0EF-5XEw" type="_JTcUQPSQEfC2GY0EF-5XEw" direction="return">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_UDIxIfSQEfC2GY0EF-5XEw"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_UDIxIvSQEfC2GY0EF-5XEw" value="*"/>
+              </ownedParameter>
+            </ownedOperation>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_x3-S4PSQEfC2GY0EF-5XEw" name="A_seme_card" memberEnd="_JTia4PSQEfC2GY0EF-5XEw _x3-58PSQEfC2GY0EF-5XEw">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_x3-58PSQEfC2GY0EF-5XEw" name="card" type="_JTcUQPSQEfC2GY0EF-5XEw" association="_x3-S4PSQEfC2GY0EF-5XEw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_x3_hAPSQEfC2GY0EF-5XEw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_x3_hAfSQEfC2GY0EF-5XEw" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_7l6X0PSQEfC2GY0EF-5XEw" name="A_cards_deck" memberEnd="_UDEfsPSQEfC2GY0EF-5XEw _7l7l8PSQEfC2GY0EF-5XEw">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_7l7l8PSQEfC2GY0EF-5XEw" name="deck" type="_UDBcYPSQEfC2GY0EF-5XEw" association="_7l6X0PSQEfC2GY0EF-5XEw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_7l7l8fSQEfC2GY0EF-5XEw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_7l7l8vSQEfC2GY0EF-5XEw" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_-QAmkPSQEfC2GY0EF-5XEw" name="A_sample_deck" memberEnd="_UDFt0vSQEfC2GY0EF-5XEw _-QAmkfSQEfC2GY0EF-5XEw">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_-QAmkfSQEfC2GY0EF-5XEw" name="deck" type="_UDBcYPSQEfC2GY0EF-5XEw" association="_-QAmkPSQEfC2GY0EF-5XEw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-QBNoPSQEfC2GY0EF-5XEw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_-QBNofSQEfC2GY0EF-5XEw" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_A_ZlAPSREfC2GY0EF-5XEw" name="Hand" visibility="public">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_A_coUPSREfC2GY0EF-5XEw" name="cards" visibility="private" type="_JTcUQPSQEfC2GY0EF-5XEw" isUnique="false" aggregation="composite" association="_E4TJMPSREfC2GY0EF-5XEw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_A_coUfSREfC2GY0EF-5XEw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_A_coUvSREfC2GY0EF-5XEw" value="*"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_A_gSsPSREfC2GY0EF-5XEw" name="rank" visibility="private" type="_A_dPYPSREfC2GY0EF-5XEw" isUnique="false" aggregation="composite" association="_VwsCoPSREfC2GY0EF-5XEw"/>
+            <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_A_cBQPSREfC2GY0EF-5XEw" name="Hand implements Serializable" client="_A_ZlAPSREfC2GY0EF-5XEw" supplier="_JTcURPSQEfC2GY0EF-5XEw" contract="_JTcURPSQEfC2GY0EF-5XEw"/>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_A_hg0fSREfC2GY0EF-5XEw" name="Hand" specification="_A_gSsfSREfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>cards = new ArrayList&lt;Card>();&#xD;
+rank = new Rank();</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_A_jWAPSREfC2GY0EF-5XEw" name="checkRank" specification="_A_iH4PSREfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>int[] counters = { 0, 0, 0, 0, 0, 0, 0, 0 };&#xD;
+for (int i = 7; i &lt;= 14; i++) {&#xD;
+    for (Card c : cards) {&#xD;
+        if (c.getValore() == i) {&#xD;
+            counters[i - 7]++;&#xD;
+        }&#xD;
+    }&#xD;
+}&#xD;
+// ricerca poker&#xD;
+for (int i = 0; i &lt;= 7; i++) {&#xD;
+    if (counters[i] == 4) {&#xD;
+        rank.setLevel(8);&#xD;
+        rank.setValue((i + 7) * 4);&#xD;
+        return;&#xD;
+    }&#xD;
+}&#xD;
+// ricerca tris o full&#xD;
+for (int i = 0; i &lt;= 7; i++) {&#xD;
+    if (// tris&#xD;
+    counters[i] == // tris&#xD;
+    3) {&#xD;
+        rank.setLevel(4);&#xD;
+        rank.setValue((i + 7) * 3);&#xD;
+        for (int j = 0; j &lt;= 7; j++) {&#xD;
+            if (counters// full&#xD;
+            [j] == 2) {&#xD;
+                rank.setLevel(7);&#xD;
+                rank.setValue(rank.getValue() + ((j + 7) * 2));&#xD;
+                return;&#xD;
+            }&#xD;
+        }&#xD;
+        return;&#xD;
+    }&#xD;
+}&#xD;
+// ricerca coppia o doppia coppia&#xD;
+for (int i = 0; i &lt;= 7; i++) {&#xD;
+    if (// coppia&#xD;
+    counters[i] == 2) {&#xD;
+        rank.setLevel(2);&#xD;
+        rank.setValue((i + 7) * 2);&#xD;
+        for (int j = 0; j &lt;= 7; j++) {&#xD;
+            if (// doppia coppia&#xD;
+            counters[j] == 2 &amp;&amp; j != i) {&#xD;
+                rank.setLevel(3);&#xD;
+                rank.setValue(rank.getValue() + ((j + 7) * 2));&#xD;
+                return;&#xD;
+            }&#xD;
+        }&#xD;
+        return;&#xD;
+    }&#xD;
+}&#xD;
+// ricerca scala o scala colore&#xD;
+for (int i = 0; i &lt;= 3; i++) {&#xD;
+    if (counters[i] == counters[i + 1] &amp;&amp; counters[i + 1] == counters[i + 2] &amp;&amp; counters[i + 1] == counters[i + 2] &amp;&amp; counters[i + 2] == counters[i + 3] &amp;&amp; // scala&#xD;
+    counters[i + 3] == // scala&#xD;
+    counters[i + 4]) {&#xD;
+        rank.setLevel(5);&#xD;
+        rank.setValue(45 + (5 * i));&#xD;
+        if (// scala colore&#xD;
+        isColore()) {&#xD;
+            rank.setLevel(9);&#xD;
+        }&#xD;
+        return;&#xD;
+    }&#xD;
+}&#xD;
+// ricerca colore&#xD;
+boolean color = false;&#xD;
+if (isColore()) {&#xD;
+    rank.setLevel(6);&#xD;
+    int sum = 0;&#xD;
+    for (Card c : cards) sum = sum + c.getValore();&#xD;
+    rank.setValue(sum);&#xD;
+    return;&#xD;
+}&#xD;
+// ricerca carta alta&#xD;
+int max = 7;&#xD;
+for (Card c : cards) {&#xD;
+    if (c.getValore() > max)&#xD;
+        max = c.getValore();&#xD;
+}&#xD;
+rank.setLevel(1);&#xD;
+rank.setValue(max);</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_A_kkIPSREfC2GY0EF-5XEw" name="isColore" specification="_A_j9EPSREfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>return cards.get(0).getSeme() == cards.get(1).getSeme() &amp;&amp; cards.get(1).getSeme() == cards.get(2).getSeme() &amp;&amp; cards.get(2).getSeme() == cards.get(3).getSeme() &amp;&amp; cards.get(3).getSeme() == cards.get(4).getSeme();</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_A_lyQ_SREfC2GY0EF-5XEw" name="getCards" specification="_A_lLMPSREfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>return cards;</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_A_nAYPSREfC2GY0EF-5XEw" name="setCards" specification="_A_mZUPSREfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>this.cards = cards;</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_A_nAY_SREfC2GY0EF-5XEw" name="getRank" specification="_A_nAYfSREfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>return rank;</body>
+            </ownedBehavior>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_A_gSsfSREfC2GY0EF-5XEw" name="Hand" visibility="public" method="_A_hg0fSREfC2GY0EF-5XEw"/>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_A_iH4PSREfC2GY0EF-5XEw" name="checkRank" visibility="public" method="_A_jWAPSREfC2GY0EF-5XEw">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_A_iH4fSREfC2GY0EF-5XEw">
+                <body>Calcola il Rank della mano, ovvero il valore del suo punteggio (carta alta 1, coppia 2, doppia coppia 3, tris 4, scala 5, colore 6, full 7, poker 8, scala colore 9)</body>
+              </ownedComment>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_A_j9EPSREfC2GY0EF-5XEw" name="isColore" visibility="private" method="_A_kkIPSREfC2GY0EF-5XEw">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_A_j9EvSREfC2GY0EF-5XEw" type="_A_j9EfSREfC2GY0EF-5XEw" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_A_lLMPSREfC2GY0EF-5XEw" name="getCards" visibility="public" method="_A_lyQ_SREfC2GY0EF-5XEw">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_A_lLMfSREfC2GY0EF-5XEw">
+                <body>Getter &amp; Setter</body>
+              </ownedComment>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_A_lyQPSREfC2GY0EF-5XEw" type="_JTcUQPSQEfC2GY0EF-5XEw" direction="return">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_A_lyQfSREfC2GY0EF-5XEw"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_A_lyQvSREfC2GY0EF-5XEw" value="*"/>
+              </ownedParameter>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_A_mZUPSREfC2GY0EF-5XEw" name="setCards" visibility="public" method="_A_nAYPSREfC2GY0EF-5XEw">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_A_mZUfSREfC2GY0EF-5XEw" name="cards" type="_JTcUQPSQEfC2GY0EF-5XEw">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_A_mZUvSREfC2GY0EF-5XEw"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_A_mZU_SREfC2GY0EF-5XEw" value="*"/>
+              </ownedParameter>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_A_nAYfSREfC2GY0EF-5XEw" name="getRank" visibility="public" method="_A_nAY_SREfC2GY0EF-5XEw">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_A_nAYvSREfC2GY0EF-5XEw" type="_A_dPYPSREfC2GY0EF-5XEw" direction="return"/>
+            </ownedOperation>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_A_dPYPSREfC2GY0EF-5XEw" name="Rank" visibility="public">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_IY6wQPSREfC2GY0EF-5XEw" name="level" visibility="private" type="_JTjpAfSQEfC2GY0EF-5XEw" isUnique="false">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_IY7XUPSREfC2GY0EF-5XEw">
+                <body>indica la scala del punteggio</body>
+              </ownedComment>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_IY7-YPSREfC2GY0EF-5XEw" name="value" visibility="private" type="_JTjpAfSQEfC2GY0EF-5XEw" isUnique="false">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_IY8lcPSREfC2GY0EF-5XEw">
+                <body>indica il valore del punteggio</body>
+              </ownedComment>
+            </ownedAttribute>
+            <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_IY6JMPSREfC2GY0EF-5XEw" name="Rank implements Serializable" client="_A_dPYPSREfC2GY0EF-5XEw" supplier="_JTcURPSQEfC2GY0EF-5XEw" contract="_JTcURPSQEfC2GY0EF-5XEw"/>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_IZAP0PSREfC2GY0EF-5XEw" name="Rank" specification="_IY8lcfSREfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body></body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_IZBd8PSREfC2GY0EF-5XEw" name="getLevel" specification="_IZA24PSREfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>return level;</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_IZCFAfSREfC2GY0EF-5XEw" name="setLevel" specification="_IZBd8fSREfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>this.level = level;</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_IZCsEPSREfC2GY0EF-5XEw" name="getValue" specification="_IZCFAvSREfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>return value;</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_IZDTIvSREfC2GY0EF-5XEw" name="setValue" specification="_IZDTIPSREfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>this.value = value;</body>
+            </ownedBehavior>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_IY8lcfSREfC2GY0EF-5XEw" name="Rank" visibility="public" method="_IZAP0PSREfC2GY0EF-5XEw"/>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_IZA24PSREfC2GY0EF-5XEw" name="getLevel" visibility="public" method="_IZBd8PSREfC2GY0EF-5XEw">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_IZA24fSREfC2GY0EF-5XEw">
+                <body>Getter &amp; Setter</body>
+              </ownedComment>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_IZA24vSREfC2GY0EF-5XEw" type="_JTjpAfSQEfC2GY0EF-5XEw" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_IZBd8fSREfC2GY0EF-5XEw" name="setLevel" visibility="public" method="_IZCFAfSREfC2GY0EF-5XEw">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_IZCFAPSREfC2GY0EF-5XEw" name="level" type="_JTjpAfSQEfC2GY0EF-5XEw"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_IZCFAvSREfC2GY0EF-5XEw" name="getValue" visibility="public" method="_IZCsEPSREfC2GY0EF-5XEw">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_IZCFA_SREfC2GY0EF-5XEw" type="_JTjpAfSQEfC2GY0EF-5XEw" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_IZDTIPSREfC2GY0EF-5XEw" name="setValue" visibility="public" method="_IZDTIvSREfC2GY0EF-5XEw">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_IZDTIfSREfC2GY0EF-5XEw" name="value" type="_JTjpAfSQEfC2GY0EF-5XEw"/>
+            </ownedOperation>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_E4TJMPSREfC2GY0EF-5XEw" name="A_cards_hand" memberEnd="_A_coUPSREfC2GY0EF-5XEw _E4TJMfSREfC2GY0EF-5XEw">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_E4TJMfSREfC2GY0EF-5XEw" name="hand" type="_A_ZlAPSREfC2GY0EF-5XEw" association="_E4TJMPSREfC2GY0EF-5XEw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_E4TJMvSREfC2GY0EF-5XEw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_E4TJM_SREfC2GY0EF-5XEw" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_VwsCoPSREfC2GY0EF-5XEw" name="A_rank_hand" memberEnd="_A_gSsPSREfC2GY0EF-5XEw _VwspsPSREfC2GY0EF-5XEw">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_VwspsPSREfC2GY0EF-5XEw" name="hand" type="_A_ZlAPSREfC2GY0EF-5XEw" association="_VwsCoPSREfC2GY0EF-5XEw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_VwspsfSREfC2GY0EF-5XEw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_VwspsvSREfC2GY0EF-5XEw" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_MXcbUPSREfC2GY0EF-5XEw" name="client">
+          <packagedElement xmi:type="uml:Class" xmi:id="_MXdpcPSREfC2GY0EF-5XEw" name="Client" visibility="public">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_MXhT0PSREfC2GY0EF-5XEw" name="logger" visibility="private" isLeaf="true" isStatic="true" type="_MXfepfSREfC2GY0EF-5XEw" isUnique="false">
+              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_MXhT0fSREfC2GY0EF-5XEw" name="defaultValue">
+                <language>JAVA</language>
+                <body>LogManager.getLogger(&quot;client&quot;)</body>
+              </defaultValue>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_MXih8fSREfC2GY0EF-5XEw" name="out" visibility="private" type="_MXh64PSREfC2GY0EF-5XEw" isUnique="false"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_MXjwEPSREfC2GY0EF-5XEw" name="serverListener" visibility="private" type="_MXih8vSREfC2GY0EF-5XEw" isUnique="false"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_MXkXIfSREfC2GY0EF-5XEw" name="socket" visibility="private" type="_MXjwEvSREfC2GY0EF-5XEw" isUnique="false"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_MXk-MPSREfC2GY0EF-5XEw" name="HOST" visibility="private" isLeaf="true" isStatic="true" type="_JTmsUvSQEfC2GY0EF-5XEw" isUnique="false">
+              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_MXk-MfSREfC2GY0EF-5XEw" name="defaultValue">
+                <language>JAVA</language>
+                <body>&quot;localhost&quot;</body>
+              </defaultValue>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_MXk-MvSREfC2GY0EF-5XEw" name="PORT" visibility="private" isLeaf="true" isStatic="true" type="_JTjpAfSQEfC2GY0EF-5XEw" isUnique="false">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_MXk-M_SREfC2GY0EF-5XEw">
+                <body>private static final String HOST = &quot;204.216.208.188&quot;;</body>
+              </ownedComment>
+              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_MXk-NPSREfC2GY0EF-5XEw" name="defaultValue">
+                <language>JAVA</language>
+                <body>443</body>
+              </defaultValue>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_MXmMUfSREfC2GY0EF-5XEw" name="gameView" visibility="private" type="_MXllQfSREfC2GY0EF-5XEw" isUnique="false">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_MXmMUvSREfC2GY0EF-5XEw">
+                <body>variabile che contiene solo i dati personali del game</body>
+              </ownedComment>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_MXmMU_SREfC2GY0EF-5XEw" name="clientId" visibility="private" type="_JTjpAfSQEfC2GY0EF-5XEw" isUnique="false"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_MXnacfSREfC2GY0EF-5XEw" name="player" visibility="private" type="_MXmzYfSREfC2GY0EF-5XEw" isUnique="false"/>
+            <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_MXfeoPSREfC2GY0EF-5XEw" name="Client implements Communicator" client="_MXdpcPSREfC2GY0EF-5XEw" supplier="_MXdpc_SREfC2GY0EF-5XEw" contract="_MXdpc_SREfC2GY0EF-5XEw"/>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_MXoBgfSREfC2GY0EF-5XEw" name="Client" specification="_MXnacvSREfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body></body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_MXookvSREfC2GY0EF-5XEw" name="startClient" specification="_MXookPSREfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>player = dbConnection();&#xD;
+serverConnection();&#xD;
+// dopo la connessione sarà attivo solo il thread ServerListener, poichè Client&#xD;
+// è attivo ma ha finito</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_MXoolfSREfC2GY0EF-5XEw" name="startGame" specification="_MXook_SREfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body></body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_MXpPoPSREfC2GY0EF-5XEw" name="dbConnection" specification="_MXoolvSREfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>// creazione Player con dati corretti&#xD;
+return new Player(&quot;userName&quot;, &quot;password&quot;);</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_MXpPo_SREfC2GY0EF-5XEw" name="serverConnection" specification="_MXpPofSREfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>ObjectInputStream in;&#xD;
+try {&#xD;
+    socket = new Socket(HOST, PORT);&#xD;
+    logger.info(&quot;Client connesso al server&quot;);&#xD;
+    out = new ObjectOutputStream(socket.getOutputStream());&#xD;
+    in = new ObjectInputStream(socket.getInputStream());&#xD;
+    serverListener = new ServerListener(in, this);&#xD;
+    new Thread(serverListener).start();&#xD;
+} catch (IOException e) {&#xD;
+    logger.error(&quot;ERRORE! Impossibile connettersi alla partita. Disconnessione.&quot;);&#xD;
+    System.exit(1);&#xD;
+}</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_MXp2sfSREfC2GY0EF-5XEw" name="serverDisconnection" specification="_MXpPpPSREfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>try {&#xD;
+    out.close();&#xD;
+    socket.close();&#xD;
+    serverListener = null;&#xD;
+} catch (IOException e) {&#xD;
+    e.printStackTrace();&#xD;
+}&#xD;
+logger.info(&quot;Disconnessione riuscita.&quot;);</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_MXp2s_SREfC2GY0EF-5XEw" name="checkMoment" specification="_MXp2svSREfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>logger.info(&quot;Fase di &quot; + gameView.getPhase() + &quot; : tocca a Client &quot; + gameView.getCurrentTurn());</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_MXp2tvSREfC2GY0EF-5XEw" name="invioInvito" specification="_MXp2tPSREfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>Message msg = gameView.getPlayers().get(clientId).invito();&#xD;
+sendMessage(msg);</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_MXrE0_SREfC2GY0EF-5XEw" name="invioPuntata" specification="_MXrE0PSREfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>Message msg = gameView.getPlayers().get(clientId).punta(puntata);&#xD;
+sendMessage(msg);</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_MXrE1_SREfC2GY0EF-5XEw" name="invioApertura" specification="_MXrE1PSREfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>Message msg = gameView.getPlayers().get(clientId).apri(puntata);&#xD;
+sendMessage(msg);</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_MXrE2vSREfC2GY0EF-5XEw" name="invioPassa" specification="_MXrE2PSREfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>Message msg = gameView.getPlayers().get(clientId).passa();&#xD;
+sendMessage(msg);</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_MXsS8vSREfC2GY0EF-5XEw" name="invioLascia" specification="_MXsS8PSREfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>Message msg = gameView.getPlayers().get(clientId).lascia();&#xD;
+sendMessage(msg);</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_MXsS9fSREfC2GY0EF-5XEw" name="invioCambio" specification="_MXsS8_SREfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>Message msg = gameView.getPlayers().get(clientId).cambio();&#xD;
+sendMessage(msg);</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_MXs6APSREfC2GY0EF-5XEw" name="invioServito" specification="_MXsS9vSREfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>Message msg = gameView.getPlayers().get(clientId).servito();&#xD;
+sendMessage(msg);</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_MXs6A_SREfC2GY0EF-5XEw" name="ready" specification="_MXs6AfSREfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>Message msg = new Message(ControlType.READY, clientId);&#xD;
+sendMessage(msg);</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_MXs6BvSREfC2GY0EF-5XEw" name="quit" specification="_MXs6BPSREfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>Message msg = new Message(ControlType.QUIT, clientId);&#xD;
+sendMessage(msg);&#xD;
+serverDisconnection();</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_MXuvMfSREfC2GY0EF-5XEw" name="sendMessage" specification="_MXuIIfSREfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>try {&#xD;
+    out.writeObject(msg);&#xD;
+    out.flush();&#xD;
+} catch (IOException e) {&#xD;
+    e.printStackTrace();&#xD;
+}</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_MXvWQfSREfC2GY0EF-5XEw" name="setGame" specification="_MXuvMvSREfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>this.gameView = gameView;</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_MXv9UPSREfC2GY0EF-5XEw" name="setClientId" specification="_MXvWQvSREfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>this.clientId = clientId;</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_MXwkYPSREfC2GY0EF-5XEw" name="getPlayer" specification="_MXv9UfSREfC2GY0EF-5XEw">
+              <language>JAVA</language>
+              <body>return player;</body>
+            </ownedBehavior>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_MXnacvSREfC2GY0EF-5XEw" name="Client" visibility="public" method="_MXoBgfSREfC2GY0EF-5XEw"/>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_MXookPSREfC2GY0EF-5XEw" name="startClient" visibility="public" method="_MXookvSREfC2GY0EF-5XEw">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_MXookfSREfC2GY0EF-5XEw">
+                <body>Metodo per avviare il client</body>
+              </ownedComment>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_MXook_SREfC2GY0EF-5XEw" name="startGame" visibility="public" method="_MXoolfSREfC2GY0EF-5XEw">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_MXoolPSREfC2GY0EF-5XEw">
+                <body>Metodo per avviare la partita del client</body>
+              </ownedComment>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_MXoolvSREfC2GY0EF-5XEw" name="dbConnection" visibility="private" method="_MXpPoPSREfC2GY0EF-5XEw">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_MXool_SREfC2GY0EF-5XEw">
+                <body>Metodo che permette di creare un player valido da DB</body>
+              </ownedComment>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_MXoomPSREfC2GY0EF-5XEw" type="_MXmzYfSREfC2GY0EF-5XEw" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_MXpPofSREfC2GY0EF-5XEw" name="serverConnection" visibility="private" method="_MXpPo_SREfC2GY0EF-5XEw">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_MXpPovSREfC2GY0EF-5XEw">
+                <body>Metodo con il quale il client si connette al server</body>
+              </ownedComment>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_MXpPpPSREfC2GY0EF-5XEw" name="serverDisconnection" visibility="public" method="_MXp2sfSREfC2GY0EF-5XEw">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_MXp2sPSREfC2GY0EF-5XEw">
+                <body>Metodo con il quale il client si disconnette dal server</body>
+              </ownedComment>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_MXp2svSREfC2GY0EF-5XEw" name="checkMoment" visibility="public" method="_MXp2s_SREfC2GY0EF-5XEw"/>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_MXp2tPSREfC2GY0EF-5XEw" name="invioInvito" visibility="private" method="_MXp2tvSREfC2GY0EF-5XEw">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_MXp2tfSREfC2GY0EF-5XEw">
+                <body>Metodo che serve per inviare l'invito al server</body>
+              </ownedComment>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_MXrE0PSREfC2GY0EF-5XEw" name="invioPuntata" visibility="private" method="_MXrE0_SREfC2GY0EF-5XEw">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_MXrE0fSREfC2GY0EF-5XEw">
+                <body>Metodo che serve per inviare la punatata al server</body>
+              </ownedComment>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_MXrE0vSREfC2GY0EF-5XEw" name="puntata" type="_JTjpAfSQEfC2GY0EF-5XEw"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_MXrE1PSREfC2GY0EF-5XEw" name="invioApertura" visibility="private" method="_MXrE1_SREfC2GY0EF-5XEw">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_MXrE1fSREfC2GY0EF-5XEw">
+                <body>Metodo che serve per inviare l'invito al server</body>
+              </ownedComment>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_MXrE1vSREfC2GY0EF-5XEw" name="puntata" type="_JTjpAfSQEfC2GY0EF-5XEw"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_MXrE2PSREfC2GY0EF-5XEw" name="invioPassa" visibility="private" method="_MXrE2vSREfC2GY0EF-5XEw">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_MXrE2fSREfC2GY0EF-5XEw">
+                <body>Metodo che serve per inviare il passa al server</body>
+              </ownedComment>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_MXsS8PSREfC2GY0EF-5XEw" name="invioLascia" visibility="private" method="_MXsS8vSREfC2GY0EF-5XEw">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_MXsS8fSREfC2GY0EF-5XEw">
+                <body>Metodo che serve per inviare il lascia al server</body>
+              </ownedComment>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_MXsS8_SREfC2GY0EF-5XEw" name="invioCambio" visibility="private" method="_MXsS9fSREfC2GY0EF-5XEw">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_MXsS9PSREfC2GY0EF-5XEw">
+                <body>Metodo che serve per inviare il cambio al server</body>
+              </ownedComment>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_MXsS9vSREfC2GY0EF-5XEw" name="invioServito" visibility="private" method="_MXs6APSREfC2GY0EF-5XEw">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_MXsS9_SREfC2GY0EF-5XEw">
+                <body>Metodo che serve per inviare il servito al server</body>
+              </ownedComment>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_MXs6AfSREfC2GY0EF-5XEw" name="ready" visibility="public" method="_MXs6A_SREfC2GY0EF-5XEw">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_MXs6AvSREfC2GY0EF-5XEw">
+                <body>Metodo che permette al client di uscire dalla partita e disconnettersi dal server</body>
+              </ownedComment>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_MXs6BPSREfC2GY0EF-5XEw" name="quit" visibility="public" method="_MXs6BvSREfC2GY0EF-5XEw">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_MXs6BfSREfC2GY0EF-5XEw">
+                <body>Metodo che permette al client di uscire dalla partita e disconnettersi dal server</body>
+              </ownedComment>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_MXuIIfSREfC2GY0EF-5XEw" name="sendMessage" visibility="public" method="_MXuvMfSREfC2GY0EF-5XEw">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_MXuvMPSREfC2GY0EF-5XEw" name="msg" type="_MXs6B_SREfC2GY0EF-5XEw"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_MXuvMvSREfC2GY0EF-5XEw" name="setGame" visibility="public" method="_MXvWQfSREfC2GY0EF-5XEw">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_MXuvM_SREfC2GY0EF-5XEw">
+                <body>Getter &amp; Setter</body>
+              </ownedComment>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_MXvWQPSREfC2GY0EF-5XEw" name="gameView" type="_MXllQfSREfC2GY0EF-5XEw"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_MXvWQvSREfC2GY0EF-5XEw" name="setClientId" visibility="public" method="_MXv9UPSREfC2GY0EF-5XEw">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_MXvWQ_SREfC2GY0EF-5XEw" name="clientId" type="_JTjpAfSQEfC2GY0EF-5XEw"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_MXv9UfSREfC2GY0EF-5XEw" name="getPlayer" visibility="public" method="_MXwkYPSREfC2GY0EF-5XEw">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_MXv9UvSREfC2GY0EF-5XEw" type="_MXmzYfSREfC2GY0EF-5XEw" direction="return"/>
+            </ownedOperation>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_MXih8vSREfC2GY0EF-5XEw" name="ServerListener"/>
+        </packagedElement>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="_JTcUQfSQEfC2GY0EF-5XEw" name="java">
+      <packagedElement xmi:type="uml:Package" xmi:id="_JTcUQvSQEfC2GY0EF-5XEw" name="java">
+        <packagedElement xmi:type="uml:Package" xmi:id="_JTcUQ_SQEfC2GY0EF-5XEw" name="io">
+          <packagedElement xmi:type="uml:Interface" xmi:id="_JTcURPSQEfC2GY0EF-5XEw" name="Serializable"/>
+          <packagedElement xmi:type="uml:Class" xmi:id="_MXh64PSREfC2GY0EF-5XEw" name="ObjectOutputStream"/>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_JTmsUfSQEfC2GY0EF-5XEw" name="lang">
+          <packagedElement xmi:type="uml:Class" xmi:id="_JTmsUvSQEfC2GY0EF-5XEw" name="String"/>
+          <packagedElement xmi:type="uml:Class" xmi:id="_MXs6B_SREfC2GY0EF-5XEw" name="Object"/>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_MXjwEfSREfC2GY0EF-5XEw" name="net">
+          <packagedElement xmi:type="uml:Class" xmi:id="_MXjwEvSREfC2GY0EF-5XEw" name="Socket"/>
+        </packagedElement>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="_JTjB8PSQEfC2GY0EF-5XEw" name="importedTypes">
+      <packagedElement xmi:type="uml:Package" xmi:id="_JTjpAPSQEfC2GY0EF-5XEw" name="primitivetype">
+        <packagedElement xmi:type="uml:PrimitiveType" xmi:id="_JTjpAfSQEfC2GY0EF-5XEw" name="Integer"/>
+        <packagedElement xmi:type="uml:PrimitiveType" xmi:id="_A_j9EfSREfC2GY0EF-5XEw" name="Boolean"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Package" xmi:id="_MXdpcfSREfC2GY0EF-5XEw" name="THRProject">
+        <packagedElement xmi:type="uml:Package" xmi:id="_MXdpcvSREfC2GY0EF-5XEw" name="message">
+          <packagedElement xmi:type="uml:Interface" xmi:id="_MXdpc_SREfC2GY0EF-5XEw" name="Communicator"/>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_MXllQPSREfC2GY0EF-5XEw" name="game">
+          <packagedElement xmi:type="uml:Class" xmi:id="_MXllQfSREfC2GY0EF-5XEw" name="Game"/>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_MXmzYPSREfC2GY0EF-5XEw" name="player">
+          <packagedElement xmi:type="uml:Class" xmi:id="_MXmzYfSREfC2GY0EF-5XEw" name="Player"/>
+        </packagedElement>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Package" xmi:id="_MXfeofSREfC2GY0EF-5XEw" name="org">
+        <packagedElement xmi:type="uml:Package" xmi:id="_MXfeovSREfC2GY0EF-5XEw" name="apache">
+          <packagedElement xmi:type="uml:Package" xmi:id="_MXfeo_SREfC2GY0EF-5XEw" name="logging">
+            <packagedElement xmi:type="uml:Package" xmi:id="_MXfepPSREfC2GY0EF-5XEw" name="log4j">
+              <packagedElement xmi:type="uml:Class" xmi:id="_MXfepfSREfC2GY0EF-5XEw" name="Logger"/>
+            </packagedElement>
+          </packagedElement>
+        </packagedElement>
+      </packagedElement>
+    </packagedElement>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_GXlAEPSQEfC2GY0EF-5XEw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_GXp4kPSQEfC2GY0EF-5XEw" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/PapyrusJava/1#/"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="pathmap://PapyrusJava_PROFILES/PapyrusJava.profile.uml#_j9REUByGEduN1bTiWJ0lyw"/>
+    </profileApplication>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_GX8McPSQEfC2GY0EF-5XEw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_GX8zgPSQEfC2GY0EF-5XEw" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/Codegen/1#/"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="pathmap://Codegen_PROFILES/Codegen.profile.uml#_fPDsIBa-EearhdjjJ6cVzQ"/>
+    </profileApplication>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_GX8zgfSQEfC2GY0EF-5XEw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_GX9akPSQEfC2GY0EF-5XEw" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/uml2/5.0.0/UML/Profile/Standard#/"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="pathmap://UML_PROFILES/Standard.profile.uml#_0"/>
+    </profileApplication>
+  </uml:Model>
+  <Codegen:External xmi:id="_JTeJcPSQEfC2GY0EF-5XEw" name="java.io.Serializable" base_Classifier="_JTcURPSQEfC2GY0EF-5XEw"/>
+  <Codegen:External xmi:id="_JThz0PSQEfC2GY0EF-5XEw" name="Suit" base_Classifier="_WVSZ8PSQEfC2GY0EF-5XEw"/>
+  <standard:Create xmi:id="_JTk3IPSQEfC2GY0EF-5XEw" base_BehavioralFeature="_JTjpA_SQEfC2GY0EF-5XEw"/>
+  <Codegen:External xmi:id="_JTnTYPSQEfC2GY0EF-5XEw" name="java.lang.String" base_Classifier="_JTmsUvSQEfC2GY0EF-5XEw"/>
+  <Codegen:External xmi:id="_UDD4oPSQEfC2GY0EF-5XEw" name="Card" base_Classifier="_JTcUQPSQEfC2GY0EF-5XEw"/>
+  <standard:Create xmi:id="_UDG78PSQEfC2GY0EF-5XEw" base_BehavioralFeature="_UDGU4vSQEfC2GY0EF-5XEw"/>
+  <Codegen:External xmi:id="_A_d2cPSREfC2GY0EF-5XEw" name="Rank" base_Classifier="_A_dPYPSREfC2GY0EF-5XEw"/>
+  <standard:Create xmi:id="_A_hg0PSREfC2GY0EF-5XEw" base_BehavioralFeature="_A_gSsfSREfC2GY0EF-5XEw"/>
+  <standard:Create xmi:id="_IY9zkPSREfC2GY0EF-5XEw" base_BehavioralFeature="_IY8lcfSREfC2GY0EF-5XEw"/>
+  <Codegen:External xmi:id="_MXe3kPSREfC2GY0EF-5XEw" name="THRProject.message.Communicator" base_Classifier="_MXdpc_SREfC2GY0EF-5XEw"/>
+  <Codegen:External xmi:id="_MXgFsPSREfC2GY0EF-5XEw" name="org.apache.logging.log4j.Logger" base_Classifier="_MXfepfSREfC2GY0EF-5XEw"/>
+  <Codegen:External xmi:id="_MXih8PSREfC2GY0EF-5XEw" name="java.io.ObjectOutputStream" base_Classifier="_MXh64PSREfC2GY0EF-5XEw"/>
+  <Codegen:External xmi:id="_MXjJAPSREfC2GY0EF-5XEw" name="ServerListener" base_Classifier="_MXih8vSREfC2GY0EF-5XEw"/>
+  <Codegen:External xmi:id="_MXkXIPSREfC2GY0EF-5XEw" name="java.net.Socket" base_Classifier="_MXjwEvSREfC2GY0EF-5XEw"/>
+  <Codegen:External xmi:id="_MXmMUPSREfC2GY0EF-5XEw" name="THRProject.game.Game" base_Classifier="_MXllQfSREfC2GY0EF-5XEw"/>
+  <Codegen:External xmi:id="_MXnacPSREfC2GY0EF-5XEw" name="THRProject.player.Player" base_Classifier="_MXmzYfSREfC2GY0EF-5XEw"/>
+  <standard:Create xmi:id="_MXoBgPSREfC2GY0EF-5XEw" base_BehavioralFeature="_MXnacvSREfC2GY0EF-5XEw"/>
+  <Codegen:External xmi:id="_MXuIIPSREfC2GY0EF-5XEw" name="java.lang.Object" base_Classifier="_MXs6B_SREfC2GY0EF-5XEw"/>
+</xmi:XMI>
