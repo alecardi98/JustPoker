@@ -3,7 +3,6 @@ package THRProject.gui;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import THRProject.card.Card;
 import THRProject.game.Game;
 import THRProject.game.GamePhase;
