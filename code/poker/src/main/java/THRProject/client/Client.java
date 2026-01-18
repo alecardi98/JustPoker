@@ -101,7 +101,7 @@ public class Client implements Communicator {
 	}
 
 	/*
-	 * Metodo che serve per inviare la punatata al server
+	 * Metodo che serve per inviare la puntata al server
 	 */
 	private void invioPuntata(int puntata) {
 		Message msg = gameView.getPlayers().get(clientId).punta(puntata);
@@ -109,7 +109,7 @@ public class Client implements Communicator {
 	}
 
 	/*
-	 * Metodo che serve per inviare l'invito al server
+	 * Metodo che serve per inviare l'apertura al server
 	 */
 	private void invioApertura(int puntata) {
 		Message msg = gameView.getPlayers().get(clientId).apri(puntata);

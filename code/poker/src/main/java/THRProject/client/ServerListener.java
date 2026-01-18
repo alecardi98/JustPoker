@@ -102,7 +102,7 @@ public class ServerListener implements Runnable {
 
 					case ENDGAME:
 						logger.info("Bancarotta! Hai perso.");
-						client.serverDisconnection();
+						cleanUp();
 						break;
 						
 					default:
@@ -113,14 +113,14 @@ public class ServerListener implements Runnable {
 			}
 		} catch (IOException | ClassNotFoundException e) {
 			logger.error("ERRORE! Comunicazione con il Server persa.");
-			cleanup();
+			cleanUp();
 		}
 	}
 
 	/*
 	 * Permette di chiudere correttamente il ServerListener
 	 */
-	private void cleanup() {
+	private void cleanUp() {
 		try {
 			in.close();
 		} catch (IOException e) {

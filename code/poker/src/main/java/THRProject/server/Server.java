@@ -406,6 +406,23 @@ public final class Server {
 	}
 
 	/*
+	 * Metodo per passare direttamente all'ENDPASS se tutti foldano tranne uno
+	 */
+	private void checkFold() {
+		synchronized (game) {
+			int count = 0;
+			for (Map.Entry<Integer, Player> p : game.getPlayers().entrySet()) {
+				if (p.getValue().getStatus().isFold()) {
+					count++;
+				}
+			}
+			if (count == game.getPlayers().size() - 1) {
+				game.setPhase(GamePhase.PUNTATA);
+			}
+		}
+	}
+
+	/*
 	 * Metodo per controllare che il player non sia in bancarotta, e che quindi
 	 * possa continuare a giocare
 	 */
@@ -414,6 +431,7 @@ public final class Server {
 			for (Map.Entry<Integer, Player> p : game.getPlayers().entrySet()) {
 				if (p.getValue().getStatus().getFiches() == 0) {
 					clientHandlers.get(p.getKey()).sendMessage(new Message(ControlType.ENDGAME, null));
+					clientHandlers.get(p.getKey()).cleanUp(p.getKey());
 				}
 			}
 		}
@@ -433,8 +451,10 @@ public final class Server {
 				if (!p.getValue().getStatus().isFold())
 					active++; // conta chi non ha foldato
 			}
-			if (count == active)
+			if (count == active) {
+				checkFold();
 				nextPhase();
+			}
 		}
 	}
 

@@ -96,7 +96,7 @@ class ClientHandler implements Runnable, Communicator {
 						break;
 
 					case QUIT:
-						cleanup(clientId);
+						cleanUp(clientId);
 						Server.getServer().checkStart();
 						return;
 
@@ -109,7 +109,7 @@ class ClientHandler implements Runnable, Communicator {
 			}
 		} catch (IOException | ClassNotFoundException e) {
 			logger.error("ERRORE! Comunicazione con il Client " + clientId + " persa.");
-			cleanup(clientId);
+			cleanUp(clientId);
 		}
 	}
 
@@ -117,7 +117,7 @@ class ClientHandler implements Runnable, Communicator {
 	 * Metodo per chiudere correttamente la connessione con il client - rimuove il
 	 * player - chiude il clientHandler
 	 */
-	private void cleanup(int clientId) {
+	public void cleanUp(int clientId) {
 		Server.getServer().getGame().removePlayer(clientId);
 		try {
 			in.close();
