@@ -52,60 +52,29 @@ class ClientHandler implements Runnable, Communicator {
 
 				if (msg.getType() instanceof ActionType action) {
 					switch (action) {
-					case INVITO:
-						Server.getServer().checkInvito(clientId);
-						break;
-
-					case APRI:
-						Server.getServer().checkApertura(clientId, (Integer) msg.getData());
-						break;
-
-					case PASSA:
-						Server.getServer().checkPassa(clientId);
-						break;
-
-					case CAMBIO:
-						Server.getServer().checkCambio(clientId, (ArrayList<Card>) msg.getData());
-						break;
-
-					case SERVITO:
-						Server.getServer().checkServito(clientId);
-						break;
-
-					case PUNTA:
-						Server.getServer().checkPuntata(clientId, (Integer) msg.getData());
-						break;
-
-					case FOLD:
-						Server.getServer().checkFold(clientId);
-						break;
-
-					default:
-						logger.error("ERRORE! Messaggio sconosciuto.");
-						break;
+					case INVITO -> Server.getServer().checkInvito(clientId);
+					case APRI -> Server.getServer().checkApertura(clientId, (Integer) msg.getData());
+					case PASSA -> Server.getServer().checkPassa(clientId);
+					case CAMBIO -> Server.getServer().checkCambio(clientId, (ArrayList<Card>) msg.getData());
+					case SERVITO -> Server.getServer().checkServito(clientId);
+					case PUNTA -> Server.getServer().checkPuntata(clientId, (Integer) msg.getData());
+					case FOLD -> Server.getServer().checkFold(clientId);
+					default -> logger.error("ERRORE! Messaggio sconosciuto.");
 					}
 				}
+
 				if (msg.getType() instanceof ControlType control) {
-					switch (control) {	
-					case PLAYER_JOIN:
-						Server.getServer().registerPlayer(clientId, (Player) msg.getData());
-						break;
-
-					case READY:
-						Server.getServer().countReady(clientId);
-						break;
-
-					case QUIT:
+					switch (control) {
+					case PLAYER_JOIN -> Server.getServer().registerPlayer(clientId, (Player) msg.getData());
+					case READY -> Server.getServer().countReady(clientId);
+					case QUIT -> {
 						cleanUp(clientId);
 						Server.getServer().checkStart();
 						return;
-
-					default:
-						logger.error("ERRORE! Messaggio sconosciuto.");
-						break;
+					}
+					default -> logger.error("ERRORE! Messaggio sconosciuto.");
 					}
 				}
-
 			}
 		} catch (IOException | ClassNotFoundException e) {
 			logger.error("ERRORE! Comunicazione con il Client " + clientId + " persa.");

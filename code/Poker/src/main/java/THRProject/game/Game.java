@@ -156,25 +156,6 @@ public class Game implements Serializable {
 	}
 
 	/*
-	 * Metodo per dividere il piatto in caso di parità o di fold generale
-	 */
-	public void splitPot() {
-		synchronized (this) {
-			int active = 0;
-			for (Map.Entry<Integer, Player> p : players.entrySet()) {
-				if (!p.getValue().getStatus().isFold())
-					active++;
-			}
-
-			for (Map.Entry<Integer, Player> p : players.entrySet()) {
-				if (!p.getValue().getStatus().isFold())
-					p.getValue().getStatus()
-							.setFiches(p.getValue().getStatus().getFiches() + (pot.getTotal() / active));
-			}
-		}
-	}
-
-	/*
 	 * Metodo per far foldare il player
 	 */
 	public void foldPlayer(Player player) {
