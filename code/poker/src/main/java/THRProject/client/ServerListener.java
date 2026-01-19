@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 
 import THRProject.game.Game;
+import THRProject.gui.SceneManager;
 import THRProject.message.ControlType;
 import THRProject.message.Message;
 
@@ -11,6 +12,7 @@ public class ServerListener implements Runnable {
 
 	private ObjectInputStream in;
 	private Client client;
+	private SceneManager sceneManager;
 
 	public ServerListener(ObjectInputStream in, Client client) {
 		this.in = in;
