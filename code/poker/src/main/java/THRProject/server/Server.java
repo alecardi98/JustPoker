@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,7 +21,7 @@ import THRProject.player.Player;
 
 public final class Server {
 
-	private static final Logger logger = LogManager.getLogger("server");
+	private static final Logger logger = LogManager.getLogger(Server.class);
 
 	private static Server server; // singleton Server
 	private static final int PORT = 443; // porta per la connessione
@@ -151,8 +150,7 @@ public final class Server {
 			ClientHandler clientHandler = clientHandlers.get(clientId);
 			if (clientId == game.getCurrentTurn() && player.getStatus().isActive()) {
 				player.getHand().checkRank();
-				if ((player.getHand().getRank().getLevel() == 2 && player.getHand().getRank().getValue() >= 22)
-						|| player.getHand().getRank().getLevel() > 2) { // controllo almeno coppia di Jack
+				if (player.canOpen()) { // controllo almeno coppia di Jack
 					if (!valorePuntataValido(puntata, player)) {
 						logger.info("ERRORE! Apertura Client " + clientId + " non valida.");
 						clientHandler.sendMessage(new Message(ControlType.INVALID_ACTION, "apertura"));
