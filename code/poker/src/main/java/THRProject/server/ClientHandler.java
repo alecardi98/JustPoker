@@ -19,7 +19,7 @@ import THRProject.player.Player;
  */
 class ClientHandler implements Runnable, Communicator {
 
-	private static final Logger logger = LogManager.getLogger("handler");
+	private static final Logger logger = LogManager.getLogger(ClientHandler.class);
 	private Socket socket;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;

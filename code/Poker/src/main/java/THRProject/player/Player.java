@@ -81,6 +81,13 @@ public class Player implements Serializable {
 	}
 
 	/*
+	 * Metodo per sapere se un giocatore può aprire
+	 */
+	public boolean canOpen() {
+		return (hand.getRank().getLevel() == 2 && hand.getRank().getValue() >= 22) || hand.getRank().getLevel() > 2;
+	}
+
+	/*
 	 * Getter & Setter
 	 */
 	public Hand getHand() {
