@@ -1,4 +1,4 @@
-package THRProject.card;
+package THRProject.card.model;
 
 import java.io.Serializable;
 

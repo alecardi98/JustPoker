@@ -12,8 +12,8 @@ import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import THRProject.card.Card;
-import THRProject.card.Suit;
+import THRProject.card.model.Card;
+import THRProject.card.model.Suit;
 import THRProject.game.Game;
 import THRProject.game.GamePhase;
 import THRProject.player.Player;

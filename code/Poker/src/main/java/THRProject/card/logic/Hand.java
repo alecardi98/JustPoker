@@ -1,9 +1,12 @@
-package THRProject.card;
+package THRProject.card.logic;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Hand implements Serializable{
+import THRProject.card.model.Card;
+import THRProject.card.model.Rank;
+
+public class Hand implements Serializable {
 
 	private ArrayList<Card> cards;
 	private Rank rank;
@@ -28,39 +31,63 @@ public class Hand implements Serializable{
 				}
 			}
 		}
+		checkCartaAlta(counters);
+		checkCoppiaDoppiaCoppia(counters);
+		checkTris(counters);
+		checkColore();
+		checkScala(counters);
+		checkPoker(counters);
+	}
 
-		// ricerca poker
+	/*
+	 * Metodo per valutare il poker
+	 */
+	private void checkPoker(int[] counters) {
 		for (int i = 0; i <= 7; i++) {
 			if (counters[i] == 4) {
 				rank.setLevel(8);
 				rank.setValue((i + 7) * 4);
-				return;
 			}
 		}
+	}
 
+	/*
+	 * Metodo per valutare il tris ed il full
+	 */
+	private void checkTris(int[] counters) {
 		// ricerca tris o full
 		for (int i = 0; i <= 7; i++) {
-			if (counters[i] == 3) { // tris
+			if (counters[i] == 3) {
 				rank.setLevel(4);
 				rank.setValue((i + 7) * 3);
-
-				for (int j = 0; j <= 7; j++) {
-					if (counters[j] == 2) { // full
-						rank.setLevel(7);
-						rank.setValue(rank.getValue() + ((j + 7) * 2));
-						return;
-					}
-				}
+				checkFull(counters);
 				return;
 			}
 		}
+	}
 
+	/*
+	 * Metodo per valutare il full
+	 */
+	private void checkFull(int[] counters) {
+		for (int j = 0; j <= 7; j++) {
+			if (counters[j] == 2) {
+				rank.setLevel(7);
+				rank.setValue(rank.getValue() + ((j + 7) * 2));
+				return;
+			}
+		}
+	}
+
+	/*
+	 * Metodo per valutare la coppia e la doppia coppia
+	 */
+	private void checkCoppiaDoppiaCoppia(int[] counters) {
 		// ricerca coppia o doppia coppia
 		for (int i = 0; i <= 7; i++) {
 			if (counters[i] == 2) { // coppia
 				rank.setLevel(2);
 				rank.setValue((i + 7) * 2);
-
 				for (int j = 0; j <= 7; j++) {
 					if (counters[j] == 2 && j != i) { // doppia coppia
 						rank.setLevel(3);
@@ -71,23 +98,12 @@ public class Hand implements Serializable{
 				return;
 			}
 		}
+	}
 
-		// ricerca scala o scala colore
-		for (int i = 0; i <= 3; i++) {
-			if (counters[i] == counters[i + 1] && counters[i + 1] == counters[i + 2]
-					&& counters[i + 1] == counters[i + 2] && counters[i + 2] == counters[i + 3]
-					&& counters[i + 3] == counters[i + 4]) { // scala
-				rank.setLevel(5);
-				rank.setValue(45 + (5 * i));
-				if (isColore()) {// scala colore
-					rank.setLevel(9);
-				}
-				return;
-			}
-		}
-
-		// ricerca colore
-		boolean color = false;
+	/*
+	 * Metodo per valutare il colore
+	 */
+	private void checkColore() {
 		if (isColore()) {
 			rank.setLevel(6);
 
@@ -95,10 +111,37 @@ public class Hand implements Serializable{
 			for (Card c : cards)
 				sum = sum + c.getValore();
 			rank.setValue(sum);
-			return;
 		}
+	}
 
-		// ricerca carta alta
+	/*
+	 * Metodo per valutare la scala e la scala colore
+	 */
+	private void checkScala(int[] counters) {
+		for (int i = 0; i <= 3; i++) {
+			if (counters[i] != 0 && counters[i] == counters[i + 1] && counters[i + 1] == counters[i + 2]
+					&& counters[i + 2] == counters[i + 3] && counters[i + 3] == counters[i + 4]) { // scala
+				rank.setLevel(5);
+				rank.setValue(45 + (5 * i));
+				checkScalaColore();
+				return;
+			}
+		}
+	}
+
+	/*
+	 * Metodo per valutare la scala colore
+	 */
+	private void checkScalaColore() {
+		if (isColore()) {
+			rank.setLevel(9);
+		}
+	}
+
+	/*
+	 * Metodo per valutare la carta alta
+	 */
+	private void checkCartaAlta(int[] counters) {
 		int max = 7;
 		for (Card c : cards) {
 			if (c.getValore() > max)
@@ -110,10 +153,9 @@ public class Hand implements Serializable{
 
 	private boolean isColore() {
 		return cards.get(0).getSeme() == cards.get(1).getSeme() && cards.get(1).getSeme() == cards.get(2).getSeme()
-				&& cards.get(2).getSeme() == cards.get(3).getSeme()
-				&& cards.get(3).getSeme() == cards.get(4).getSeme();
+				&& cards.get(2).getSeme() == cards.get(3).getSeme() && cards.get(3).getSeme() == cards.get(4).getSeme();
 	}
-	
+
 	/*
 	 * Getter & Setter
 	 */

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import THRProject.card.Card;
+import THRProject.card.model.Card;
 import THRProject.message.ActionType;
 import THRProject.message.Communicator;
 import THRProject.message.ControlType;

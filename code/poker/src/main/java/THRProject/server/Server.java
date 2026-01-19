@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import THRProject.card.Card;
+import THRProject.card.model.Card;
 import THRProject.game.Game;
 import THRProject.game.GamePhase;
 import THRProject.message.Message;

@@ -6,9 +6,9 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import THRProject.card.Card;
-import THRProject.card.Deck;
-import THRProject.card.Hand;
+import THRProject.card.logic.Deck;
+import THRProject.card.logic.Hand;
+import THRProject.card.model.Card;
 import THRProject.player.Player;
 
 public class Game implements Serializable {
