@@ -42,6 +42,8 @@ public class Game implements Serializable {
 			currentTurn = min;
 		}
 	}
+	
+	
 
 	/*
 	 * Metodo con il quale il server cede il turno al giocatore successivo: gli ID
@@ -179,7 +181,7 @@ public class Game implements Serializable {
 		synchronized (this) {
 			player.getStatus().setEnd(true);
 			player.getStatus().setFold(true);
-			checkFirstTurn();
+			nextTurn();
 		}
 	}
 

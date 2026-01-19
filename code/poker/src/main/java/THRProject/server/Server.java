@@ -111,13 +111,12 @@ public final class Server {
 			ClientHandler clientHandler = clientHandlers.get(clientId);
 			if (clientId == game.getCurrentTurn() && player.getStatus().isActive()) {
 				int invito = MINBET;
-				if (invito > player.getStatus().getFiches()) {
+				if (invito >= player.getStatus().getFiches()) {
 					logger.info("All-in Client " + clientId + " registrato.");
-					game.punta(player, player.getStatus().getFiches());
 				} else {
 					logger.info("Invito Client " + clientId + " registrato.");
-					game.punta(player, invito);
 				}
+				game.punta(player, invito);
 				game.nextTurn();
 				clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "invito"));
 				checkNextPhase();
@@ -156,13 +155,12 @@ public final class Server {
 						logger.info("ERRORE! Apertura Client " + clientId + " non valida.");
 						clientHandler.sendMessage(new Message(ControlType.INVALID_ACTION, "apertura"));
 					} else {
-						if (puntata > player.getStatus().getFiches()) {
+						if (puntata >= player.getStatus().getFiches()) {
 							logger.info("All-in Client " + clientId + " registrato.");
-							game.punta(player, player.getStatus().getFiches());
 						} else {
 							logger.info("Apertura Client " + clientId + " registrata.");
-							game.punta(player, puntata);
 						}
+						game.punta(player, puntata);
 						game.setOpen(true);
 						game.nextTurn();
 						clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "apertura"));
@@ -196,13 +194,12 @@ public final class Server {
 					logger.info("ERRORE! Puntata Client " + clientId + " non valida.");
 					clientHandler.sendMessage(new Message(ControlType.INVALID_ACTION, "puntata"));
 				} else {
-					if (puntata > player.getStatus().getFiches()) {
+					if (puntata >= player.getStatus().getFiches()) {
 						logger.info("All-in Client " + clientId + " registrato.");
-						game.punta(player, player.getStatus().getFiches());
 					} else {
 						logger.info("Puntata Client " + clientId + " registrata.");
-						game.punta(player, puntata);
 					}
+					game.punta(player, puntata);
 					game.nextTurn();
 					clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "puntata"));
 					game.resetBet(clientId);
@@ -251,7 +248,7 @@ public final class Server {
 			Player player = game.getPlayers().get(clientId);
 			ClientHandler clientHandler = clientHandlers.get(clientId);
 			if (clientId == game.getCurrentTurn() && player.getStatus().isActive()) {
-				if (cardsToRemove.isEmpty() || cardsToRemove.size() > 5) {
+				if (cardsToRemove.isEmpty() || cardsToRemove.size() > 3) {
 					logger.info("ERRORE! Cambio Client " + clientId + " non valido.");
 					clientHandler.sendMessage(new Message(ControlType.INVALID_ACTION, "cambio"));
 				} else {
@@ -264,7 +261,7 @@ public final class Server {
 					for (int i = 0; i < cardsToRemove.size(); i++) {
 						Card c = game.getDeck().getCards().get(0);
 						player.getHand().getCards().add(c);
-						game.getDeck().getCards().remove(c);
+						game.getDeck().getCards().remove(0);
 					}
 					player.getStatus().setEnd(true);
 					game.nextTurn();
@@ -429,7 +426,7 @@ public final class Server {
 	private void checkBankrupt() {
 		synchronized (game) {
 			for (Map.Entry<Integer, Player> p : game.getPlayers().entrySet()) {
-				if (p.getValue().getStatus().getFiches() == 0) {
+				if (p.getValue().getStatus().getFiches() <= 0) {
 					clientHandlers.get(p.getKey()).sendMessage(new Message(ControlType.ENDGAME, null));
 					clientHandlers.get(p.getKey()).cleanUp(p.getKey());
 				}

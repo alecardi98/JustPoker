@@ -42,9 +42,6 @@ public class ServerListener implements Runnable {
 
 					case INVALID_ACTION:
 						String invalidAction = (String) msg.getData();
-						if (invalidAction.equals("invito")) {
-							logger.info("ERRORE! Invito non valido.");
-						}
 						if (invalidAction.equals("apertura")) {
 							logger.info("ERRORE! Apertura non valida.");
 						}
