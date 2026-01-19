@@ -11,7 +11,7 @@ import THRProject.message.Message;
 
 public class ServerListener implements Runnable {
 
-	private static final Logger logger = LogManager.getLogger("listener");
+	private static final Logger logger = LogManager.getLogger(ServerListener.class);
 	private ObjectInputStream in;
 	private Client client;
 

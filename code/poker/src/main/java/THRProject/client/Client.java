@@ -15,13 +15,13 @@ import THRProject.player.Player;
 
 public class Client implements Communicator {
 
-	private static final Logger logger = LogManager.getLogger("client");
+	private static final Logger logger = LogManager.getLogger(Client.class);
 	private ObjectOutputStream out;
 	private ServerListener serverListener;
 	private Socket socket;
 
-	private static final String HOST = "localhost";
-//	private static final String HOST = "204.216.208.188";
+//	private static final String HOST = "localhost";
+	private static final String HOST = "204.216.208.188";
 	private static final int PORT = 443;
 
 	private Game gameView; // variabile che contiene solo i dati personali del game

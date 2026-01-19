@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,7 +21,7 @@ import THRProject.player.Player;
 
 public final class Server {
 
-	private static final Logger logger = LogManager.getLogger("server");
+	private static final Logger logger = LogManager.getLogger(Server.class);
 
 	private static Server server; // singleton Server
 	private static final int PORT = 443; // porta per la connessione
@@ -111,7 +110,8 @@ public final class Server {
 		synchronized (game) {
 			Player player = game.getPlayers().get(clientId);
 			ClientHandler clientHandler = clientHandlers.get(clientId);
-			if (clientId == game.getCurrentTurn() && player.getStatus().isActive()) {
+			if (game.getPhase().equals(GamePhase.INVITO) && clientId == game.getCurrentTurn()
+					&& player.getStatus().isActive()) {
 				int invito = MINBET;
 				if (invito >= player.getStatus().getFiches()) {
 					logger.info("All-in Client " + clientId + " registrato.");
@@ -149,10 +149,10 @@ public final class Server {
 		synchronized (game) {
 			Player player = game.getPlayers().get(clientId);
 			ClientHandler clientHandler = clientHandlers.get(clientId);
-			if (clientId == game.getCurrentTurn() && player.getStatus().isActive()) {
+			if (game.getPhase().equals(GamePhase.APERTURA) && clientId == game.getCurrentTurn()
+					&& player.getStatus().isActive()) {
 				player.getHand().checkRank();
-				if ((player.getHand().getRank().getLevel() == 2 && player.getHand().getRank().getValue() >= 22)
-						|| player.getHand().getRank().getLevel() > 2) { // controllo almeno coppia di Jack
+				if (player.canOpen()) { // controllo almeno coppia di Jack
 					if (!valorePuntataValido(puntata, player)) {
 						logger.info("ERRORE! Apertura Client " + clientId + " non valida.");
 						clientHandler.sendMessage(new Message(ControlType.INVALID_ACTION, "apertura"));
@@ -191,7 +191,8 @@ public final class Server {
 		synchronized (game) {
 			Player player = game.getPlayers().get(clientId);
 			ClientHandler clientHandler = clientHandlers.get(clientId);
-			if (clientId == game.getCurrentTurn() && player.getStatus().isActive()) {
+			if ((game.getPhase().equals(GamePhase.INVITO) || game.getPhase().equals(GamePhase.APERTURA))
+					&& clientId == game.getCurrentTurn() && player.getStatus().isActive()) {
 				if (!valorePuntataValido(puntata, player)) {
 					logger.info("ERRORE! Puntata Client " + clientId + " non valida.");
 					clientHandler.sendMessage(new Message(ControlType.INVALID_ACTION, "puntata"));
@@ -227,7 +228,8 @@ public final class Server {
 		synchronized (game) {
 			Player player = game.getPlayers().get(clientId);
 			ClientHandler clientHandler = clientHandlers.get(clientId);
-			if (clientId == game.getCurrentTurn() && player.getStatus().isActive()) {
+			if (game.getPhase().equals(GamePhase.INVITO) && clientId == game.getCurrentTurn()
+					&& player.getStatus().isActive()) {
 				// registra passa
 				logger.info("Passa Client " + clientId + " registrato.");
 				player.getStatus().setEnd(true);
@@ -249,7 +251,8 @@ public final class Server {
 		synchronized (game) {
 			Player player = game.getPlayers().get(clientId);
 			ClientHandler clientHandler = clientHandlers.get(clientId);
-			if (clientId == game.getCurrentTurn() && player.getStatus().isActive()) {
+			if (game.getPhase().equals(GamePhase.ACCOMODO) && clientId == game.getCurrentTurn()
+					&& player.getStatus().isActive()) {
 				if (cardsToRemove.isEmpty() || cardsToRemove.size() > 3) {
 					logger.info("ERRORE! Cambio Client " + clientId + " non valido.");
 					clientHandler.sendMessage(new Message(ControlType.INVALID_ACTION, "cambio"));
@@ -284,7 +287,8 @@ public final class Server {
 		synchronized (game) {
 			Player player = game.getPlayers().get(clientId);
 			ClientHandler clientHandler = clientHandlers.get(clientId);
-			if (clientId == game.getCurrentTurn() && player.getStatus().isActive()) {
+			if (game.getPhase().equals(GamePhase.ACCOMODO) && clientId == game.getCurrentTurn()
+					&& player.getStatus().isActive()) {
 				logger.info("Servito Client " + clientId + " registrato.");
 				player.getStatus().setEnd(true);
 				game.nextTurn();
@@ -380,7 +384,7 @@ public final class Server {
 		for (Map.Entry<Integer, Player> p : players.entrySet()) {
 			Rank r = p.getValue().getHand().getRank();
 			if (r.getLevel() == maxLevel && r.getValue() == maxValue) {
-				winners.put(p.getKey(),p.getValue());
+				winners.put(p.getKey(), p.getValue());
 			}
 		}
 		return winners;
