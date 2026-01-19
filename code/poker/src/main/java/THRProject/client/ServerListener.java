@@ -28,83 +28,17 @@ public class ServerListener implements Runnable {
 				obj = in.readObject();
 				Message msg = (Message) obj;
 
-				// gestione delle risposte del Server
 				if (msg.getType() instanceof ControlType control) {
 					switch (control) {
-					case CLIENT_ID:
-						client.setClientId((int) msg.getData());
-						client.sendMessage(new Message(ControlType.PLAYER_JOIN, client.getPlayer()));
-						break;
-
-					case START_GAME:
-						client.startGame();
-						break;
-
-					case INVALID_ACTION:
-						String invalidAction = (String) msg.getData();
-						if (invalidAction.equals("apertura")) {
-							logger.info("ERRORE! Apertura non valida.");
-						}
-						if (invalidAction.equals("cambio")) {
-							logger.info("ERRORE! Cambio non valido.");
-						}
-						if (invalidAction.equals("puntata")) {
-							logger.info("ERRORE! Puntata non valida.");
-						}
-						if (invalidAction.equals("ready")) {
-							logger.info("ERRORE! Hai già scelto.");
-						}
-						break;
-
-					case VALID_ACTION:
-						String validAction = (String) msg.getData();
-						if (validAction.equals("invito")) {
-							logger.info("Invito registrato.");
-						}
-						if (validAction.equals("apertura")) {
-							logger.info("Apertura registrata.");
-						}
-						if (validAction.equals("passa")) {
-							logger.info("Passa registrato.");
-						}
-						if (validAction.equals("cambio")) {
-							logger.info("Cambio registrato.");
-						}
-						if (validAction.equals("servito")) {
-							logger.info("Servito registrato.");
-						}
-						if (validAction.equals("puntata")) {
-							logger.info("Puntata registrata.");
-						}
-						if (validAction.equals("fold")) {
-							logger.info("Fold registrato.");
-						}
-						if (validAction.equals("ready")) {
-							logger.info("Ready registrato.");
-						}
-						break;
-
-					case UPDATE:
-						client.setGame((Game) msg.getData());
-						client.checkMoment();
-						break;
-
-					case WINNER:
-						logger.info("Hai vinto la mano!");
-						break;
-
-					case LOSER:
-						logger.info("Hai perso la mano.");
-						break;
-
-					case ENDGAME:
-						logger.info("Bancarotta! Hai perso.");
-						cleanUp();
-						break;
-						
-					default:
-						logger.error("ERRORE! Messaggio sconosciuto.");
-						break;
+					case CLIENT_ID -> handleClientId(msg.getData());
+					case START_GAME -> handleStartGame();
+					case INVALID_ACTION -> handleInvalidAction((String) msg.getData());
+					case VALID_ACTION -> handleValidAction((String) msg.getData());
+					case UPDATE -> handleUpdate(msg.getData());
+					case WINNER -> handleWinner();
+					case LOSER -> handleLoser();
+					case ENDGAME -> handleEndGame();
+					default -> logger.error("ERRORE! Messaggio sconosciuto.");
 					}
 				}
 			}
@@ -115,7 +49,82 @@ public class ServerListener implements Runnable {
 	}
 
 	/*
-	 * Permette di chiudere correttamente il ServerListener
+	 * Metodo che gestisce l'arrivo del CLIENT_ID
+	 */
+	private void handleClientId(Object data) {
+		client.setClientId((int) data);
+		client.sendMessage(new Message(ControlType.PLAYER_JOIN, client.getPlayer()));
+	}
+
+	/*
+	 * Metodo che gestisce l'arrivo del lo START_GAME
+	 */
+	private void handleStartGame() {
+		client.startGame();
+	}
+
+	/*
+	 * Metodo che gestisce l'arrivo dell'INVALID_ACTION
+	 */
+	private void handleInvalidAction(String action) {
+		switch (action) {
+		case "apertura" -> logger.info("ERRORE! Apertura non valida.");
+		case "cambio" -> logger.info("ERRORE! Cambio non valido.");
+		case "puntata" -> logger.info("ERRORE! Puntata non valida.");
+		case "ready" -> logger.info("ERRORE! Hai già scelto.");
+		default -> logger.warn("Azione invalida sconosciuta: " + action);
+		}
+	}
+
+	/*
+	 * Metodo che gestisce l'arrivo del VALID_ACTION
+	 */
+	private void handleValidAction(String action) {
+		switch (action) {
+		case "invito" -> logger.info("Invito registrato.");
+		case "apertura" -> logger.info("Apertura registrata.");
+		case "passa" -> logger.info("Passa registrato.");
+		case "cambio" -> logger.info("Cambio registrato.");
+		case "servito" -> logger.info("Servito registrato.");
+		case "puntata" -> logger.info("Puntata registrata.");
+		case "fold" -> logger.info("Fold registrato.");
+		case "ready" -> logger.info("Ready registrato.");
+		default -> logger.warn("Azione valida sconosciuta: " + action);
+		}
+	}
+
+	/*
+	 * Metodo che gestisce l'arrivo dell'UPDATE
+	 */
+	private void handleUpdate(Object data) {
+		client.setGame((Game) data);
+		client.checkMoment();
+	}
+
+	/*
+	 * Metodo che gestisce l'arrivo del WINNER
+	 */
+	private void handleWinner() {
+		logger.info("Hai vinto la mano!");
+	}
+
+	/*
+	 * Metodo che gestisce l'arrivo del LOSER
+	 */
+	private void handleLoser() {
+		logger.info("Hai perso la mano.");
+	}
+
+	/*
+	 * Metodo che gestisce l'arrivo dell'ENDGAME
+	 */
+	private void handleEndGame() {
+		logger.info("Bancarotta! Hai perso.");
+		cleanUp();
+	}
+
+	/*
+	 * Metodo che chiude correttamente il ServerListener
 	 */
 	private void cleanUp() {
 		try {

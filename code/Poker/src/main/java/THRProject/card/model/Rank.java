@@ -1,4 +1,4 @@
-package THRProject.card;
+package THRProject.card.model;
 
 import java.io.Serializable;
 
@@ -8,6 +8,7 @@ public class Rank implements Serializable{
 	private int value; // indica il valore del punteggio
 
 	public Rank() {
+		//il Rank viene inizializzato solo quando viene calcolato da Hand
 	}
 
 	/*

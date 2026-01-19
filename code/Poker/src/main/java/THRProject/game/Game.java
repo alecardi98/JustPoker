@@ -6,9 +6,9 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import THRProject.card.Card;
-import THRProject.card.Deck;
-import THRProject.card.Hand;
+import THRProject.card.logic.Deck;
+import THRProject.card.logic.Hand;
+import THRProject.card.model.Card;
 import THRProject.player.Player;
 
 public class Game implements Serializable {
@@ -152,25 +152,6 @@ public class Game implements Serializable {
 //					System.out.println(c);
 //				}
 //			}
-		}
-	}
-
-	/*
-	 * Metodo per dividere il piatto in caso di parità o di fold generale
-	 */
-	public void splitPot() {
-		synchronized (this) {
-			int active = 0;
-			for (Map.Entry<Integer, Player> p : players.entrySet()) {
-				if (!p.getValue().getStatus().isFold())
-					active++;
-			}
-
-			for (Map.Entry<Integer, Player> p : players.entrySet()) {
-				if (!p.getValue().getStatus().isFold())
-					p.getValue().getStatus()
-							.setFiches(p.getValue().getStatus().getFiches() + (pot.getTotal() / active));
-			}
 		}
 	}
 

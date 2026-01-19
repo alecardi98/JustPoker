@@ -1,9 +1,12 @@
-package THRProject.card;
+package THRProject.card.logic;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import THRProject.card.model.Card;
+import THRProject.card.model.Suit;
 
 public class Deck implements Serializable {
 

@@ -1,4 +1,4 @@
-package THRProject.card;
+package THRProject.card.logic;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import THRProject.card.Card;
-import THRProject.card.Hand;
-import THRProject.card.Suit;
+import THRProject.card.logic.Hand;
+import THRProject.card.model.Card;
+import THRProject.card.model.Suit;
 
 class HandTest {
 	

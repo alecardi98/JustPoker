@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -11,7 +12,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import THRProject.card.Card;
+import THRProject.card.model.Card;
+import THRProject.card.model.Rank;
 import THRProject.game.Game;
 import THRProject.game.GamePhase;
 import THRProject.message.Message;
@@ -328,76 +330,77 @@ public final class Server {
 	 */
 	private void checkWinner() {
 		synchronized (game) {
-			// estraggo solo i player attivi
-			ConcurrentHashMap<Integer, Player> activePlayers = new ConcurrentHashMap<Integer, Player>();
-			for (Map.Entry<Integer, Player> p : game.getPlayers().entrySet()) {
-				if (!p.getValue().getStatus().isFold())
-					activePlayers.put(p.getKey(), p.getValue());
-			}
-			// calcolo del rank
-			for (Map.Entry<Integer, Player> p : activePlayers.entrySet()) {
-				p.getValue().getHand().checkRank();
-			}
-			// calcolo del massimo level
-			int maxLevel = 1;
-			for (Map.Entry<Integer, Player> p : activePlayers.entrySet()) {
-				if (p.getValue().getHand().getRank().getLevel() > maxLevel)
-					maxLevel = p.getValue().getHand().getRank().getLevel();
-			}
-			// calcolo quanti hanno il massimo level
-			int countMaxLevel = 0;
-			for (Map.Entry<Integer, Player> p : activePlayers.entrySet()) {
-				if (p.getValue().getHand().getRank().getLevel() == maxLevel)
-					countMaxLevel++;
-			}
-			if (countMaxLevel == 1) {// un solo vincitore
-				for (Map.Entry<Integer, Player> p : activePlayers.entrySet()) {
-					if (p.getValue().getHand().getRank().getLevel() == maxLevel) {
+			Map<Integer, Player> activePlayers = getActivePlayers();
+			evaluateHands(activePlayers);
+			Map<Integer, Player> winners = determineWinners(activePlayers);
+			splitPot(activePlayers, winners);
+		}
+	}
 
-						clientHandlers.get(p.getKey()).sendMessage(new Message(ControlType.WINNER, null));
-						game.getPlayers().get(p.getKey()).getStatus().setFiches(
-								game.getPlayers().get(p.getKey()).getStatus().getFiches() + game.getPot().getTotal());
-					} else {
-						clientHandlers.get(p.getKey()).sendMessage(new Message(ControlType.LOSER, null));
-					}
-				}
-			} else { // spareggio level
-				// calcolo massimo valore di value
-				int maxValue = 0;
-				for (Map.Entry<Integer, Player> p : activePlayers.entrySet()) {
-					if (p.getValue().getHand().getRank().getValue() > maxValue)
-						maxValue = p.getValue().getHand().getRank().getValue();
-				}
-				// calcolo quanti hanno massimo valore di value
-				int countMaxValue = 0;
-				for (Map.Entry<Integer, Player> p : activePlayers.entrySet()) {
-					if (p.getValue().getHand().getRank().getValue() == maxValue)
-						countMaxValue++;
-				}
-				if (countMaxValue == 1) { // un solo vincitore
-					for (Map.Entry<Integer, Player> p : activePlayers.entrySet()) {
-						if (p.getValue().getHand().getRank().getValue() == maxValue) {
-							clientHandlers.get(p.getKey()).sendMessage(new Message(ControlType.WINNER, null));
-							game.getPlayers().get(p.getKey()).getStatus()
-									.setFiches(game.getPlayers().get(p.getKey()).getStatus().getFiches()
-											+ game.getPot().getTotal());
-						} else {
-							clientHandlers.get(p.getKey()).sendMessage(new Message(ControlType.LOSER, null));
-						}
-					}
-				} else { // pareggio
-					for (Map.Entry<Integer, Player> p : activePlayers.entrySet()) {
-						if (p.getValue().getHand().getRank().getLevel() == maxLevel
-								&& p.getValue().getHand().getRank().getValue() == maxValue) {
-							clientHandlers.get(p.getKey()).sendMessage(new Message(ControlType.WINNER, null));
-							game.getPlayers().get(p.getKey()).getStatus()
-									.setFiches(game.getPlayers().get(p.getKey()).getStatus().getFiches()
-											+ (game.getPot().getTotal() / countMaxValue));
-						} else {
-							clientHandlers.get(p.getKey()).sendMessage(new Message(ControlType.LOSER, null));
-						}
-					}
-				}
+	/*
+	 * Metodo che restituisce i giocatori attivi (che non hanno foldato)
+	 */
+	private Map<Integer, Player> getActivePlayers() {
+		Map<Integer, Player> activePlayers = new ConcurrentHashMap<Integer, Player>();
+
+		for (Map.Entry<Integer, Player> p : game.getPlayers().entrySet()) {
+			if (!p.getValue().getStatus().isFold()) {
+				activePlayers.put(p.getKey(), p.getValue());
+			}
+		}
+		return activePlayers;
+	}
+
+	/*
+	 * Metodo che calcola il punteggio delle mani dei giocatori
+	 */
+	private void evaluateHands(Map<Integer, Player> players) {
+		for (Player p : players.values()) {
+			p.getHand().checkRank();
+		}
+	}
+
+	/*
+	 * Metodo che determina i vincitori potenziali
+	 */
+	private Map<Integer, Player> determineWinners(Map<Integer, Player> players) {
+		int maxLevel = 1;
+		int maxValue = 7;
+
+		for (Player p : players.values()) {
+			Rank r = p.getHand().getRank();
+
+			if (r.getLevel() > maxLevel || (r.getLevel() == maxLevel && r.getValue() > maxValue)) {
+				maxLevel = r.getLevel();
+				maxValue = r.getValue();
+			}
+		}
+
+		Map<Integer, Player> winners = new ConcurrentHashMap<Integer, Player>();
+		for (Map.Entry<Integer, Player> p : players.entrySet()) {
+			Rank r = p.getValue().getHand().getRank();
+			if (r.getLevel() == maxLevel && r.getValue() == maxValue) {
+				winners.put(p.getKey(),p.getValue());
+			}
+		}
+		return winners;
+	}
+
+	/*
+	 * Metodo che distribuisce il piatto ai vincitori
+	 */
+	private void splitPot(Map<Integer, Player> activePlayers, Map<Integer, Player> winners) {
+		int potShare = game.getPot().getTotal() / winners.size();
+
+		for (Map.Entry<Integer, Player> entry : activePlayers.entrySet()) {
+			int playerId = entry.getKey();
+
+			if (winners.containsKey(playerId)) {
+				clientHandlers.get(playerId).sendMessage(new Message(ControlType.WINNER, null));
+				game.getPlayers().get(playerId).getStatus()
+						.setFiches(game.getPlayers().get(playerId).getStatus().getFiches() + potShare);
+			} else {
+				clientHandlers.get(playerId).sendMessage(new Message(ControlType.LOSER, null));
 			}
 		}
 	}
@@ -538,7 +541,7 @@ public final class Server {
 				}
 				if (game.getPhase().equals(GamePhase.ENDPASS)) {
 					game.setPhase(GamePhase.INVITO);
-					game.splitPot();
+					splitPot(getActivePlayers(), getActivePlayers());
 					startGame();
 				}
 			}

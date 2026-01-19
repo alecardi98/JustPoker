@@ -3,8 +3,8 @@ package THRProject.player;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import THRProject.card.Card;
-import THRProject.card.Hand;
+import THRProject.card.logic.Hand;
+import THRProject.card.model.Card;
 import THRProject.message.Message;
 import THRProject.message.ActionType;
 

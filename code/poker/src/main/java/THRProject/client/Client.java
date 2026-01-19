@@ -29,6 +29,7 @@ public class Client implements Communicator {
 	private Player player;
 
 	public Client() {
+		// il Client viene inizializzato solo dopo la connessione al Server
 	}
 
 	/*
@@ -45,7 +46,7 @@ public class Client implements Communicator {
 	 * Metodo per avviare la partita del client
 	 */
 	public void startGame() {
-
+		// TO DO il client ha tutto ciò che gli serve per stampare il campo
 	}
 
 	/*
