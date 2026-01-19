@@ -3,8 +3,8 @@ package THRProject.player;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import THRProject.card.Card;
-import THRProject.card.Hand;
+import THRProject.card.logic.Hand;
+import THRProject.card.model.Card;
 import THRProject.message.Message;
 import THRProject.message.ActionType;
 
@@ -61,13 +61,13 @@ public class Player implements Serializable {
 	 * Metodo per creare il cambio
 	 */
 	public Message cambio() {
-		return new Message(ActionType.CAMBIO, changeCards());
+		return new Message(ActionType.CAMBIO, chooseCards());
 	}
 
 	/*
 	 * Metodo per scegliere le carte da cambiare
 	 */
-	public ArrayList<Card> changeCards() {
+	public ArrayList<Card> chooseCards() {
 		ArrayList<Card> cards = new ArrayList<Card>();
 		// TO DO scelta carte
 		return cards;
@@ -78,6 +78,13 @@ public class Player implements Serializable {
 	 */
 	public Message servito() {
 		return new Message(ActionType.SERVITO, null);
+	}
+
+	/*
+	 * Metodo per sapere se un giocatore può aprire
+	 */
+	public boolean canOpen() {
+		return (hand.getRank().getLevel() == 2 && hand.getRank().getValue() >= 22) || hand.getRank().getLevel() > 2;
 	}
 
 	/*

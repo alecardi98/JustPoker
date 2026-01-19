@@ -4,20 +4,24 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import THRProject.game.Game;
 import THRProject.message.Message;
+import THRProject.message.Communicator;
 import THRProject.message.ControlType;
 import THRProject.player.Player;
 
-public class Client {
+public class Client implements Communicator {
 
+	private static final Logger logger = LogManager.getLogger(Client.class);
 	private ObjectOutputStream out;
 	private ServerListener serverListener;
 	private Socket socket;
 
-	private static final String HOST = "localhost";
-//	private static final String HOST = "204.216.208.188";
+//	private static final String HOST = "localhost";
+	private static final String HOST = "204.216.208.188";
 	private static final int PORT = 443;
 
 	private Game gameView; // variabile che contiene solo i dati personali del game
@@ -25,6 +29,7 @@ public class Client {
 	private Player player;
 
 	public Client() {
+		// il Client viene inizializzato solo dopo la connessione al Server
 	}
 
 	/*
@@ -48,6 +53,7 @@ public class Client {
 	 * Metodo per avviare la partita del client
 	 */
 	public void startGame() {
+		// TO DO il client ha tutto ciò che gli serve per stampare il campo
 	}
 
 	/*
@@ -65,13 +71,13 @@ public class Client {
 		ObjectInputStream in;
 		try {
 			socket = new Socket(HOST, PORT);
-			System.out.println("Client connesso al server");
+			logger.info("Client connesso al server");
 			out = new ObjectOutputStream(socket.getOutputStream());
 			in = new ObjectInputStream(socket.getInputStream());
 			serverListener = new ServerListener(in, this);
 			new Thread(serverListener).start();
 		} catch (IOException e) {
-			System.out.println("ERRORE! Impossibile connettersi alla partita. Disconnessione.\n");
+			logger.error("ERRORE! Impossibile connettersi alla partita. Disconnessione.");
 			System.exit(1);
 		}
 	}
@@ -87,11 +93,11 @@ public class Client {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println("Disconnessione riuscita.");
+		logger.info("Disconnessione riuscita.");
 	}
 
 	public void checkMoment() {
-		System.out.println("Fase di " + getGameView().getPhase() + " : tocca a Client " + getGameView().getCurrentTurn());
+		logger.info("Fase di " + gameView.getPhase() + " : tocca a Client " + gameView.getCurrentTurn());
 	}
 
 	/*
@@ -103,7 +109,7 @@ public class Client {
 	}
 
 	/*
-	 * Metodo che serve per inviare la punatata al server
+	 * Metodo che serve per inviare la puntata al server
 	 */
 	public void invioPuntata(int puntata) {
 		Message msg = getGameView().getPlayers().get(clientId).punta(puntata);
@@ -111,7 +117,7 @@ public class Client {
 	}
 
 	/*
-	 * Metodo che serve per inviare l'invito al server
+	 * Metodo che serve per inviare l'apertura al server
 	 */
 	public void invioApertura(int puntata) {
 		Message msg = getGameView().getPlayers().get(clientId).apri(puntata);
@@ -169,9 +175,7 @@ public class Client {
 		serverDisconnection();
 	}
 
-	/*
-	 * Metodo per inviare messaggi al server
-	 */
+	@Override
 	public void sendMessage(Object msg) {
 		try {
 			out.writeObject(msg);

@@ -53,6 +53,13 @@ public class PlayerStatus implements Serializable {
 	}
 
 	/*
+	 * Metodo che permette di capire se un giocatore è attivo
+	 */
+	public boolean isActive() {
+		return !fold && !end;
+	}
+
+	/*
 	 * Getter & Setter
 	 */
 	public int getFiches() {

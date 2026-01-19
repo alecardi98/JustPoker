@@ -258,106 +258,37 @@ this.data = data;</body>
             <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_tnKCAvEvEfC5cpUsQOGJ5Q" name="YOUR_TURN"/>
             <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_tnKCA_EvEfC5cpUsQOGJ5Q" name="QUIT"/>
           </packagedElement>
+          <packagedElement xmi:type="uml:Enumeration" xmi:id="_hOI1APSfEfCQ8o0a-G4ObQ" name="ControlType" visibility="public">
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_hOJcEPSfEfCQ8o0a-G4ObQ" name="PLAYER_JOIN"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_hOKDIPSfEfCQ8o0a-G4ObQ" name="CLIENT_ID"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_hOKDIfSfEfCQ8o0a-G4ObQ" name="START_GAME"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_hOKDIvSfEfCQ8o0a-G4ObQ" name="INVALID_ACTION"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_hOKDI_SfEfCQ8o0a-G4ObQ" name="VALID_ACTION"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_hOKDJPSfEfCQ8o0a-G4ObQ" name="UPDATE"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_hOKDJfSfEfCQ8o0a-G4ObQ" name="READY"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_hOKDJvSfEfCQ8o0a-G4ObQ" name="QUIT"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_hOKqMPSfEfCQ8o0a-G4ObQ" name="WINNER"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_hOKqMfSfEfCQ8o0a-G4ObQ" name="LOSER"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Interface" xmi:id="_iccbMPSfEfCQ8o0a-G4ObQ" name="Communicator" visibility="public">
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_icdpUPSfEfCQ8o0a-G4ObQ" name="sendMessage" visibility="private">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_icdpUfSfEfCQ8o0a-G4ObQ">
+                <body>metodo per inviare messaggi</body>
+              </ownedComment>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_icdpUvSfEfCQ8o0a-G4ObQ" name="msg" type="_f0G-UPEuEfC5cpUsQOGJ5Q"/>
+            </ownedOperation>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Enumeration" xmi:id="_i7r78PSfEfCQ8o0a-G4ObQ" name="ActionType" visibility="public">
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_i7r78fSfEfCQ8o0a-G4ObQ" name="INVITO"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_i7r78vSfEfCQ8o0a-G4ObQ" name="PASSA"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_i7sjAPSfEfCQ8o0a-G4ObQ" name="APRI"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_i7sjAfSfEfCQ8o0a-G4ObQ" name="CAMBIO"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_i7sjAvSfEfCQ8o0a-G4ObQ" name="SERVITO"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_i7sjA_SfEfCQ8o0a-G4ObQ" name="PUNTA"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_i7sjBPSfEfCQ8o0a-G4ObQ" name="FOLD"/>
+          </packagedElement>
         </packagedElement>
-        <packagedElement xmi:type="uml:Package" xmi:id="_tnKpEPEvEfC5cpUsQOGJ5Q" name="poker">
-          <packagedElement xmi:type="uml:Enumeration" xmi:id="_tnLQIPEvEfC5cpUsQOGJ5Q" name="GamePhase" visibility="public">
-            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_tnLQIfEvEfC5cpUsQOGJ5Q" name="INVITO"/>
-            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_tnLQIvEvEfC5cpUsQOGJ5Q" name="APERTURA"/>
-            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_tnLQI_EvEfC5cpUsQOGJ5Q" name="ACCOMODO"/>
-            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_tnLQJPEvEfC5cpUsQOGJ5Q" name="PUNTATA"/>
-            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_tnLQJfEvEfC5cpUsQOGJ5Q" name="SHOWDOWN"/>
-            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_tnLQJvEvEfC5cpUsQOGJ5Q" name="END"/>
-          </packagedElement>
-          <packagedElement xmi:type="uml:Class" xmi:id="_tnNFUPEvEfC5cpUsQOGJ5Q" name="Game" visibility="public">
-            <ownedAttribute xmi:type="uml:Property" xmi:id="_tnNsYfEvEfC5cpUsQOGJ5Q" name="currentTurn" visibility="private" type="_fzxAEPEuEfC5cpUsQOGJ5Q" isUnique="false">
-              <ownedComment xmi:type="uml:Comment" xmi:id="_tnNsYvEvEfC5cpUsQOGJ5Q">
-                <body>indica a chi tocca (ID del player)</body>
-              </ownedComment>
-            </ownedAttribute>
-            <ownedAttribute xmi:type="uml:Property" xmi:id="_tnQvsPEvEfC5cpUsQOGJ5Q" name="bets" visibility="private" type="_fzxAEPEuEfC5cpUsQOGJ5Q" isUnique="false">
-              <ownedComment xmi:type="uml:Comment" xmi:id="_tnQvsfEvEfC5cpUsQOGJ5Q">
-                <body>valore totale scommesso dai giocatori</body>
-              </ownedComment>
-            </ownedAttribute>
-            <ownedAttribute xmi:type="uml:Property" xmi:id="_brh4AvExEfC5cpUsQOGJ5Q" name="gamephase" type="_tnLQIPEvEfC5cpUsQOGJ5Q" association="_brhQ8PExEfC5cpUsQOGJ5Q">
-              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_dXse4PExEfC5cpUsQOGJ5Q" name="LiteralInteger1" value="1"/>
-              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_dXse4fExEfC5cpUsQOGJ5Q" name="LiteralUnlimitedNatural1" value="1"/>
-            </ownedAttribute>
-            <ownedAttribute xmi:type="uml:Property" xmi:id="_hB3qkvExEfC5cpUsQOGJ5Q" name="player" type="_tnrmcPEvEfC5cpUsQOGJ5Q" association="_hB3DgPExEfC5cpUsQOGJ5Q">
-              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_rDWWkPExEfC5cpUsQOGJ5Q" name="LiteralInteger1"/>
-              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_rDW9oPExEfC5cpUsQOGJ5Q" name="LiteralUnlimitedNatural1" value="*"/>
-            </ownedAttribute>
-            <ownedAttribute xmi:type="uml:Property" xmi:id="_zi1rYvExEfC5cpUsQOGJ5Q" name="deck" type="_tnQvsvEvEfC5cpUsQOGJ5Q" association="_zi1EUPExEfC5cpUsQOGJ5Q">
-              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_1ZcnsPExEfC5cpUsQOGJ5Q" name="LiteralInteger1" value="1"/>
-              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_1ZcnsfExEfC5cpUsQOGJ5Q" name="LiteralUnlimitedNatural1" value="1"/>
-            </ownedAttribute>
-            <ownedAttribute xmi:type="uml:Property" xmi:id="_jKbdEvEyEfC5cpUsQOGJ5Q" name="client" type="_tjpbAPEvEfC5cpUsQOGJ5Q" association="_jKaO8PEyEfC5cpUsQOGJ5Q">
-              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_n8ZXQPEyEfC5cpUsQOGJ5Q" name="LiteralInteger1"/>
-              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_n8ZXQfEyEfC5cpUsQOGJ5Q" name="LiteralUnlimitedNatural1" value="*"/>
-            </ownedAttribute>
-            <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_tnNsYPEvEfC5cpUsQOGJ5Q" name="Game implements Serializable" client="_tnNFUPEvEfC5cpUsQOGJ5Q" supplier="_tkAAUfEvEfC5cpUsQOGJ5Q" contract="_tkAAUfEvEfC5cpUsQOGJ5Q"/>
-            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnR90PEvEfC5cpUsQOGJ5Q" name="Game" specification="_tnQvtfEvEfC5cpUsQOGJ5Q">
-              <language>JAVA</language>
-              <body>currentTurn = 0;&#xD;
-phase = GamePhase.INVITO;&#xD;
-players = new ConcurrentHashMap&lt;Integer, Player>();&#xD;
-bets = 0;&#xD;
-deck = new Deck();</body>
-            </ownedBehavior>
-            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnSk4vEvEfC5cpUsQOGJ5Q" name="getPlayers" specification="_tnR90fEvEfC5cpUsQOGJ5Q">
-              <language>JAVA</language>
-              <body>return players;</body>
-            </ownedBehavior>
-            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnTL8PEvEfC5cpUsQOGJ5Q" name="getBets" specification="_tnSk4_EvEfC5cpUsQOGJ5Q">
-              <language>JAVA</language>
-              <body>return bets;</body>
-            </ownedBehavior>
-            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnTL8_EvEfC5cpUsQOGJ5Q" name="getCurrentTurn" specification="_tnTL8fEvEfC5cpUsQOGJ5Q">
-              <language>JAVA</language>
-              <body>return currentTurn;</body>
-            </ownedBehavior>
-            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnUaEfEvEfC5cpUsQOGJ5Q" name="setCurrentTurn" specification="_tnTL9PEvEfC5cpUsQOGJ5Q">
-              <language>JAVA</language>
-              <body>this.currentTurn = currentTurn;</body>
-            </ownedBehavior>
-            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnUaFPEvEfC5cpUsQOGJ5Q" name="getDeck" specification="_tnUaEvEvEfC5cpUsQOGJ5Q">
-              <language>JAVA</language>
-              <body>return deck;</body>
-            </ownedBehavior>
-            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnVBIvEvEfC5cpUsQOGJ5Q" name="setDeck" specification="_tnVBIPEvEfC5cpUsQOGJ5Q">
-              <language>JAVA</language>
-              <body>this.deck = deck;</body>
-            </ownedBehavior>
-            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnVoMfEvEfC5cpUsQOGJ5Q" name="setBets" specification="_tnVBI_EvEfC5cpUsQOGJ5Q">
-              <language>JAVA</language>
-              <body>this.bets = bets;</body>
-            </ownedBehavior>
-            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnQvtfEvEfC5cpUsQOGJ5Q" name="Game" visibility="public" method="_tnR90PEvEfC5cpUsQOGJ5Q"/>
-            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnR90fEvEfC5cpUsQOGJ5Q" name="getPlayers" visibility="public" method="_tnSk4vEvEfC5cpUsQOGJ5Q">
-              <ownedComment xmi:type="uml:Comment" xmi:id="_tnSk4PEvEfC5cpUsQOGJ5Q">
-                <body>Getter &amp; Setter</body>
-              </ownedComment>
-              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tnSk4fEvEfC5cpUsQOGJ5Q" type="_tnO6hPEvEfC5cpUsQOGJ5Q" direction="return"/>
-            </ownedOperation>
-            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnSk4_EvEfC5cpUsQOGJ5Q" name="getBets" visibility="public" method="_tnTL8PEvEfC5cpUsQOGJ5Q">
-              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tnSk5PEvEfC5cpUsQOGJ5Q" type="_fzxAEPEuEfC5cpUsQOGJ5Q" direction="return"/>
-            </ownedOperation>
-            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnTL8fEvEfC5cpUsQOGJ5Q" name="getCurrentTurn" visibility="public" method="_tnTL8_EvEfC5cpUsQOGJ5Q">
-              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tnTL8vEvEfC5cpUsQOGJ5Q" type="_fzxAEPEuEfC5cpUsQOGJ5Q" direction="return"/>
-            </ownedOperation>
-            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnTL9PEvEfC5cpUsQOGJ5Q" name="setCurrentTurn" visibility="public" method="_tnUaEfEvEfC5cpUsQOGJ5Q">
-              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tnUaEPEvEfC5cpUsQOGJ5Q" name="currentTurn" type="_fzxAEPEuEfC5cpUsQOGJ5Q"/>
-            </ownedOperation>
-            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnUaEvEvEfC5cpUsQOGJ5Q" name="getDeck" visibility="public" method="_tnUaFPEvEfC5cpUsQOGJ5Q">
-              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tnUaE_EvEfC5cpUsQOGJ5Q" type="_tnQvsvEvEfC5cpUsQOGJ5Q" direction="return"/>
-            </ownedOperation>
-            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnVBIPEvEfC5cpUsQOGJ5Q" name="setDeck" visibility="public" method="_tnVBIvEvEfC5cpUsQOGJ5Q">
-              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tnVBIfEvEfC5cpUsQOGJ5Q" name="deck" type="_tnQvsvEvEfC5cpUsQOGJ5Q"/>
-            </ownedOperation>
-            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnVBI_EvEfC5cpUsQOGJ5Q" name="setBets" visibility="public" method="_tnVoMfEvEfC5cpUsQOGJ5Q">
-              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tnVoMPEvEfC5cpUsQOGJ5Q" name="bets" type="_fzxAEPEuEfC5cpUsQOGJ5Q"/>
-            </ownedOperation>
-          </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_tnKpEPEvEfC5cpUsQOGJ5Q" name="card">
           <packagedElement xmi:type="uml:Class" xmi:id="_tnQvsvEvEfC5cpUsQOGJ5Q" name="Deck" visibility="public">
             <ownedAttribute xmi:type="uml:Property" xmi:id="_7nhTgvExEfC5cpUsQOGJ5Q" name="card" type="_tnYEcPEvEfC5cpUsQOGJ5Q" association="_7ngscPExEfC5cpUsQOGJ5Q">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="__OuqwPExEfC5cpUsQOGJ5Q" name="LiteralInteger1" value="32"/>
@@ -495,183 +426,207 @@ return nome + &quot; &quot; + seme.toString();</body>
               <ownedParameter xmi:type="uml:Parameter" xmi:id="_tneyI_EvEfC5cpUsQOGJ5Q" name="seme" type="_tnWPQPEvEfC5cpUsQOGJ5Q"/>
             </ownedOperation>
           </packagedElement>
-          <packagedElement xmi:type="uml:Class" xmi:id="_tnmt8PEvEfC5cpUsQOGJ5Q" name="PlayerStatus" visibility="public">
-            <ownedAttribute xmi:type="uml:Property" xmi:id="_tnn8EPEvEfC5cpUsQOGJ5Q" name="fold" visibility="private" type="_fzyOMPEuEfC5cpUsQOGJ5Q" isUnique="false">
-              <ownedComment xmi:type="uml:Comment" xmi:id="_tnn8EfEvEfC5cpUsQOGJ5Q">
-                <body>indica se il player ha foldato</body>
-              </ownedComment>
+          <packagedElement xmi:type="uml:Class" xmi:id="_5m03IPSfEfCQ8o0a-G4ObQ" name="Hand" visibility="public">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_5m4hgPSfEfCQ8o0a-G4ObQ" name="cards" visibility="private" type="_tnYEcPEvEfC5cpUsQOGJ5Q" isUnique="false" aggregation="composite" association="_koJBQPSgEfCQ8o0a-G4ObQ">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_5m4hgfSfEfCQ8o0a-G4ObQ"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_5m4hgvSfEfCQ8o0a-G4ObQ" value="*"/>
             </ownedAttribute>
-            <ownedAttribute xmi:type="uml:Property" xmi:id="_tnn8EvEvEfC5cpUsQOGJ5Q" name="open" visibility="private" type="_fzyOMPEuEfC5cpUsQOGJ5Q" isUnique="false">
-              <ownedComment xmi:type="uml:Comment" xmi:id="_tnn8E_EvEfC5cpUsQOGJ5Q">
-                <body>indica se il player ha aperto</body>
-              </ownedComment>
-            </ownedAttribute>
-            <ownedAttribute xmi:type="uml:Property" xmi:id="_tnojIPEvEfC5cpUsQOGJ5Q" name="debt" visibility="private" type="_fzyOMPEuEfC5cpUsQOGJ5Q" isUnique="false">
-              <ownedComment xmi:type="uml:Comment" xmi:id="_tnojIfEvEfC5cpUsQOGJ5Q">
-                <body>indica se il player è in debito con il piatto</body>
-              </ownedComment>
-            </ownedAttribute>
-            <ownedAttribute xmi:type="uml:Property" xmi:id="_tnojIvEvEfC5cpUsQOGJ5Q" name="pass" visibility="private" type="_fzyOMPEuEfC5cpUsQOGJ5Q" isUnique="false">
-              <ownedComment xmi:type="uml:Comment" xmi:id="_tnojI_EvEfC5cpUsQOGJ5Q">
-                <body>indica se il giocatore ha passato durante la fase di apertura</body>
-              </ownedComment>
-            </ownedAttribute>
-            <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_tnmt8fEvEfC5cpUsQOGJ5Q" name="PlayerStatus implements Serializable" client="_tnmt8PEvEfC5cpUsQOGJ5Q" supplier="_tkAAUfEvEfC5cpUsQOGJ5Q" contract="_tkAAUfEvEfC5cpUsQOGJ5Q"/>
-            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnpxQPEvEfC5cpUsQOGJ5Q" name="PlayerStatus" specification="_tnojJPEvEfC5cpUsQOGJ5Q">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_5m6WsfSfEfCQ8o0a-G4ObQ" name="rank" visibility="private" type="_5m5IkPSfEfCQ8o0a-G4ObQ" isUnique="false" aggregation="composite" association="_YKoXsPSgEfCQ8o0a-G4ObQ"/>
+            <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_5m2FQPSfEfCQ8o0a-G4ObQ" name="Hand implements Serializable" client="_5m03IPSfEfCQ8o0a-G4ObQ" supplier="_tkAAUfEvEfC5cpUsQOGJ5Q" contract="_tkAAUfEvEfC5cpUsQOGJ5Q"/>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_5m8L4PSfEfCQ8o0a-G4ObQ" name="Hand" specification="_5m6WsvSfEfCQ8o0a-G4ObQ">
               <language>JAVA</language>
-              <body>fold = false;&#xD;
-open = false;&#xD;
-debt = false;&#xD;
-pass = false;</body>
+              <body>cards = new ArrayList&lt;Card>();&#xD;
+rank = new Rank();</body>
             </ownedBehavior>
-            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnojJPEvEfC5cpUsQOGJ5Q" name="PlayerStatus" visibility="public" method="_tnpxQPEvEfC5cpUsQOGJ5Q"/>
-          </packagedElement>
-          <packagedElement xmi:type="uml:Class" xmi:id="_tnrmcPEvEfC5cpUsQOGJ5Q" name="Player" visibility="public">
-            <ownedAttribute xmi:type="uml:Property" xmi:id="_tnsNgPEvEfC5cpUsQOGJ5Q" name="username" visibility="private" isLeaf="true" type="_fzQpwPEuEfC5cpUsQOGJ5Q" isUnique="false"/>
-            <ownedAttribute xmi:type="uml:Property" xmi:id="_tnsNgfEvEfC5cpUsQOGJ5Q" name="password" visibility="private" type="_fzQpwPEuEfC5cpUsQOGJ5Q" isUnique="false"/>
-            <ownedAttribute xmi:type="uml:Property" xmi:id="_tnsNg_EvEfC5cpUsQOGJ5Q" name="fiches" visibility="private" type="_fzxAEPEuEfC5cpUsQOGJ5Q" isUnique="false"/>
-            <ownedAttribute xmi:type="uml:Property" xmi:id="_ON1uYvEyEfC5cpUsQOGJ5Q" name="card" type="_tnYEcPEvEfC5cpUsQOGJ5Q" association="_ON1HUPEyEfC5cpUsQOGJ5Q">
-              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_PpMSEPEyEfC5cpUsQOGJ5Q" name="LiteralInteger1" value="5"/>
-              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_PpMSEfEyEfC5cpUsQOGJ5Q" name="LiteralUnlimitedNatural1" value="5"/>
-            </ownedAttribute>
-            <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_tnrmcfEvEfC5cpUsQOGJ5Q" name="Player implements Serializable" client="_tnrmcPEvEfC5cpUsQOGJ5Q" supplier="_tkAAUfEvEfC5cpUsQOGJ5Q" contract="_tkAAUfEvEfC5cpUsQOGJ5Q"/>
-            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnupwfEvEfC5cpUsQOGJ5Q" name="Player" specification="_tns0k_EvEfC5cpUsQOGJ5Q">
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_5m8y8PSfEfCQ8o0a-G4ObQ" name="checkRank" specification="_5m8L4fSfEfCQ8o0a-G4ObQ">
               <language>JAVA</language>
-              <body>this.username = userName;&#xD;
-this.password = password;&#xD;
-hand = new ArrayList&lt;Card>();&#xD;
-status = new PlayerStatus();</body>
+              <body>int[] counters = { 0, 0, 0, 0, 0, 0, 0, 0 };&#xD;
+for (int i = 7; i &lt;= 14; i++) {&#xD;
+    for (Card c : cards) {&#xD;
+        if (c.getValore() == i) {&#xD;
+            counters[i - 7]++;&#xD;
+        }&#xD;
+    }&#xD;
+}&#xD;
+// ricerca poker&#xD;
+for (int i = 0; i &lt;= 7; i++) {&#xD;
+    if (counters[i] == 4) {&#xD;
+        rank.setLevel(8);&#xD;
+        rank.setValue((i + 7) * 4);&#xD;
+        return;&#xD;
+    }&#xD;
+}&#xD;
+// ricerca tris o full&#xD;
+for (int i = 0; i &lt;= 7; i++) {&#xD;
+    if (// tris&#xD;
+    counters[i] == // tris&#xD;
+    3) {&#xD;
+        rank.setLevel(4);&#xD;
+        rank.setValue((i + 7) * 3);&#xD;
+        for (int j = 0; j &lt;= 7; j++) {&#xD;
+            if (counters// full&#xD;
+            [j] == 2) {&#xD;
+                rank.setLevel(7);&#xD;
+                rank.setValue(rank.getValue() + ((j + 7) * 2));&#xD;
+                return;&#xD;
+            }&#xD;
+        }&#xD;
+        return;&#xD;
+    }&#xD;
+}&#xD;
+// ricerca coppia o doppia coppia&#xD;
+for (int i = 0; i &lt;= 7; i++) {&#xD;
+    if (// coppia&#xD;
+    counters[i] == 2) {&#xD;
+        rank.setLevel(2);&#xD;
+        rank.setValue((i + 7) * 2);&#xD;
+        for (int j = 0; j &lt;= 7; j++) {&#xD;
+            if (// doppia coppia&#xD;
+            counters[j] == 2 &amp;&amp; j != i) {&#xD;
+                rank.setLevel(3);&#xD;
+                rank.setValue(rank.getValue() + ((j + 7) * 2));&#xD;
+                return;&#xD;
+            }&#xD;
+        }&#xD;
+        return;&#xD;
+    }&#xD;
+}&#xD;
+// ricerca scala o scala colore&#xD;
+for (int i = 0; i &lt;= 3; i++) {&#xD;
+    if (counters[i] == counters[i + 1] &amp;&amp; counters[i + 1] == counters[i + 2] &amp;&amp; counters[i + 1] == counters[i + 2] &amp;&amp; counters[i + 2] == counters[i + 3] &amp;&amp; // scala&#xD;
+    counters[i + 3] == // scala&#xD;
+    counters[i + 4]) {&#xD;
+        rank.setLevel(5);&#xD;
+        rank.setValue(45 + (5 * i));&#xD;
+        if (// scala colore&#xD;
+        isColore()) {&#xD;
+            rank.setLevel(9);&#xD;
+        }&#xD;
+        return;&#xD;
+    }&#xD;
+}&#xD;
+// ricerca colore&#xD;
+boolean color = false;&#xD;
+if (isColore()) {&#xD;
+    rank.setLevel(6);&#xD;
+    int sum = 0;&#xD;
+    for (Card c : cards) sum = sum + c.getValore();&#xD;
+    rank.setValue(sum);&#xD;
+    return;&#xD;
+}&#xD;
+// ricerca carta alta&#xD;
+int max = 7;&#xD;
+for (Card c : cards) {&#xD;
+    if (c.getValore() > max)&#xD;
+        max = c.getValore();&#xD;
+}&#xD;
+rank.setLevel(1);&#xD;
+rank.setValue(max);</body>
             </ownedBehavior>
-            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnvQ0vEvEfC5cpUsQOGJ5Q" name="esciPartita" specification="_tnvQ0PEvEfC5cpUsQOGJ5Q">
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_5m9aAfSfEfCQ8o0a-G4ObQ" name="isColore" specification="_5m8y8fSfEfCQ8o0a-G4ObQ">
               <language>JAVA</language>
-              <body></body>
+              <body>return cards.get(0).getSeme() == cards.get(1).getSeme() &amp;&amp; cards.get(1).getSeme() == cards.get(2).getSeme() &amp;&amp; cards.get(2).getSeme() == cards.get(3).getSeme() &amp;&amp; cards.get(3).getSeme() == cards.get(4).getSeme();</body>
             </ownedBehavior>
-            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnv34fEvEfC5cpUsQOGJ5Q" name="partecipaInvito" specification="_tnvQ0_EvEfC5cpUsQOGJ5Q">
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_5m-BE_SfEfCQ8o0a-G4ObQ" name="getCards" specification="_5m9aAvSfEfCQ8o0a-G4ObQ">
               <language>JAVA</language>
-              <body>if (// puntata d'invito tra 5 e 100&#xD;
-invito >= 5 &amp;&amp; invito &lt;= 100) {&#xD;
-    punta(invito);&#xD;
-} else {&#xD;
-    System.out.println(&quot;errore&quot;);&#xD;
-}</body>
+              <body>return cards;</body>
             </ownedBehavior>
-            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnv34_EvEfC5cpUsQOGJ5Q" name="nonPartecipa" specification="_tnv34vEvEfC5cpUsQOGJ5Q">
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_5m_PMfSfEfCQ8o0a-G4ObQ" name="setCards" specification="_5m-oIPSfEfCQ8o0a-G4ObQ">
               <language>JAVA</language>
-              <body>// turno disabilitato per questa mano</body>
+              <body>this.cards = cards;</body>
             </ownedBehavior>
-            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnwe8vEvEfC5cpUsQOGJ5Q" name="punta" specification="_tnwe8PEvEfC5cpUsQOGJ5Q">
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_5m_2QPSfEfCQ8o0a-G4ObQ" name="getRank" specification="_5m_PMvSfEfCQ8o0a-G4ObQ">
               <language>JAVA</language>
-              <body>if (fiches >= puntata) {&#xD;
-    fiches -= puntata;&#xD;
-} else {&#xD;
-    System.out.println(&quot;errore&quot;);&#xD;
-}</body>
+              <body>return rank;</body>
             </ownedBehavior>
-            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnxGAfEvEfC5cpUsQOGJ5Q" name="apri" specification="_tnwe8_EvEfC5cpUsQOGJ5Q">
-              <language>JAVA</language>
-              <body>punta(puntata);</body>
-            </ownedBehavior>
-            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnxGA_EvEfC5cpUsQOGJ5Q" name="passa" specification="_tnxGAvEvEfC5cpUsQOGJ5Q">
-              <language>JAVA</language>
-              <body></body>
-            </ownedBehavior>
-            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnxGBfEvEfC5cpUsQOGJ5Q" name="lascia" specification="_tnxGBPEvEfC5cpUsQOGJ5Q">
-              <language>JAVA</language>
-              <body></body>
-            </ownedBehavior>
-            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnxtEPEvEfC5cpUsQOGJ5Q" name="vedi" specification="_tnxGBvEvEfC5cpUsQOGJ5Q">
-              <language>JAVA</language>
-              <body></body>
-            </ownedBehavior>
-            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnxtE_EvEfC5cpUsQOGJ5Q" name="cambio" specification="_tnxtEfEvEfC5cpUsQOGJ5Q">
-              <language>JAVA</language>
-              <body></body>
-            </ownedBehavior>
-            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnxtFfEvEfC5cpUsQOGJ5Q" name="servito" specification="_tnxtFPEvEfC5cpUsQOGJ5Q">
-              <language>JAVA</language>
-              <body></body>
-            </ownedBehavior>
-            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnyUIvEvEfC5cpUsQOGJ5Q" name="toString" specification="_tnyUIPEvEfC5cpUsQOGJ5Q">
-              <language>JAVA</language>
-              <body>return username;</body>
-            </ownedBehavior>
-            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnyUJvEvEfC5cpUsQOGJ5Q" name="getUsername" specification="_tnyUI_EvEfC5cpUsQOGJ5Q">
-              <language>JAVA</language>
-              <body>return username;</body>
-            </ownedBehavior>
-            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tny7MfEvEfC5cpUsQOGJ5Q" name="getPassword" specification="_tnyUJ_EvEfC5cpUsQOGJ5Q">
-              <language>JAVA</language>
-              <body>return password;</body>
-            </ownedBehavior>
-            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tny7NPEvEfC5cpUsQOGJ5Q" name="setPassword" specification="_tny7MvEvEfC5cpUsQOGJ5Q">
-              <language>JAVA</language>
-              <body>this.password = password;</body>
-            </ownedBehavior>
-            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnziQvEvEfC5cpUsQOGJ5Q" name="getFiches" specification="_tnziQPEvEfC5cpUsQOGJ5Q">
-              <language>JAVA</language>
-              <body>return fiches;</body>
-            </ownedBehavior>
-            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnziRfEvEfC5cpUsQOGJ5Q" name="setFiches" specification="_tnziQ_EvEfC5cpUsQOGJ5Q">
-              <language>JAVA</language>
-              <body>this.fiches = fiches;</body>
-            </ownedBehavior>
-            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tn0JVPEvEfC5cpUsQOGJ5Q" name="getHand" specification="_tn0JUPEvEfC5cpUsQOGJ5Q">
-              <language>JAVA</language>
-              <body>return hand;</body>
-            </ownedBehavior>
-            <ownedOperation xmi:type="uml:Operation" xmi:id="_tns0k_EvEfC5cpUsQOGJ5Q" name="Player" visibility="public" method="_tnupwfEvEfC5cpUsQOGJ5Q">
-              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tnuCsfEvEfC5cpUsQOGJ5Q" name="userName" type="_fzQpwPEuEfC5cpUsQOGJ5Q"/>
-              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tnupwPEvEfC5cpUsQOGJ5Q" name="password" type="_fzQpwPEuEfC5cpUsQOGJ5Q"/>
-            </ownedOperation>
-            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnvQ0PEvEfC5cpUsQOGJ5Q" name="esciPartita" visibility="public" method="_tnvQ0vEvEfC5cpUsQOGJ5Q">
-              <ownedComment xmi:type="uml:Comment" xmi:id="_tnvQ0fEvEfC5cpUsQOGJ5Q">
-                <body>Metodo che permette di abbandonare la partita dalla fine della mano. Il client non potrà più connettersi poichè il server non sarà aperto a nuove connessioni durante la partita</body>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_5m6WsvSfEfCQ8o0a-G4ObQ" name="Hand" visibility="public" method="_5m8L4PSfEfCQ8o0a-G4ObQ"/>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_5m8L4fSfEfCQ8o0a-G4ObQ" name="checkRank" visibility="public" method="_5m8y8PSfEfCQ8o0a-G4ObQ">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_5m8L4vSfEfCQ8o0a-G4ObQ">
+                <body>Calcola il Rank della mano, ovvero il valore del suo punteggio (carta alta 1, coppia 2, doppia coppia 3, tris 4, scala 5, colore 6, full 7, poker 8, scala colore 9)</body>
               </ownedComment>
             </ownedOperation>
-            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnvQ0_EvEfC5cpUsQOGJ5Q" name="partecipaInvito" visibility="public" method="_tnv34fEvEfC5cpUsQOGJ5Q">
-              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tnv34PEvEfC5cpUsQOGJ5Q" name="invito" type="_fzxAEPEuEfC5cpUsQOGJ5Q"/>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_5m8y8fSfEfCQ8o0a-G4ObQ" name="isColore" visibility="private" method="_5m9aAfSfEfCQ8o0a-G4ObQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_5m9aAPSfEfCQ8o0a-G4ObQ" type="_fzyOMPEuEfC5cpUsQOGJ5Q" direction="return"/>
             </ownedOperation>
-            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnv34vEvEfC5cpUsQOGJ5Q" name="nonPartecipa" visibility="public" method="_tnv34_EvEfC5cpUsQOGJ5Q"/>
-            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnwe8PEvEfC5cpUsQOGJ5Q" name="punta" visibility="public" method="_tnwe8vEvEfC5cpUsQOGJ5Q">
-              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tnwe8fEvEfC5cpUsQOGJ5Q" name="puntata" type="_fzxAEPEuEfC5cpUsQOGJ5Q"/>
-            </ownedOperation>
-            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnwe8_EvEfC5cpUsQOGJ5Q" name="apri" visibility="public" method="_tnxGAfEvEfC5cpUsQOGJ5Q">
-              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tnxGAPEvEfC5cpUsQOGJ5Q" name="puntata" type="_fzxAEPEuEfC5cpUsQOGJ5Q"/>
-            </ownedOperation>
-            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnxGAvEvEfC5cpUsQOGJ5Q" name="passa" visibility="public" method="_tnxGA_EvEfC5cpUsQOGJ5Q"/>
-            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnxGBPEvEfC5cpUsQOGJ5Q" name="lascia" visibility="public" method="_tnxGBfEvEfC5cpUsQOGJ5Q"/>
-            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnxGBvEvEfC5cpUsQOGJ5Q" name="vedi" visibility="public" method="_tnxtEPEvEfC5cpUsQOGJ5Q"/>
-            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnxtEfEvEfC5cpUsQOGJ5Q" name="cambio" visibility="public" method="_tnxtE_EvEfC5cpUsQOGJ5Q">
-              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tnxtEvEvEfC5cpUsQOGJ5Q" name="scelta" type="_fzxAEPEuEfC5cpUsQOGJ5Q"/>
-            </ownedOperation>
-            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnxtFPEvEfC5cpUsQOGJ5Q" name="servito" visibility="public" method="_tnxtFfEvEfC5cpUsQOGJ5Q"/>
-            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnyUIPEvEfC5cpUsQOGJ5Q" name="toString" visibility="public" method="_tnyUIvEvEfC5cpUsQOGJ5Q">
-              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tnyUIfEvEfC5cpUsQOGJ5Q" type="_fzQpwPEuEfC5cpUsQOGJ5Q" direction="return"/>
-            </ownedOperation>
-            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnyUI_EvEfC5cpUsQOGJ5Q" name="getUsername" visibility="public" method="_tnyUJvEvEfC5cpUsQOGJ5Q">
-              <ownedComment xmi:type="uml:Comment" xmi:id="_tnyUJPEvEfC5cpUsQOGJ5Q">
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_5m9aAvSfEfCQ8o0a-G4ObQ" name="getCards" visibility="public" method="_5m-BE_SfEfCQ8o0a-G4ObQ">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_5m9aA_SfEfCQ8o0a-G4ObQ">
                 <body>Getter &amp; Setter</body>
               </ownedComment>
-              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tnyUJfEvEfC5cpUsQOGJ5Q" type="_fzQpwPEuEfC5cpUsQOGJ5Q" direction="return"/>
-            </ownedOperation>
-            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnyUJ_EvEfC5cpUsQOGJ5Q" name="getPassword" visibility="public" method="_tny7MfEvEfC5cpUsQOGJ5Q">
-              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tny7MPEvEfC5cpUsQOGJ5Q" type="_fzQpwPEuEfC5cpUsQOGJ5Q" direction="return"/>
-            </ownedOperation>
-            <ownedOperation xmi:type="uml:Operation" xmi:id="_tny7MvEvEfC5cpUsQOGJ5Q" name="setPassword" visibility="public" method="_tny7NPEvEfC5cpUsQOGJ5Q">
-              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tny7M_EvEfC5cpUsQOGJ5Q" name="password" type="_fzQpwPEuEfC5cpUsQOGJ5Q"/>
-            </ownedOperation>
-            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnziQPEvEfC5cpUsQOGJ5Q" name="getFiches" visibility="public" method="_tnziQvEvEfC5cpUsQOGJ5Q">
-              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tnziQfEvEfC5cpUsQOGJ5Q" type="_fzxAEPEuEfC5cpUsQOGJ5Q" direction="return"/>
-            </ownedOperation>
-            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnziQ_EvEfC5cpUsQOGJ5Q" name="setFiches" visibility="public" method="_tnziRfEvEfC5cpUsQOGJ5Q">
-              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tnziRPEvEfC5cpUsQOGJ5Q" name="fiches" type="_fzxAEPEuEfC5cpUsQOGJ5Q"/>
-            </ownedOperation>
-            <ownedOperation xmi:type="uml:Operation" xmi:id="_tn0JUPEvEfC5cpUsQOGJ5Q" name="getHand" visibility="public" method="_tn0JVPEvEfC5cpUsQOGJ5Q">
-              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tn0JUfEvEfC5cpUsQOGJ5Q" type="_tnYEcPEvEfC5cpUsQOGJ5Q" direction="return">
-                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_tn0JUvEvEfC5cpUsQOGJ5Q"/>
-                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_tn0JU_EvEfC5cpUsQOGJ5Q" value="*"/>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_5m-BEPSfEfCQ8o0a-G4ObQ" type="_tnYEcPEvEfC5cpUsQOGJ5Q" direction="return">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_5m-BEfSfEfCQ8o0a-G4ObQ"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_5m-BEvSfEfCQ8o0a-G4ObQ" value="*"/>
               </ownedParameter>
             </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_5m-oIPSfEfCQ8o0a-G4ObQ" name="setCards" visibility="public" method="_5m_PMfSfEfCQ8o0a-G4ObQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_5m-oIfSfEfCQ8o0a-G4ObQ" name="cards" type="_tnYEcPEvEfC5cpUsQOGJ5Q">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_5m-oIvSfEfCQ8o0a-G4ObQ"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_5m_PMPSfEfCQ8o0a-G4ObQ" value="*"/>
+              </ownedParameter>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_5m_PMvSfEfCQ8o0a-G4ObQ" name="getRank" visibility="public" method="_5m_2QPSfEfCQ8o0a-G4ObQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_5m_PM_SfEfCQ8o0a-G4ObQ" type="_5m5IkPSfEfCQ8o0a-G4ObQ" direction="return"/>
+            </ownedOperation>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_5m5IkPSfEfCQ8o0a-G4ObQ" name="Rank" visibility="public">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_6TnEoPSfEfCQ8o0a-G4ObQ" name="level" visibility="private" type="_fzxAEPEuEfC5cpUsQOGJ5Q" isUnique="false">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_6TnEofSfEfCQ8o0a-G4ObQ">
+                <body>indica la scala del punteggio</body>
+              </ownedComment>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_6TnEovSfEfCQ8o0a-G4ObQ" name="value" visibility="private" type="_fzxAEPEuEfC5cpUsQOGJ5Q" isUnique="false">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_6TnrsPSfEfCQ8o0a-G4ObQ">
+                <body>indica il valore del punteggio</body>
+              </ownedComment>
+            </ownedAttribute>
+            <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_6TmdkPSfEfCQ8o0a-G4ObQ" name="Rank implements Serializable" client="_5m5IkPSfEfCQ8o0a-G4ObQ" supplier="_tkAAUfEvEfC5cpUsQOGJ5Q" contract="_tkAAUfEvEfC5cpUsQOGJ5Q"/>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_6Tpg4PSfEfCQ8o0a-G4ObQ" name="Rank" specification="_6TnrsfSfEfCQ8o0a-G4ObQ">
+              <language>JAVA</language>
+              <body></body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_6TqH8PSfEfCQ8o0a-G4ObQ" name="getLevel" specification="_6Tpg4fSfEfCQ8o0a-G4ObQ">
+              <language>JAVA</language>
+              <body>return level;</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_6TqH8_SfEfCQ8o0a-G4ObQ" name="setLevel" specification="_6TqH8fSfEfCQ8o0a-G4ObQ">
+              <language>JAVA</language>
+              <body>this.level = level;</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_6TqvAvSfEfCQ8o0a-G4ObQ" name="getValue" specification="_6TqvAPSfEfCQ8o0a-G4ObQ">
+              <language>JAVA</language>
+              <body>return value;</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_6TrWEvSfEfCQ8o0a-G4ObQ" name="setValue" specification="_6TrWEPSfEfCQ8o0a-G4ObQ">
+              <language>JAVA</language>
+              <body>this.value = value;</body>
+            </ownedBehavior>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_6TnrsfSfEfCQ8o0a-G4ObQ" name="Rank" visibility="public" method="_6Tpg4PSfEfCQ8o0a-G4ObQ"/>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_6Tpg4fSfEfCQ8o0a-G4ObQ" name="getLevel" visibility="public" method="_6TqH8PSfEfCQ8o0a-G4ObQ">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_6Tpg4vSfEfCQ8o0a-G4ObQ">
+                <body>Getter &amp; Setter</body>
+              </ownedComment>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_6Tpg4_SfEfCQ8o0a-G4ObQ" type="_fzxAEPEuEfC5cpUsQOGJ5Q" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_6TqH8fSfEfCQ8o0a-G4ObQ" name="setLevel" visibility="public" method="_6TqH8_SfEfCQ8o0a-G4ObQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_6TqH8vSfEfCQ8o0a-G4ObQ" name="level" type="_fzxAEPEuEfC5cpUsQOGJ5Q"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_6TqvAPSfEfCQ8o0a-G4ObQ" name="getValue" visibility="public" method="_6TqvAvSfEfCQ8o0a-G4ObQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_6TqvAfSfEfCQ8o0a-G4ObQ" type="_fzxAEPEuEfC5cpUsQOGJ5Q" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_6TrWEPSfEfCQ8o0a-G4ObQ" name="setValue" visibility="public" method="_6TrWEvSfEfCQ8o0a-G4ObQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_6TrWEfSfEfCQ8o0a-G4ObQ" name="value" type="_fzxAEPEuEfC5cpUsQOGJ5Q"/>
+            </ownedOperation>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_YKoXsPSgEfCQ8o0a-G4ObQ" name="A_rank_hand" memberEnd="_5m6WsfSfEfCQ8o0a-G4ObQ _YKpl0PSgEfCQ8o0a-G4ObQ">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_YKpl0PSgEfCQ8o0a-G4ObQ" name="hand" type="_5m03IPSfEfCQ8o0a-G4ObQ" association="_YKoXsPSgEfCQ8o0a-G4ObQ">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_YKpl0fSgEfCQ8o0a-G4ObQ"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_YKpl0vSgEfCQ8o0a-G4ObQ" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_koJBQPSgEfCQ8o0a-G4ObQ" name="A_cards_hand" memberEnd="_5m4hgPSfEfCQ8o0a-G4ObQ _koJBQfSgEfCQ8o0a-G4ObQ">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_koJBQfSgEfCQ8o0a-G4ObQ" name="hand" type="_5m03IPSfEfCQ8o0a-G4ObQ" association="_koJBQPSgEfCQ8o0a-G4ObQ">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_koJoUPSgEfCQ8o0a-G4ObQ"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_koJoUfSgEfCQ8o0a-G4ObQ" value="1"/>
+            </ownedEnd>
           </packagedElement>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_tn2lkPEvEfC5cpUsQOGJ5Q" name="server">
@@ -1103,6 +1058,351 @@ return server;</body>
             </ownedOperation>
           </packagedElement>
         </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_QB2IIPSfEfCQ8o0a-G4ObQ" name="game">
+          <packagedElement xmi:type="uml:Class" xmi:id="_tnNFUPEvEfC5cpUsQOGJ5Q" name="Game" visibility="public">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_tnNsYfEvEfC5cpUsQOGJ5Q" name="currentTurn" visibility="private" type="_fzxAEPEuEfC5cpUsQOGJ5Q" isUnique="false">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_tnNsYvEvEfC5cpUsQOGJ5Q">
+                <body>indica a chi tocca (ID del player)</body>
+              </ownedComment>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_tnQvsPEvEfC5cpUsQOGJ5Q" name="bets" visibility="private" type="_fzxAEPEuEfC5cpUsQOGJ5Q" isUnique="false">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_tnQvsfEvEfC5cpUsQOGJ5Q">
+                <body>valore totale scommesso dai giocatori</body>
+              </ownedComment>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_brh4AvExEfC5cpUsQOGJ5Q" name="gamephase" type="_tnLQIPEvEfC5cpUsQOGJ5Q" association="_brhQ8PExEfC5cpUsQOGJ5Q">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_dXse4PExEfC5cpUsQOGJ5Q" name="LiteralInteger1" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_dXse4fExEfC5cpUsQOGJ5Q" name="LiteralUnlimitedNatural1" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_hB3qkvExEfC5cpUsQOGJ5Q" name="player" type="_tnrmcPEvEfC5cpUsQOGJ5Q" association="_hB3DgPExEfC5cpUsQOGJ5Q">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_rDWWkPExEfC5cpUsQOGJ5Q" name="LiteralInteger1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_rDW9oPExEfC5cpUsQOGJ5Q" name="LiteralUnlimitedNatural1" value="*"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_zi1rYvExEfC5cpUsQOGJ5Q" name="deck" type="_tnQvsvEvEfC5cpUsQOGJ5Q" association="_zi1EUPExEfC5cpUsQOGJ5Q">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_1ZcnsPExEfC5cpUsQOGJ5Q" name="LiteralInteger1" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_1ZcnsfExEfC5cpUsQOGJ5Q" name="LiteralUnlimitedNatural1" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_jKbdEvEyEfC5cpUsQOGJ5Q" name="client" type="_tjpbAPEvEfC5cpUsQOGJ5Q" association="_jKaO8PEyEfC5cpUsQOGJ5Q">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_n8ZXQPEyEfC5cpUsQOGJ5Q" name="LiteralInteger1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_n8ZXQfEyEfC5cpUsQOGJ5Q" name="LiteralUnlimitedNatural1" value="*"/>
+            </ownedAttribute>
+            <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_tnNsYPEvEfC5cpUsQOGJ5Q" name="Game implements Serializable" client="_tnNFUPEvEfC5cpUsQOGJ5Q" supplier="_tkAAUfEvEfC5cpUsQOGJ5Q" contract="_tkAAUfEvEfC5cpUsQOGJ5Q"/>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnR90PEvEfC5cpUsQOGJ5Q" name="Game" specification="_tnQvtfEvEfC5cpUsQOGJ5Q">
+              <language>JAVA</language>
+              <body>currentTurn = 0;&#xD;
+phase = GamePhase.INVITO;&#xD;
+players = new ConcurrentHashMap&lt;Integer, Player>();&#xD;
+bets = 0;&#xD;
+deck = new Deck();</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnSk4vEvEfC5cpUsQOGJ5Q" name="getPlayers" specification="_tnR90fEvEfC5cpUsQOGJ5Q">
+              <language>JAVA</language>
+              <body>return players;</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnTL8PEvEfC5cpUsQOGJ5Q" name="getBets" specification="_tnSk4_EvEfC5cpUsQOGJ5Q">
+              <language>JAVA</language>
+              <body>return bets;</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnTL8_EvEfC5cpUsQOGJ5Q" name="getCurrentTurn" specification="_tnTL8fEvEfC5cpUsQOGJ5Q">
+              <language>JAVA</language>
+              <body>return currentTurn;</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnUaEfEvEfC5cpUsQOGJ5Q" name="setCurrentTurn" specification="_tnTL9PEvEfC5cpUsQOGJ5Q">
+              <language>JAVA</language>
+              <body>this.currentTurn = currentTurn;</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnUaFPEvEfC5cpUsQOGJ5Q" name="getDeck" specification="_tnUaEvEvEfC5cpUsQOGJ5Q">
+              <language>JAVA</language>
+              <body>return deck;</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnVBIvEvEfC5cpUsQOGJ5Q" name="setDeck" specification="_tnVBIPEvEfC5cpUsQOGJ5Q">
+              <language>JAVA</language>
+              <body>this.deck = deck;</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnVoMfEvEfC5cpUsQOGJ5Q" name="setBets" specification="_tnVBI_EvEfC5cpUsQOGJ5Q">
+              <language>JAVA</language>
+              <body>this.bets = bets;</body>
+            </ownedBehavior>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnQvtfEvEfC5cpUsQOGJ5Q" name="Game" visibility="public" method="_tnR90PEvEfC5cpUsQOGJ5Q"/>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnR90fEvEfC5cpUsQOGJ5Q" name="getPlayers" visibility="public" method="_tnSk4vEvEfC5cpUsQOGJ5Q">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_tnSk4PEvEfC5cpUsQOGJ5Q">
+                <body>Getter &amp; Setter</body>
+              </ownedComment>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tnSk4fEvEfC5cpUsQOGJ5Q" type="_tnO6hPEvEfC5cpUsQOGJ5Q" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnSk4_EvEfC5cpUsQOGJ5Q" name="getBets" visibility="public" method="_tnTL8PEvEfC5cpUsQOGJ5Q">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tnSk5PEvEfC5cpUsQOGJ5Q" type="_fzxAEPEuEfC5cpUsQOGJ5Q" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnTL8fEvEfC5cpUsQOGJ5Q" name="getCurrentTurn" visibility="public" method="_tnTL8_EvEfC5cpUsQOGJ5Q">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tnTL8vEvEfC5cpUsQOGJ5Q" type="_fzxAEPEuEfC5cpUsQOGJ5Q" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnTL9PEvEfC5cpUsQOGJ5Q" name="setCurrentTurn" visibility="public" method="_tnUaEfEvEfC5cpUsQOGJ5Q">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tnUaEPEvEfC5cpUsQOGJ5Q" name="currentTurn" type="_fzxAEPEuEfC5cpUsQOGJ5Q"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnUaEvEvEfC5cpUsQOGJ5Q" name="getDeck" visibility="public" method="_tnUaFPEvEfC5cpUsQOGJ5Q">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tnUaE_EvEfC5cpUsQOGJ5Q" type="_tnQvsvEvEfC5cpUsQOGJ5Q" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnVBIPEvEfC5cpUsQOGJ5Q" name="setDeck" visibility="public" method="_tnVBIvEvEfC5cpUsQOGJ5Q">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tnVBIfEvEfC5cpUsQOGJ5Q" name="deck" type="_tnQvsvEvEfC5cpUsQOGJ5Q"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnVBI_EvEfC5cpUsQOGJ5Q" name="setBets" visibility="public" method="_tnVoMfEvEfC5cpUsQOGJ5Q">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tnVoMPEvEfC5cpUsQOGJ5Q" name="bets" type="_fzxAEPEuEfC5cpUsQOGJ5Q"/>
+            </ownedOperation>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Enumeration" xmi:id="_tnLQIPEvEfC5cpUsQOGJ5Q" name="GamePhase" visibility="public">
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_tnLQIfEvEfC5cpUsQOGJ5Q" name="INVITO"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_tnLQIvEvEfC5cpUsQOGJ5Q" name="APERTURA"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_tnLQI_EvEfC5cpUsQOGJ5Q" name="ACCOMODO"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_tnLQJPEvEfC5cpUsQOGJ5Q" name="PUNTATA"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_tnLQJfEvEfC5cpUsQOGJ5Q" name="SHOWDOWN"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_tnLQJvEvEfC5cpUsQOGJ5Q" name="END"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_UbisQPSfEfCQ8o0a-G4ObQ" name="Pot" visibility="public">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_UbsdQPSfEfCQ8o0a-G4ObQ" name="total" visibility="private" type="_fzxAEPEuEfC5cpUsQOGJ5Q" isUnique="false">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_UbtEUPSfEfCQ8o0a-G4ObQ">
+                <body>valore totale scommesso dai giocatori</body>
+              </ownedComment>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_UbtrYPSfEfCQ8o0a-G4ObQ" name="maxBet" visibility="private" type="_fzxAEPEuEfC5cpUsQOGJ5Q" isUnique="false">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_UbtrYfSfEfCQ8o0a-G4ObQ">
+                <body>puntata massima attuale</body>
+              </ownedComment>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_UbuScPSfEfCQ8o0a-G4ObQ" name="minBet" visibility="private" type="_fzxAEPEuEfC5cpUsQOGJ5Q" isUnique="false">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_UbuScfSfEfCQ8o0a-G4ObQ">
+                <body>valore puntata minima decisa dal server</body>
+              </ownedComment>
+            </ownedAttribute>
+            <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_UbjTUPSfEfCQ8o0a-G4ObQ" name="Pot implements Serializable" client="_UbisQPSfEfCQ8o0a-G4ObQ" supplier="_tkAAUfEvEfC5cpUsQOGJ5Q" contract="_tkAAUfEvEfC5cpUsQOGJ5Q"/>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_Ub0ZEPSfEfCQ8o0a-G4ObQ" name="Pot" specification="_UbuScvSfEfCQ8o0a-G4ObQ">
+              <language>JAVA</language>
+              <body>total = 0;&#xD;
+this.minBet = minBet;&#xD;
+maxBet = this.minBet;</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_Ub2OQPSfEfCQ8o0a-G4ObQ" name="getTotal" specification="_Ub1AIPSfEfCQ8o0a-G4ObQ">
+              <language>JAVA</language>
+              <body>return total;</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_Ub2OQ_SfEfCQ8o0a-G4ObQ" name="setTotal" specification="_Ub2OQfSfEfCQ8o0a-G4ObQ">
+              <language>JAVA</language>
+              <body>this.total = total;</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_Ub21UfSfEfCQ8o0a-G4ObQ" name="getMaxBet" specification="_Ub2ORPSfEfCQ8o0a-G4ObQ">
+              <language>JAVA</language>
+              <body>return maxBet;</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_Ub3cYPSfEfCQ8o0a-G4ObQ" name="setMaxBet" specification="_Ub21UvSfEfCQ8o0a-G4ObQ">
+              <language>JAVA</language>
+              <body>this.maxBet = maxBet;</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_Ub3cY_SfEfCQ8o0a-G4ObQ" name="getMinBet" specification="_Ub3cYfSfEfCQ8o0a-G4ObQ">
+              <language>JAVA</language>
+              <body>return minBet;</body>
+            </ownedBehavior>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_UbuScvSfEfCQ8o0a-G4ObQ" name="Pot" visibility="public" method="_Ub0ZEPSfEfCQ8o0a-G4ObQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_Ubyj4PSfEfCQ8o0a-G4ObQ" name="minBet" type="_fzxAEPEuEfC5cpUsQOGJ5Q"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_Ub1AIPSfEfCQ8o0a-G4ObQ" name="getTotal" visibility="public" method="_Ub2OQPSfEfCQ8o0a-G4ObQ">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_Ub1AIfSfEfCQ8o0a-G4ObQ">
+                <body>Getter &amp; Setter</body>
+              </ownedComment>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_Ub1nMPSfEfCQ8o0a-G4ObQ" type="_fzxAEPEuEfC5cpUsQOGJ5Q" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_Ub2OQfSfEfCQ8o0a-G4ObQ" name="setTotal" visibility="public" method="_Ub2OQ_SfEfCQ8o0a-G4ObQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_Ub2OQvSfEfCQ8o0a-G4ObQ" name="total" type="_fzxAEPEuEfC5cpUsQOGJ5Q"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_Ub2ORPSfEfCQ8o0a-G4ObQ" name="getMaxBet" visibility="public" method="_Ub21UfSfEfCQ8o0a-G4ObQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_Ub21UPSfEfCQ8o0a-G4ObQ" type="_fzxAEPEuEfC5cpUsQOGJ5Q" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_Ub21UvSfEfCQ8o0a-G4ObQ" name="setMaxBet" visibility="public" method="_Ub3cYPSfEfCQ8o0a-G4ObQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_Ub21U_SfEfCQ8o0a-G4ObQ" name="maxBet" type="_fzxAEPEuEfC5cpUsQOGJ5Q"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_Ub3cYfSfEfCQ8o0a-G4ObQ" name="getMinBet" visibility="public" method="_Ub3cY_SfEfCQ8o0a-G4ObQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_Ub3cYvSfEfCQ8o0a-G4ObQ" type="_fzxAEPEuEfC5cpUsQOGJ5Q" direction="return"/>
+            </ownedOperation>
+          </packagedElement>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_vagNEPSfEfCQ8o0a-G4ObQ" name="player">
+          <packagedElement xmi:type="uml:Class" xmi:id="_tnmt8PEvEfC5cpUsQOGJ5Q" name="PlayerStatus" visibility="public">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_tnn8EPEvEfC5cpUsQOGJ5Q" name="fold" visibility="private" type="_fzyOMPEuEfC5cpUsQOGJ5Q" isUnique="false">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_tnn8EfEvEfC5cpUsQOGJ5Q">
+                <body>indica se il player ha foldato</body>
+              </ownedComment>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_tnn8EvEvEfC5cpUsQOGJ5Q" name="open" visibility="private" type="_fzyOMPEuEfC5cpUsQOGJ5Q" isUnique="false">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_tnn8E_EvEfC5cpUsQOGJ5Q">
+                <body>indica se il player ha aperto</body>
+              </ownedComment>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_tnojIPEvEfC5cpUsQOGJ5Q" name="debt" visibility="private" type="_fzyOMPEuEfC5cpUsQOGJ5Q" isUnique="false">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_tnojIfEvEfC5cpUsQOGJ5Q">
+                <body>indica se il player è in debito con il piatto</body>
+              </ownedComment>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_tnojIvEvEfC5cpUsQOGJ5Q" name="pass" visibility="private" type="_fzyOMPEuEfC5cpUsQOGJ5Q" isUnique="false">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_tnojI_EvEfC5cpUsQOGJ5Q">
+                <body>indica se il giocatore ha passato durante la fase di apertura</body>
+              </ownedComment>
+            </ownedAttribute>
+            <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_tnmt8fEvEfC5cpUsQOGJ5Q" name="PlayerStatus implements Serializable" client="_tnmt8PEvEfC5cpUsQOGJ5Q" supplier="_tkAAUfEvEfC5cpUsQOGJ5Q" contract="_tkAAUfEvEfC5cpUsQOGJ5Q"/>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnpxQPEvEfC5cpUsQOGJ5Q" name="PlayerStatus" specification="_tnojJPEvEfC5cpUsQOGJ5Q">
+              <language>JAVA</language>
+              <body>fold = false;&#xD;
+open = false;&#xD;
+debt = false;&#xD;
+pass = false;</body>
+            </ownedBehavior>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnojJPEvEfC5cpUsQOGJ5Q" name="PlayerStatus" visibility="public" method="_tnpxQPEvEfC5cpUsQOGJ5Q"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_tnrmcPEvEfC5cpUsQOGJ5Q" name="Player" visibility="public">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_tnsNgPEvEfC5cpUsQOGJ5Q" name="username" visibility="private" isLeaf="true" type="_fzQpwPEuEfC5cpUsQOGJ5Q" isUnique="false"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_tnsNgfEvEfC5cpUsQOGJ5Q" name="password" visibility="private" type="_fzQpwPEuEfC5cpUsQOGJ5Q" isUnique="false"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_tnsNg_EvEfC5cpUsQOGJ5Q" name="fiches" visibility="private" type="_fzxAEPEuEfC5cpUsQOGJ5Q" isUnique="false"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_ON1uYvEyEfC5cpUsQOGJ5Q" name="card" type="_tnYEcPEvEfC5cpUsQOGJ5Q" association="_ON1HUPEyEfC5cpUsQOGJ5Q">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_PpMSEPEyEfC5cpUsQOGJ5Q" name="LiteralInteger1" value="5"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_PpMSEfEyEfC5cpUsQOGJ5Q" name="LiteralUnlimitedNatural1" value="5"/>
+            </ownedAttribute>
+            <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_tnrmcfEvEfC5cpUsQOGJ5Q" name="Player implements Serializable" client="_tnrmcPEvEfC5cpUsQOGJ5Q" supplier="_tkAAUfEvEfC5cpUsQOGJ5Q" contract="_tkAAUfEvEfC5cpUsQOGJ5Q"/>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnupwfEvEfC5cpUsQOGJ5Q" name="Player" specification="_tns0k_EvEfC5cpUsQOGJ5Q">
+              <language>JAVA</language>
+              <body>this.username = userName;&#xD;
+this.password = password;&#xD;
+hand = new ArrayList&lt;Card>();&#xD;
+status = new PlayerStatus();</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnvQ0vEvEfC5cpUsQOGJ5Q" name="esciPartita" specification="_tnvQ0PEvEfC5cpUsQOGJ5Q">
+              <language>JAVA</language>
+              <body></body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnv34fEvEfC5cpUsQOGJ5Q" name="partecipaInvito" specification="_tnvQ0_EvEfC5cpUsQOGJ5Q">
+              <language>JAVA</language>
+              <body>if (// puntata d'invito tra 5 e 100&#xD;
+invito >= 5 &amp;&amp; invito &lt;= 100) {&#xD;
+    punta(invito);&#xD;
+} else {&#xD;
+    System.out.println(&quot;errore&quot;);&#xD;
+}</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnv34_EvEfC5cpUsQOGJ5Q" name="nonPartecipa" specification="_tnv34vEvEfC5cpUsQOGJ5Q">
+              <language>JAVA</language>
+              <body>// turno disabilitato per questa mano</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnwe8vEvEfC5cpUsQOGJ5Q" name="punta" specification="_tnwe8PEvEfC5cpUsQOGJ5Q">
+              <language>JAVA</language>
+              <body>if (fiches >= puntata) {&#xD;
+    fiches -= puntata;&#xD;
+} else {&#xD;
+    System.out.println(&quot;errore&quot;);&#xD;
+}</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnxGAfEvEfC5cpUsQOGJ5Q" name="apri" specification="_tnwe8_EvEfC5cpUsQOGJ5Q">
+              <language>JAVA</language>
+              <body>punta(puntata);</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnxGA_EvEfC5cpUsQOGJ5Q" name="passa" specification="_tnxGAvEvEfC5cpUsQOGJ5Q">
+              <language>JAVA</language>
+              <body></body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnxGBfEvEfC5cpUsQOGJ5Q" name="lascia" specification="_tnxGBPEvEfC5cpUsQOGJ5Q">
+              <language>JAVA</language>
+              <body></body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnxtEPEvEfC5cpUsQOGJ5Q" name="vedi" specification="_tnxGBvEvEfC5cpUsQOGJ5Q">
+              <language>JAVA</language>
+              <body></body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnxtE_EvEfC5cpUsQOGJ5Q" name="cambio" specification="_tnxtEfEvEfC5cpUsQOGJ5Q">
+              <language>JAVA</language>
+              <body></body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnxtFfEvEfC5cpUsQOGJ5Q" name="servito" specification="_tnxtFPEvEfC5cpUsQOGJ5Q">
+              <language>JAVA</language>
+              <body></body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnyUIvEvEfC5cpUsQOGJ5Q" name="toString" specification="_tnyUIPEvEfC5cpUsQOGJ5Q">
+              <language>JAVA</language>
+              <body>return username;</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnyUJvEvEfC5cpUsQOGJ5Q" name="getUsername" specification="_tnyUI_EvEfC5cpUsQOGJ5Q">
+              <language>JAVA</language>
+              <body>return username;</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tny7MfEvEfC5cpUsQOGJ5Q" name="getPassword" specification="_tnyUJ_EvEfC5cpUsQOGJ5Q">
+              <language>JAVA</language>
+              <body>return password;</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tny7NPEvEfC5cpUsQOGJ5Q" name="setPassword" specification="_tny7MvEvEfC5cpUsQOGJ5Q">
+              <language>JAVA</language>
+              <body>this.password = password;</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnziQvEvEfC5cpUsQOGJ5Q" name="getFiches" specification="_tnziQPEvEfC5cpUsQOGJ5Q">
+              <language>JAVA</language>
+              <body>return fiches;</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tnziRfEvEfC5cpUsQOGJ5Q" name="setFiches" specification="_tnziQ_EvEfC5cpUsQOGJ5Q">
+              <language>JAVA</language>
+              <body>this.fiches = fiches;</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tn0JVPEvEfC5cpUsQOGJ5Q" name="getHand" specification="_tn0JUPEvEfC5cpUsQOGJ5Q">
+              <language>JAVA</language>
+              <body>return hand;</body>
+            </ownedBehavior>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_tns0k_EvEfC5cpUsQOGJ5Q" name="Player" visibility="public" method="_tnupwfEvEfC5cpUsQOGJ5Q">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tnuCsfEvEfC5cpUsQOGJ5Q" name="userName" type="_fzQpwPEuEfC5cpUsQOGJ5Q"/>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tnupwPEvEfC5cpUsQOGJ5Q" name="password" type="_fzQpwPEuEfC5cpUsQOGJ5Q"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnvQ0PEvEfC5cpUsQOGJ5Q" name="esciPartita" visibility="public" method="_tnvQ0vEvEfC5cpUsQOGJ5Q">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_tnvQ0fEvEfC5cpUsQOGJ5Q">
+                <body>Metodo che permette di abbandonare la partita dalla fine della mano. Il client non potrà più connettersi poichè il server non sarà aperto a nuove connessioni durante la partita</body>
+              </ownedComment>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnvQ0_EvEfC5cpUsQOGJ5Q" name="partecipaInvito" visibility="public" method="_tnv34fEvEfC5cpUsQOGJ5Q">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tnv34PEvEfC5cpUsQOGJ5Q" name="invito" type="_fzxAEPEuEfC5cpUsQOGJ5Q"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnv34vEvEfC5cpUsQOGJ5Q" name="nonPartecipa" visibility="public" method="_tnv34_EvEfC5cpUsQOGJ5Q"/>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnwe8PEvEfC5cpUsQOGJ5Q" name="punta" visibility="public" method="_tnwe8vEvEfC5cpUsQOGJ5Q">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tnwe8fEvEfC5cpUsQOGJ5Q" name="puntata" type="_fzxAEPEuEfC5cpUsQOGJ5Q"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnwe8_EvEfC5cpUsQOGJ5Q" name="apri" visibility="public" method="_tnxGAfEvEfC5cpUsQOGJ5Q">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tnxGAPEvEfC5cpUsQOGJ5Q" name="puntata" type="_fzxAEPEuEfC5cpUsQOGJ5Q"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnxGAvEvEfC5cpUsQOGJ5Q" name="passa" visibility="public" method="_tnxGA_EvEfC5cpUsQOGJ5Q"/>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnxGBPEvEfC5cpUsQOGJ5Q" name="lascia" visibility="public" method="_tnxGBfEvEfC5cpUsQOGJ5Q"/>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnxGBvEvEfC5cpUsQOGJ5Q" name="vedi" visibility="public" method="_tnxtEPEvEfC5cpUsQOGJ5Q"/>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnxtEfEvEfC5cpUsQOGJ5Q" name="cambio" visibility="public" method="_tnxtE_EvEfC5cpUsQOGJ5Q">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tnxtEvEvEfC5cpUsQOGJ5Q" name="scelta" type="_fzxAEPEuEfC5cpUsQOGJ5Q"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnxtFPEvEfC5cpUsQOGJ5Q" name="servito" visibility="public" method="_tnxtFfEvEfC5cpUsQOGJ5Q"/>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnyUIPEvEfC5cpUsQOGJ5Q" name="toString" visibility="public" method="_tnyUIvEvEfC5cpUsQOGJ5Q">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tnyUIfEvEfC5cpUsQOGJ5Q" type="_fzQpwPEuEfC5cpUsQOGJ5Q" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnyUI_EvEfC5cpUsQOGJ5Q" name="getUsername" visibility="public" method="_tnyUJvEvEfC5cpUsQOGJ5Q">
+              <ownedComment xmi:type="uml:Comment" xmi:id="_tnyUJPEvEfC5cpUsQOGJ5Q">
+                <body>Getter &amp; Setter</body>
+              </ownedComment>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tnyUJfEvEfC5cpUsQOGJ5Q" type="_fzQpwPEuEfC5cpUsQOGJ5Q" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnyUJ_EvEfC5cpUsQOGJ5Q" name="getPassword" visibility="public" method="_tny7MfEvEfC5cpUsQOGJ5Q">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tny7MPEvEfC5cpUsQOGJ5Q" type="_fzQpwPEuEfC5cpUsQOGJ5Q" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_tny7MvEvEfC5cpUsQOGJ5Q" name="setPassword" visibility="public" method="_tny7NPEvEfC5cpUsQOGJ5Q">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tny7M_EvEfC5cpUsQOGJ5Q" name="password" type="_fzQpwPEuEfC5cpUsQOGJ5Q"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnziQPEvEfC5cpUsQOGJ5Q" name="getFiches" visibility="public" method="_tnziQvEvEfC5cpUsQOGJ5Q">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tnziQfEvEfC5cpUsQOGJ5Q" type="_fzxAEPEuEfC5cpUsQOGJ5Q" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_tnziQ_EvEfC5cpUsQOGJ5Q" name="setFiches" visibility="public" method="_tnziRfEvEfC5cpUsQOGJ5Q">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tnziRPEvEfC5cpUsQOGJ5Q" name="fiches" type="_fzxAEPEuEfC5cpUsQOGJ5Q"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_tn0JUPEvEfC5cpUsQOGJ5Q" name="getHand" visibility="public" method="_tn0JVPEvEfC5cpUsQOGJ5Q">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_tn0JUfEvEfC5cpUsQOGJ5Q" type="_tnYEcPEvEfC5cpUsQOGJ5Q" direction="return">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_tn0JUvEvEfC5cpUsQOGJ5Q"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_tn0JU_EvEfC5cpUsQOGJ5Q" value="*"/>
+              </ownedParameter>
+            </ownedOperation>
+          </packagedElement>
+        </packagedElement>
       </packagedElement>
     </packagedElement>
     <packagedElement xmi:type="uml:Package" xmi:id="_fy6rgPEuEfC5cpUsQOGJ5Q" name="java">
@@ -1265,4 +1565,9 @@ return server;</body>
   <Codegen:GeneratorHint xmi:id="_q9VGwPE0EfC5cpUsQOGJ5Q" base_Element="_XaJCsPEuEfC5cpUsQOGJ5Q" generatorID="Standard Java">
     <language xmi:type="Codegen:Language" href="pathmap://Codegen_PROFILES/languages.uml#_2Zt6YCjREeayco6FJ_OtTQ"/>
   </Codegen:GeneratorHint>
+  <standard:Create xmi:id="_Ubx80PSfEfCQ8o0a-G4ObQ" base_BehavioralFeature="_UbuScvSfEfCQ8o0a-G4ObQ"/>
+  <Codegen:External xmi:id="_5m36cPSfEfCQ8o0a-G4ObQ" name="Card" base_Classifier="_tnYEcPEvEfC5cpUsQOGJ5Q"/>
+  <Codegen:External xmi:id="_5m6WsPSfEfCQ8o0a-G4ObQ" name="Rank" base_Classifier="_5m5IkPSfEfCQ8o0a-G4ObQ"/>
+  <standard:Create xmi:id="_5m7k0PSfEfCQ8o0a-G4ObQ" base_BehavioralFeature="_5m6WsvSfEfCQ8o0a-G4ObQ"/>
+  <standard:Create xmi:id="_6ToSwPSfEfCQ8o0a-G4ObQ" base_BehavioralFeature="_6TnrsfSfEfCQ8o0a-G4ObQ"/>
 </xmi:XMI>

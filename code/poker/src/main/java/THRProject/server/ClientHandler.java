@@ -4,8 +4,12 @@ import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 
-import THRProject.card.Card;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import THRProject.card.model.Card;
 import THRProject.message.ActionType;
+import THRProject.message.Communicator;
 import THRProject.message.ControlType;
 import THRProject.message.Message;
 import THRProject.player.Player;
@@ -13,8 +17,9 @@ import THRProject.player.Player;
 /*
  * Classe che rappresenta il thread del server che gestirà la connessione con un client 
  */
-class ClientHandler implements Runnable {
+class ClientHandler implements Runnable, Communicator {
 
+	private static final Logger logger = LogManager.getLogger(ClientHandler.class);
 	private Socket socket;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
@@ -47,78 +52,33 @@ class ClientHandler implements Runnable {
 
 				if (msg.getType() instanceof ActionType action) {
 					switch (action) {
-					case INVITO:
-						Server.getServer().checkInvito(clientId);
-						break;
-
-					case APRI:
-						Server.getServer().checkApertura(clientId, (Integer) msg.getData());
-						break;
-
-					case PASSA:
-						Server.getServer().checkPassa(clientId);
-						break;
-
-					case CAMBIO:
-						Server.getServer().checkCambio(clientId, (ArrayList<Card>) msg.getData());
-						break;
-
-					case SERVITO:
-						Server.getServer().checkServito(clientId);
-						break;
-
-					case PUNTA:
-						Server.getServer().checkPuntata(clientId, (Integer) msg.getData());
-						break;
-
-					case FOLD:
-						Server.getServer().getGame().foldPlayer(clientId);
-						Server.getServer().broadcastSafeGameView();
-						sendMessage(new Message(ControlType.VALID_ACTION, "fold"));
-						break;
-
-					default:
-						System.out.println("ERRORE! Messaggio sconosciuto.");
-						break;
+					case INVITO -> Server.getServer().checkInvito(clientId);
+					case APRI -> Server.getServer().checkApertura(clientId, (Integer) msg.getData());
+					case PASSA -> Server.getServer().checkPassa(clientId);
+					case CAMBIO -> Server.getServer().checkCambio(clientId, (ArrayList<Card>) msg.getData());
+					case SERVITO -> Server.getServer().checkServito(clientId);
+					case PUNTA -> Server.getServer().checkPuntata(clientId, (Integer) msg.getData());
+					case FOLD -> Server.getServer().checkFold(clientId);
+					default -> logger.error("ERRORE! Messaggio sconosciuto.");
 					}
 				}
+
 				if (msg.getType() instanceof ControlType control) {
 					switch (control) {
-					case PLAYER_JOIN:
-						Server.getServer().registerPlayer(clientId, (Player) msg.getData());
-						break;
-
-					case READY:
-						Server.getServer().countReady(clientId);
-						break;
-
-					case QUIT:
-						cleanup(clientId);
+					case PLAYER_JOIN -> Server.getServer().registerPlayer(clientId, (Player) msg.getData());
+					case READY -> Server.getServer().countReady(clientId);
+					case QUIT -> {
+						cleanUp(clientId);
 						Server.getServer().checkStart();
 						return;
-
-					default:
-						System.out.println("ERRORE! Messaggio sconosciuto.");
-						break;
+					}
+					default -> logger.error("ERRORE! Messaggio sconosciuto.");
 					}
 				}
-
 			}
 		} catch (IOException | ClassNotFoundException e) {
-			System.out.println("ERRORE! Comunicazione con il Client " + clientId + " persa.");
-			cleanup(clientId);
-		}
-	}
-
-	/*
-	 * Metodo per inviare messaggi al client
-	 */
-	public void sendMessage(Object msg) {
-		try {
-			out.writeObject(msg);
-			out.flush();
-		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("ERRORE! Comunicazione con il Client " + clientId + " persa.");
+			cleanUp(clientId);
 		}
 	}
 
@@ -126,7 +86,7 @@ class ClientHandler implements Runnable {
 	 * Metodo per chiudere correttamente la connessione con il client - rimuove il
 	 * player - chiude il clientHandler
 	 */
-	private void cleanup(int clientId) {
+	public void cleanUp(int clientId) {
 		Server.getServer().getGame().removePlayer(clientId);
 		try {
 			in.close();
@@ -143,6 +103,16 @@ class ClientHandler implements Runnable {
 	 */
 	public int getClientId() {
 		return clientId;
+	}
+
+	@Override
+	public void sendMessage(Object msg) {
+		try {
+			out.writeObject(msg);
+			out.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
