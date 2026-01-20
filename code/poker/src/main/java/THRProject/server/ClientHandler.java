@@ -67,7 +67,6 @@ class ClientHandler implements Runnable, Communicator {
 					switch (control) {
 					case PLAYER_JOIN -> Server.getServer().registerPlayer(clientId, (Player) msg.getData());
 					case LOGIN -> Server.getServer().handleLogin((Player) msg.getData());
-					case REGISTER -> Server.getServer().handleRegister((Player) msg.getData());
 					case READY -> Server.getServer().countReady(clientId);
 					case QUIT -> {
 						cleanUp(clientId);
