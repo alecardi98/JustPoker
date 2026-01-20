@@ -1,6 +1,5 @@
 package THRProject.gui;
 
-import THRProject.client.Client;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -9,142 +8,108 @@ import javafx.scene.layout.VBox;
 /**
  * Pannello del menu principale
  * 
- * MODIFICHE:
- * - Integrata connessione al server tramite Client
- * - Aggiunta gestione stati di connessione
- * - Aggiunto feedback visivo durante la connessione
+ * MODIFICHE: - Integrata connessione al server tramite Client - Aggiunta
+ * gestione stati di connessione - Aggiunto feedback visivo durante la
+ * connessione
  */
 public class MainMenuPane extends VBox {
 
-    private SceneManager manager;
-    private Client client;
+	private SceneManager manager;
 
-    public MainMenuPane(SceneManager manager, Client client) {
-        this.manager = manager;
-        this.client = client;
+	public MainMenuPane(SceneManager manager) {
+		this.manager = manager;
 
-        setSpacing(20);
-        setPadding(new Insets(30));
-        setAlignment(Pos.CENTER);
+		setSpacing(20);
+		setPadding(new Insets(30));
+		setAlignment(Pos.CENTER);
 
-        Label title = new Label("JustPoker™");
-        title.setStyle("-fx-font-size: 26px; -fx-font-weight: bold;");
+		Label title = new Label("JustPoker™");
+		title.setStyle("-fx-font-size: 26px; -fx-font-weight: bold;");
 
-        Button playButton = new Button("Partecipa a una partita");
-        Button rulesButton = new Button("Regolamento");
-        Button exitButton = new Button("Esci dal gioco");
+		Button playButton = new Button("Partecipa a una partita");
+		Button rulesButton = new Button("Regolamento");
+		Button exitButton = new Button("Esci dal gioco");
 
-        Label infoLabel = new Label("Benvenuto! Scegli un'opzione.");
-        infoLabel.setStyle("-fx-text-fill: blue;");
+		Label infoLabel = new Label("Benvenuto! Scegli un'opzione.");
+		infoLabel.setStyle("-fx-text-fill: blue;");
 
-        playButton.setMinWidth(220);
-        rulesButton.setMinWidth(220);
-        exitButton.setMinWidth(220);
+		playButton.setMinWidth(220);
+		rulesButton.setMinWidth(220);
+		exitButton.setMinWidth(220);
 
-        /* -------------------
-         * PARTECIPA A PARTITA
-         * ------------------- */
-        playButton.setOnAction(e -> {
-            infoLabel.setStyle("-fx-text-fill: blue;");
-            infoLabel.setText("Connessione al server...");
-            playButton.setDisable(true);
-            
-            // Connessione in thread separato
-            new Thread(() -> {
-                try {
-                    // Avvia il client e connette al server
-                    client.startClient();
-                    
-                    // Se la connessione ha successo, vai alla lobby
-                    javafx.application.Platform.runLater(() -> {
-                        infoLabel.setStyle("-fx-text-fill: green;");
-                        infoLabel.setText("Connesso! In attesa di una partita...");
-                        manager.showLobby();
-                    });
-                    
-                } catch (Exception ex) {
-                    javafx.application.Platform.runLater(() -> {
-                        infoLabel.setStyle("-fx-text-fill: red;");
-                        infoLabel.setText("Errore di connessione: " + ex.getMessage());
-                        playButton.setDisable(false);
-                    });
-                }
-            }).start();
-        });
+		/*
+		 * ------------------- PARTECIPA A PARTITA -------------------
+		 */
+		playButton.setOnAction(e -> {
+			infoLabel.setStyle("-fx-text-fill: blue;");
+			infoLabel.setText("In attesa di altri giocatori...");
+			playButton.setDisable(true);			
+		});
 
-        /* -------------
-         * REGOLAMENTO
-         * -------------
-         */
-        rulesButton.setOnAction(e -> showRulesDialog());
+		/*
+		 * ------------- REGOLAMENTO -------------
+		 */
+		rulesButton.setOnAction(e -> showRulesDialog());
 
-        /* ----------
-         * ESCI
-         * ---------- */
-        exitButton.setOnAction(e -> {
-            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-            confirm.setTitle("Conferma uscita");
-            confirm.setHeaderText("Sei sicuro di voler uscire?");
-            
-            if (confirm.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
-                System.exit(0);
-            }
-        });
+		/*
+		 * ---------- ESCI ----------
+		 */
+		exitButton.setOnAction(e -> {
+			Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+			confirm.setTitle("Conferma uscita");
+			confirm.setHeaderText("Sei sicuro di voler uscire?");
 
-        getChildren().addAll(
-                title,
-                playButton,
-                rulesButton,
-                exitButton,
-                infoLabel
-        );
-    }
+			if (confirm.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
+				System.exit(0);
+			}
+		});
 
-    /* ==========================
-     * FINESTRA REGOLAMENTO
-     * ========================== */
-    private void showRulesDialog() {
+		getChildren().addAll(title, playButton, rulesButton, exitButton, infoLabel);
+	}
 
-        Alert rulesAlert = new Alert(Alert.AlertType.INFORMATION);
-        rulesAlert.setTitle("Regolamento - JustPoker™");
-        rulesAlert.setHeaderText("Regole del gioco");
+	/*
+	 * ========================== FINESTRA REGOLAMENTO ==========================
+	 */
+	private void showRulesDialog() {
 
-        rulesAlert.setContentText(
-                """
-                REGOLE DEL POKER JUSTPOKER™
-                
-                • Ogni giocatore riceve 5 carte
-                • Il mazzo è composto da 32 carte (dal 7 all'Asso)
-                
-                FASI DEL GIOCO:
-                1. INVITO: puntata iniziale obbligatoria
-                2. APERTURA: si può aprire con almeno una coppia di Jack
-                3. PUNTATA: fase di rilanci fino al pareggio
-                4. ACCOMODO: possibilità di cambiare fino a 3 carte
-                5. SHOWDOWN: confronto delle mani
-                
-                AZIONI DISPONIBILI:
-                • Invito: partecipa alla mano con puntata minima
-                • Apri: apri il gioco con una puntata
-                • Passa: passa il turno (solo in apertura)
-                • Punta: aumenta la posta in gioco
-                • Cambio: sostituisci fino a 3 carte
-                • Servito: mantieni le carte attuali
-                • Fold: abbandona la mano
-                
-                COMBINAZIONI VINCENTI (dal più basso al più alto):
-                1. Carta alta
-                2. Coppia
-                3. Doppia coppia
-                4. Tris
-                5. Scala
-                6. Colore
-                7. Full
-                8. Poker
-                9. Scala colore
-                """
-        );
+		Alert rulesAlert = new Alert(Alert.AlertType.INFORMATION);
+		rulesAlert.setTitle("Regolamento - JustPoker™");
+		rulesAlert.setHeaderText("Regole del gioco");
 
-        rulesAlert.showAndWait();
-    }
+		rulesAlert.setContentText("""
+				REGOLE DEL POKER JUSTPOKER™
+
+				• Ogni giocatore riceve 5 carte
+				• Il mazzo è composto da 32 carte (dal 7 all'Asso)
+
+				FASI DEL GIOCO:
+				1. INVITO: puntata iniziale obbligatoria
+				2. APERTURA: si può aprire con almeno una coppia di Jack
+				3. PUNTATA: fase di rilanci fino al pareggio
+				4. ACCOMODO: possibilità di cambiare fino a 3 carte
+				5. SHOWDOWN: confronto delle mani
+
+				AZIONI DISPONIBILI:
+				• Invito: partecipa alla mano con puntata minima
+				• Apri: apri il gioco con una puntata
+				• Passa: passa il turno (solo in apertura)
+				• Punta: aumenta la posta in gioco
+				• Cambio: sostituisci fino a 3 carte
+				• Servito: mantieni le carte attuali
+				• Fold: abbandona la mano
+
+				COMBINAZIONI VINCENTI (dal più basso al più alto):
+				1. Carta alta
+				2. Coppia
+				3. Doppia coppia
+				4. Tris
+				5. Scala
+				6. Colore
+				7. Full
+				8. Poker
+				9. Scala colore
+				""");
+
+		rulesAlert.showAndWait();
+	}
 }

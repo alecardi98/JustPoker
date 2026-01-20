@@ -19,7 +19,6 @@ public class MainGUI extends Application {
     public void start(Stage stage) {
         client = new Client();
         SceneManager manager = new SceneManager(stage, client);
-        client.setSceneManager(manager);
         manager.showLoginScene();
     }
 

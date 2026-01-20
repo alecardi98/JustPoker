@@ -77,8 +77,12 @@ public final class Server {
 //				allora chiama register player
 //				manda messaggio di login sendMessage(new Message(ControlType.LOGIN, null))
 //		 }else
-//				sendMessage(new Message(ControlType.INVALID_ACTION, "login"))
+//			clientHandlers.get(clientId).sendMessage(new Message(ControlType.INVALID_ACTION, "login"))
 //	     }
+	}
+	
+	public void handleRegister(Player data) {
+		//FA LEO
 	}
 
 	/*

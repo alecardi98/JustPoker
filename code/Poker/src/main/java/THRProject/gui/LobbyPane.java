@@ -1,6 +1,5 @@
 package THRProject.gui;
 
-import THRProject.client.Client;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -14,14 +13,9 @@ import javafx.scene.layout.VBox;
  */
 public class LobbyPane extends VBox {
 
-	private SceneManager manager;
-	private Client client;
-
 	private Label statusLabel;
 
-	public LobbyPane(SceneManager manager, Client client) {
-		this.manager = manager;
-		this.client = client;
+	public LobbyPane() {
 
 		setSpacing(15);
 		setPadding(new Insets(25));
