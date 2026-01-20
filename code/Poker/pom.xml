@@ -6,18 +6,18 @@
 
 	<groupId>THRProject</groupId>
 	<artifactId>
-	poker</artifactId>
+		poker</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>poker</name>
 	<url>
-	https://github.com/alecardi98/JustPoker</url>
+		https://github.com/alecardi98/JustPoker</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.release>17</maven.compiler.release>
 	</properties>
 
-    <dependencies>
+	<dependencies>
 		<!-- JUnit 5 -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -73,7 +73,7 @@
 					<mainClass>THRProject.gui.MainGUI</mainClass>
 				</configuration>
 			</plugin>
-			
+
 			<!-- Surefire Plugin per eseguire JUnit 5 -->
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>

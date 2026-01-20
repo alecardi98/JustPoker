@@ -1,7 +1,7 @@
 package THRProject.gui;
 
+import THRProject.card.model.Card;
 import THRProject.client.Client;
-import THRProject.card.Card;
 import THRProject.game.Game;
 import THRProject.game.GamePhase;
 import THRProject.player.Player;
