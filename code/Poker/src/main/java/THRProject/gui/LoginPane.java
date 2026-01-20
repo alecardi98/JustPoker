@@ -6,6 +6,14 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 
+/**
+ * Pannello di login per l'accesso al gioco
+ * 
+ * MODIFICHE:
+ * - Integrato con metodo tryLogin del Client
+ * - Aggiunta gestione stati di connessione
+ * - Aggiunto feedback visivo durante il login
+ */
 public class LoginPane extends VBox {
 
     private SceneManager manager;
@@ -32,6 +40,7 @@ public class LoginPane extends VBox {
         Button registerButton = new Button("Registrati");
 
         Label messageLabel = new Label();
+        messageLabel.setStyle("-fx-text-fill: red;");
 
         loginButton.setOnAction(e -> {
             String username = usernameField.getText();
@@ -42,13 +51,43 @@ public class LoginPane extends VBox {
                 return;
             }
 
-            // LOGIN tramite Client
-            //client.tryLogin(username, password);			//Da implementare!!!!
+            // Disabilita i campi durante il login
+            usernameField.setDisable(true);
+            passwordField.setDisable(true);
+            loginButton.setDisable(true);
+            registerButton.setDisable(true);
+            messageLabel.setStyle("-fx-text-fill: blue;");
+            messageLabel.setText("Login in corso...");
 
-            messageLabel.setText("Login effettuato. In attesa del server...");
-
-            // Per ora passiamo direttamente al menù principale
-            manager.showMainMenu();
+            // LOGIN tramite Client - eseguito in thread separato per non bloccare la GUI
+            new Thread(() -> {
+                try {
+                    // Tenta il login (metodo ancora da implementare nel Client)
+                    // client.tryLogin(username, password);
+                    
+                    // PER ORA: Simulazione login con successo
+                    // In futuro: il client dovrà comunicare con il server per validare le credenziali
+                    Thread.sleep(1000); // Simula attesa server
+                    
+                    // Se il login ha successo, mostra il menu principale
+                    javafx.application.Platform.runLater(() -> {
+                        messageLabel.setStyle("-fx-text-fill: green;");
+                        messageLabel.setText("Login effettuato con successo!");
+                        manager.showMainMenu();
+                    });
+                    
+                } catch (Exception ex) {
+                    javafx.application.Platform.runLater(() -> {
+                        messageLabel.setStyle("-fx-text-fill: red;");
+                        messageLabel.setText("Errore durante il login: " + ex.getMessage());
+                        // Riabilita i campi
+                        usernameField.setDisable(false);
+                        passwordField.setDisable(false);
+                        loginButton.setDisable(false);
+                        registerButton.setDisable(false);
+                    });
+                }
+            }).start();
         });
 
         registerButton.setOnAction(e -> manager.showRegisterScene());

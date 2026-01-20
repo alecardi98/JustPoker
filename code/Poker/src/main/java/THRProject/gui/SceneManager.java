@@ -1,4 +1,3 @@
-
 package THRProject.gui;
 
 import THRProject.client.Client;
@@ -8,6 +7,14 @@ import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * Gestore delle scene per l'applicazione GUI
+ * 
+ * MODIFICHE:
+ * - Aggiunto game loop per aggiornamenti automatici
+ * - Corretto passaggio parametri a GameTablePane
+ * - Aggiunti metodi per gestione finestra di gioco
+ */
 public class SceneManager {
 
     private Stage stage;
@@ -19,6 +26,15 @@ public class SceneManager {
     public SceneManager(Stage stage, Client client) {
         this.stage = stage;
         this.client = client;
+        
+        // Configurazione finestra principale
+        stage.setResizable(false);
+        stage.setOnCloseRequest(e -> {
+            if (client != null) {
+                client.quit();
+            }
+            Platform.exit();
+        });
     }
 
     public void showLoginScene() {
@@ -47,19 +63,18 @@ public class SceneManager {
         LobbyPane lobbyPane = new LobbyPane(this, client);
         Scene scene = new Scene(lobbyPane, 600, 400);
         stage.setScene(scene);
+        stage.setTitle("Lobby - JustPoker™");
     }
     
     public void showGameTable() {
         Platform.runLater(() -> {
-            /*if (gameTablePane == null) {
-                gameTablePane = new GameTablePane(
-                        client,
-                        client.getGame(),
-                        client.getClientId()
-                );
-            }*/
-        	gameTablePane = new GameTablePane(client, null, 0);
-            stage.setScene(new Scene(gameTablePane, 900, 600));
+            // Creazione GameTablePane con parametri corretti
+            gameTablePane = new GameTablePane(client, client.getGame(), client.getClientId());
+            stage.setScene(new Scene(gameTablePane, 1000, 700));
+            stage.setTitle("Tavolo da gioco - JustPoker™");
+            
+            // Avvia il game loop per aggiornamenti automatici
+            startGameLoop();
         });
     }
     
@@ -68,6 +83,10 @@ public class SceneManager {
      * ===================== */
 
     private void startGameLoop() {
+        if (gameLoop != null) {
+            gameLoop.stop();
+        }
+        
         gameLoop = new AnimationTimer() {
 
             private Game lastGame; // riferimento precedente
@@ -88,6 +107,13 @@ public class SceneManager {
 
         gameLoop.start();
     }
+    
+    public void stopGameLoop() {
+        if (gameLoop != null) {
+            gameLoop.stop();
+            gameLoop = null;
+        }
+    }
 
     /* =====================
      * REDRAW (senza callback)
@@ -99,4 +125,11 @@ public class SceneManager {
         }
     }
     
+    /* =====================
+     * GETTER
+     * ===================== */
+    
+    public Stage getStage() {
+        return stage;
+    }
 }

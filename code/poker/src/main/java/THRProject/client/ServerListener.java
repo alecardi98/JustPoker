@@ -9,7 +9,16 @@ import THRProject.game.Game;
 import THRProject.gui.SceneManager;
 import THRProject.message.ControlType;
 import THRProject.message.Message;
+import javafx.scene.control.Alert;
 
+/**
+ * Thread per ascoltare i messaggi dal server
+ * 
+ * MODIFICHE:
+ * - Aggiunto riferimento a SceneManager per aggiornamenti GUI
+ * - Migliorata gestione aggiornamenti del game state
+ * - Aggiunto supporto per notifiche GUI
+ */
 public class ServerListener implements Runnable {
 
 	private static final Logger logger = LogManager.getLogger(ServerListener.class);
@@ -20,6 +29,10 @@ public class ServerListener implements Runnable {
 	public ServerListener(ObjectInputStream in, Client client) {
 		this.in = in;
 		this.client = client;
+	}
+	
+	public void setSceneManager(SceneManager sceneManager) {
+		this.sceneManager = sceneManager;
 	}
 
 	@Override
@@ -33,6 +46,8 @@ public class ServerListener implements Runnable {
 				if (msg.getType() instanceof ControlType control) {
 					switch (control) {
 					case CLIENT_ID -> handleClientId(msg.getData());
+					case LOGIN -> handleLogin();
+					case REGISTER -> handleRegister();
 					case START_GAME -> handleStartGame();
 					case INVALID_ACTION -> handleInvalidAction((String) msg.getData());
 					case VALID_ACTION -> handleValidAction((String) msg.getData());
@@ -50,18 +65,28 @@ public class ServerListener implements Runnable {
 		}
 	}
 
+	private void handleRegister() {
+		logger.info("Registrazione completata.");
+	}
+
+	private void handleLogin() {
+		logger.info("Login effettuato.");
+	}
+
 	/*
 	 * Metodo che gestisce l'arrivo del CLIENT_ID
 	 */
 	private void handleClientId(Object data) {
 		client.setClientId((int) data);
 		client.sendMessage(new Message(ControlType.PLAYER_JOIN, client.getPlayer()));
+		logger.info("Ricevuto ID client: " + data);
 	}
 
 	/*
-	 * Metodo che gestisce l'arrivo del lo START_GAME
+	 * Metodo che gestisce l'arrivo dello START_GAME
 	 */
 	private void handleStartGame() {
+		logger.info("Ricevuto segnale START_GAME");
 		client.startGame();
 	}
 
@@ -70,11 +95,23 @@ public class ServerListener implements Runnable {
 	 */
 	private void handleInvalidAction(String action) {
 		switch (action) {
+		case "login" -> logger.info("ERRORE! Login non efffettuato.");
 		case "apertura" -> logger.info("ERRORE! Apertura non valida.");
 		case "cambio" -> logger.info("ERRORE! Cambio non valido.");
 		case "puntata" -> logger.info("ERRORE! Puntata non valida.");
 		case "ready" -> logger.info("ERRORE! Hai già scelto.");
 		default -> logger.warn("Azione invalida sconosciuta: " + action);
+		}
+		
+		// Mostra notifica GUI
+		if (sceneManager != null) {
+			javafx.application.Platform.runLater(() -> {
+				Alert alert = new Alert(Alert.AlertType.WARNING);
+				alert.setTitle("Azione non valida");
+				alert.setHeaderText(null);
+				alert.setContentText("Azione " + action + " non valida in questo momento.");
+				alert.showAndWait();
+			});
 		}
 	}
 
@@ -101,6 +138,11 @@ public class ServerListener implements Runnable {
 	private void handleUpdate(Object data) {
 		client.setGame((Game) data);
 		client.checkMoment();
+		
+		// Aggiorna la GUI
+		if (sceneManager != null) {
+			sceneManager.refreshGameTable();
+		}
 	}
 
 	/*
@@ -108,6 +150,16 @@ public class ServerListener implements Runnable {
 	 */
 	private void handleWinner() {
 		logger.info("Hai vinto la mano!");
+		
+		if (sceneManager != null) {
+			javafx.application.Platform.runLater(() -> {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				alert.setTitle("Vittoria!");
+				alert.setHeaderText(null);
+				alert.setContentText("Hai vinto la mano!");
+				alert.showAndWait();
+			});
+		}
 	}
 
 	/*
@@ -115,6 +167,16 @@ public class ServerListener implements Runnable {
 	 */
 	private void handleLoser() {
 		logger.info("Hai perso la mano.");
+		
+		if (sceneManager != null) {
+			javafx.application.Platform.runLater(() -> {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				alert.setTitle("Hai perso");
+				alert.setHeaderText(null);
+				alert.setContentText("Hai perso la mano.");
+				alert.showAndWait();
+			});
+		}
 	}
 
 	/*
@@ -122,7 +184,19 @@ public class ServerListener implements Runnable {
 	 */
 	private void handleEndGame() {
 		logger.info("Bancarotta! Hai perso.");
-		cleanUp();
+		
+		if (sceneManager != null) {
+			javafx.application.Platform.runLater(() -> {
+				Alert alert = new Alert(Alert.AlertType.ERROR);
+				alert.setTitle("Game Over");
+				alert.setHeaderText(null);
+				alert.setContentText("Bancarotta! Hai finito le fiches.");
+				alert.showAndWait();
+				
+				// Torna al menu principale
+				sceneManager.showMainMenu();
+			});
+		}
 	}
 
 	/*

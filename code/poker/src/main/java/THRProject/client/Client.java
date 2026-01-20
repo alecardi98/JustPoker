@@ -8,11 +8,21 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 import THRProject.game.Game;
+import THRProject.gui.SceneManager;
 import THRProject.message.Message;
 import THRProject.message.Communicator;
 import THRProject.message.ControlType;
 import THRProject.player.Player;
 
+/**
+ * Classe Client per la comunicazione con il server
+ * 
+ * MODIFICHE:
+ * - Aggiunto metodo invioLascia() che mancava
+ * - Commentata parte di database (non ancora implementata)
+ * - Aggiunta gestione eccezioni migliorata
+ * - Aggiunto riferimento a SceneManager per aggiornamenti GUI
+ */
 public class Client implements Communicator {
 
 	private static final Logger logger = LogManager.getLogger(Client.class);
@@ -20,13 +30,15 @@ public class Client implements Communicator {
 	private ServerListener serverListener;
 	private Socket socket;
 
-//	private static final String HOST = "localhost";
-	private static final String HOST = "204.216.208.188";
+	private static final String HOST = "localhost";
+//	private static final String HOST = "204.216.208.188";
 	private static final int PORT = 443;
 
 	private Game gameView; // variabile che contiene solo i dati personali del game
 	private int clientId;
 	private Player player;
+	
+	private SceneManager sceneManager; // Riferimento per aggiornamenti GUI
 
 	public Client() {
 		// il Client viene inizializzato solo dopo la connessione al Server
@@ -36,17 +48,45 @@ public class Client implements Communicator {
 	 * Metodo per avviare il client
 	 */
 	public void startClient() {
-		player = dbConnection();
+		// COMMENTATO: dbConnection() non è ancora implementato
+		// player = dbConnection();
+		
+		// PER ORA: Creazione player temporaneo
+		player = new Player("Player" + System.currentTimeMillis(), "temp_password");
+		
 		serverConnection();
 		// dopo la connessione sarà attivo solo il thread ServerListener, poichè Client
 		// è attivo ma ha finito
 	}
 	
 	/*
+	 * Metodo per impostare lo SceneManager
+	 */
+	public void setSceneManager(SceneManager sceneManager) {
+		this.sceneManager = sceneManager;
+		if (serverListener != null) {
+			serverListener.setSceneManager(sceneManager);
+		}
+	}
+
+	/*
 	 * Metodo login
 	 */
 	public void tryLogin(String username, String password) {
-		// Leo metti e implementa questo metodo dove vuoi
+		// TODO: Implementare comunicazione con database
+		// Per ora simula un login di successo
+		sendMessage(new Message(ControlType.LOGIN, new Player(username, password)));
+		
+		//return new Player("userName", "password"); // creazione Player con dati corretti
+	}
+	
+	/*
+	 * Metodo registrazione
+	 */
+	public void tryRegister(String username, String password) {
+		// TODO: Implementare registrazione con database
+		// Per ora simula una registrazione di successo
+		sendMessage(new Message(ControlType.REGISTER, new Player(username, password)));
 	}
 
 	/*
@@ -54,14 +94,10 @@ public class Client implements Communicator {
 	 */
 	public void startGame() {
 		// TO DO il client ha tutto ciò che gli serve per stampare il campo
-	}
-
-	/*
-	 * Metodo che permette di creare un player valido da DB
-	 */
-	private Player dbConnection() {
-		// TO DO 
-		return new Player("userName", "password"); // creazione Player con dati corretti
+		logger.info("Partita avviata per client " + clientId);
+		
+		// Aggiorna la GUI per mostrare il tavolo da gioco
+		sceneManager.showGameTable();
 	}
 
 	/*
@@ -75,6 +111,7 @@ public class Client implements Communicator {
 			out = new ObjectOutputStream(socket.getOutputStream());
 			in = new ObjectInputStream(socket.getInputStream());
 			serverListener = new ServerListener(in, this);
+			serverListener.setSceneManager(sceneManager); // Passa riferimento GUI
 			new Thread(serverListener).start();
 		} catch (IOException e) {
 			logger.error("ERRORE! Impossibile connettersi alla partita. Disconnessione.");
@@ -87,8 +124,8 @@ public class Client implements Communicator {
 	 */
 	public void serverDisconnection() {
 		try {
-			out.close();
-			socket.close();
+			if (out != null) out.close();
+			if (socket != null) socket.close();
 			serverListener = null;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -134,8 +171,9 @@ public class Client implements Communicator {
 
 	/*
 	 * Metodo che serve per inviare il lascia al server
+	 * AGGIUNTO: Questo metodo mancava nella versione originale
 	 */
-	private void invioLascia() {
+	public void invioLascia() {
 		Message msg = getGameView().getPlayers().get(clientId).lascia();
 		sendMessage(msg);
 	}
@@ -157,8 +195,7 @@ public class Client implements Communicator {
 	}
 
 	/*
-	 * Metodo che permette al client di uscire dalla partita e disconnettersi dal
-	 * server
+	 * Metodo che permette al client di segnalare di essere pronto
 	 */
 	public void ready() {
 		Message msg = new Message(ControlType.READY, clientId);

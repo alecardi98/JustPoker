@@ -101,5 +101,4 @@ public class Player implements Serializable {
 	public void setHand(Hand hand) {
 		this.hand = hand;
 	}
-
 }

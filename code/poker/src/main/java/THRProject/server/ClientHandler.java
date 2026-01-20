@@ -66,6 +66,7 @@ class ClientHandler implements Runnable, Communicator {
 				if (msg.getType() instanceof ControlType control) {
 					switch (control) {
 					case PLAYER_JOIN -> Server.getServer().registerPlayer(clientId, (Player) msg.getData());
+					case LOGIN -> Server.getServer().handleLogin((Player) msg.getData());
 					case READY -> Server.getServer().countReady(clientId);
 					case QUIT -> {
 						cleanUp(clientId);

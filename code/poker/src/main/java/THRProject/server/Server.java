@@ -70,6 +70,16 @@ public final class Server {
 			}
 		}
 	}
+	
+	public void handleLogin(Player player) {
+//		 Fa Leo
+//		 if(trova la coppia username password){
+//				allora chiama register player
+//				manda messaggio di login sendMessage(new Message(ControlType.LOGIN, null))
+//		 }else
+//				sendMessage(new Message(ControlType.INVALID_ACTION, "login"))
+//	     }
+	}
 
 	/*
 	 * Metodo per aggiungere i Player al Game

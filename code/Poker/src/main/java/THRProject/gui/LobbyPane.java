@@ -6,82 +6,40 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 
+/**
+ * Pannello della lobby di gioco
+ * 
+ * MODIFICHE: - Integrata con metodi Client per partecipazione - Aggiunta
+ * gestione stati di gioco - Aggiunto feedback visivo per azioni utente
+ */
 public class LobbyPane extends VBox {
 
-    private SceneManager manager;
-    private Client client;
+	private SceneManager manager;
+	private Client client;
 
-    private Label statusLabel;
+	private Label statusLabel;
 
-    public LobbyPane(SceneManager manager, Client client) {
-        this.manager = manager;
-        this.client = client;
+	public LobbyPane(SceneManager manager, Client client) {
+		this.manager = manager;
+		this.client = client;
 
-        setSpacing(15);
-        setPadding(new Insets(25));
-        setAlignment(Pos.CENTER);
+		setSpacing(15);
+		setPadding(new Insets(25));
+		setAlignment(Pos.CENTER);
 
-        Label title = new Label("Lobby - JustPoker™");
-        title.setStyle("-fx-font-size: 22px; -fx-font-weight: bold;");
+		Label title = new Label("Lobby - JustPoker™");
+		title.setStyle("-fx-font-size: 22px; -fx-font-weight: bold;");
 
-        statusLabel = new Label("In attesa di altri giocatori...");
+		statusLabel = new Label("Connessione stabilita. In attesa di altri giocatori...");
+		statusLabel.setStyle("-fx-text-fill: blue;");
 
-        Button joinButton = new Button("Partecipa");
-        Button leaveButton = new Button("Non partecipare");
-        Button readyButton = new Button("Pronto");
-        Button quitButton = new Button("Lascia la partita");
+		getChildren().addAll(title, statusLabel);
+	}
 
-        joinButton.setMinWidth(200);
-        leaveButton.setMinWidth(200);
-        readyButton.setMinWidth(200);
-        quitButton.setMinWidth(200);
-
-        /* ----------------
-         * PARTECIPA
-         * ---------------- */
-        joinButton.setOnAction(e -> {
-            // client.joinGame();
-            statusLabel.setText("Hai partecipato alla partita.");
-        });
-
-        /* ----------------
-         * NON PARTECIPARE
-         * ---------------- */
-        leaveButton.setOnAction(e -> {
-            // client.leaveGame();
-            statusLabel.setText("Non partecipi alla partita.");
-        });
-
-        /* --------------
-         * PRONTO
-         * -------------- */
-        readyButton.setOnAction(e -> {
-            // client.sendReady();
-            statusLabel.setText("Sei pronto. In attesa degli altri...");
-        });
-
-        /* -------------------
-         * LASCIA PARTITA
-         * ------------------- */
-        quitButton.setOnAction(e -> {
-            // client.quit();
-            manager.showMainMenu();
-        });
-
-        getChildren().addAll(
-                title,
-                statusLabel,
-                joinButton,
-                leaveButton,
-                readyButton,
-                quitButton
-        );
-    }
-
-    /* =========================
-     * AGGIORNAMENTO DA SERVER
-     * ========================= */
-    public void updateFromServer(String msg) {
-        statusLabel.setText(msg);
-    }
+	/*
+	 * ========================= AGGIORNAMENTO DA SERVER =========================
+	 */
+	public void updateFromServer(String msg) {
+		statusLabel.setText(msg);
+	}
 }

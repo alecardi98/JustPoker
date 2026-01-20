@@ -9,6 +9,8 @@ public class Rank implements Serializable{
 
 	public Rank() {
 		//il Rank viene inizializzato solo quando viene calcolato da Hand
+		this.level=1;
+		this.value=7;
 	}
 
 	/*
