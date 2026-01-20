@@ -14,25 +14,19 @@ import javafx.scene.control.Alert;
 /**
  * Thread per ascoltare i messaggi dal server
  * 
- * MODIFICHE:
- * - Aggiunto riferimento a SceneManager per aggiornamenti GUI
- * - Migliorata gestione aggiornamenti del game state
- * - Aggiunto supporto per notifiche GUI
+ * MODIFICHE: - Aggiunto riferimento a SceneManager per aggiornamenti GUI -
+ * Migliorata gestione aggiornamenti del game state - Aggiunto supporto per
+ * notifiche GUI
  */
 public class ServerListener implements Runnable {
 
 	private static final Logger logger = LogManager.getLogger(ServerListener.class);
 	private ObjectInputStream in;
 	private Client client;
-	private SceneManager sceneManager;
 
 	public ServerListener(ObjectInputStream in, Client client) {
 		this.in = in;
 		this.client = client;
-	}
-	
-	public void setSceneManager(SceneManager sceneManager) {
-		this.sceneManager = sceneManager;
 	}
 
 	@Override
@@ -102,9 +96,9 @@ public class ServerListener implements Runnable {
 		case "ready" -> logger.info("ERRORE! Hai già scelto.");
 		default -> logger.warn("Azione invalida sconosciuta: " + action);
 		}
-		
+
 		// Mostra notifica GUI
-		if (sceneManager != null) {
+		if (client.getSceneManager() != null) {
 			javafx.application.Platform.runLater(() -> {
 				Alert alert = new Alert(Alert.AlertType.WARNING);
 				alert.setTitle("Azione non valida");
@@ -137,12 +131,7 @@ public class ServerListener implements Runnable {
 	 */
 	private void handleUpdate(Object data) {
 		client.setGame((Game) data);
-		client.checkMoment();
-		
-		// Aggiorna la GUI
-		if (sceneManager != null) {
-			sceneManager.refreshGameTable();
-		}
+		client.getSceneManager().refreshGameTable(); // Aggiorna la GUI
 	}
 
 	/*
@@ -150,8 +139,8 @@ public class ServerListener implements Runnable {
 	 */
 	private void handleWinner() {
 		logger.info("Hai vinto la mano!");
-		
-		if (sceneManager != null) {
+
+		if (client.getSceneManager() != null) {
 			javafx.application.Platform.runLater(() -> {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
 				alert.setTitle("Vittoria!");
@@ -167,8 +156,8 @@ public class ServerListener implements Runnable {
 	 */
 	private void handleLoser() {
 		logger.info("Hai perso la mano.");
-		
-		if (sceneManager != null) {
+
+		if (client.getSceneManager() != null) {
 			javafx.application.Platform.runLater(() -> {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
 				alert.setTitle("Hai perso");
@@ -184,17 +173,17 @@ public class ServerListener implements Runnable {
 	 */
 	private void handleEndGame() {
 		logger.info("Bancarotta! Hai perso.");
-		
-		if (sceneManager != null) {
+
+		if (client.getSceneManager() != null) {
 			javafx.application.Platform.runLater(() -> {
 				Alert alert = new Alert(Alert.AlertType.ERROR);
 				alert.setTitle("Game Over");
 				alert.setHeaderText(null);
 				alert.setContentText("Bancarotta! Hai finito le fiches.");
 				alert.showAndWait();
-				
+
 				// Torna al menu principale
-				sceneManager.showMainMenu();
+				client.getSceneManager().showMainMenu();
 			});
 		}
 	}
