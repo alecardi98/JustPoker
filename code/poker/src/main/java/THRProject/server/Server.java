@@ -1,5 +1,7 @@
 package THRProject.server;
 
+import THRProject.database.DatabaseManager;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -35,6 +37,7 @@ public final class Server {
 	private static int countId = 0; // assegazione id incrementale a partire da 0
 	private static int readyCount = 0; // giocatori pronti per il prossimo game
 	private Game game = new Game(MINBET);
+	private DatabaseManager dbManager = new DatabaseManager();
 
 	private Server() {
 	}
@@ -71,6 +74,39 @@ public final class Server {
 		}
 	}
 
+	
+	/*
+	 * Gestisce il Login verificando i dati nel DB
+	 */
+	public void handleLogin(int clientId, Player player) {
+		String response = dbManager.loginUser(player.getUsername(), player.getPassword());
+
+		if (response.equals("Login effettuato.")) {
+			clientHandlers.get(clientId).sendMessage(new Message(ControlType.LOGIN, response));
+			
+			Player gamePlayer = new Player(player.getUsername(), response); 
+			
+			registerPlayer(clientId, gamePlayer);
+		} else {
+			clientHandlers.get(clientId).sendMessage(new Message(ControlType.INVALID_ACTION, response));
+		}
+	}
+
+	/*
+	 * Gestisce la Registrazione salvando i dati nel DB
+	 */
+	public void handleRegister(int clientId, Player player) {
+		String response = dbManager.registerUser(player.getUsername(), player.getPassword());
+
+		if (response.equals("Registrazione effettuata.")) {
+			clientHandlers.get(clientId).sendMessage(new Message(ControlType.REGISTER, response));
+			
+			Player gamePlayer = new Player(player.getUsername());
+			registerPlayer(clientId, gamePlayer);
+		} else {
+			clientHandlers.get(clientId).sendMessage(new Message(ControlType.INVALID_ACTION, response));
+		}
+	}
 	/*
 	 * Metodo per aggiungere i Player al Game
 	 */
