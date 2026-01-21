@@ -69,7 +69,7 @@ class ClientHandler implements Runnable, Communicator {
 					case REGISTER -> Server.getServer().handleRegister(clientId, (Player) msg.getData());
 					case READY -> Server.getServer().countReady(clientId);
 					case QUIT -> {
-						cleanUp(clientId);
+						cleanUp();
 						Server.getServer().checkStart();
 						return;
 					}
@@ -79,7 +79,7 @@ class ClientHandler implements Runnable, Communicator {
 			}
 		} catch (IOException | ClassNotFoundException e) {
 			logger.error("ERRORE! Comunicazione con il Client " + clientId + " persa.");
-			cleanUp(clientId);
+			cleanUp();
 		}
 	}
 
@@ -87,7 +87,7 @@ class ClientHandler implements Runnable, Communicator {
 	 * Metodo per chiudere correttamente la connessione con il client - rimuove il
 	 * player - chiude il clientHandler
 	 */
-	public void cleanUp(int clientId) {
+	public void cleanUp() {
 		Server.getServer().getGame().removePlayer(clientId);
 		try {
 			in.close();
@@ -98,14 +98,7 @@ class ClientHandler implements Runnable, Communicator {
 		}
 		Server.getServer().removeClient(clientId);
 	}
-
-	/*
-	 * Getter & Setter
-	 */
-	public int getClientId() {
-		return clientId;
-	}
-
+	
 	@Override
 	public void sendMessage(Object msg) {
 		try {
@@ -114,6 +107,13 @@ class ClientHandler implements Runnable, Communicator {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	/*
+	 * Getter & Setter
+	 */
+	public int getClientId() {
+		return clientId;
 	}
 
 }
