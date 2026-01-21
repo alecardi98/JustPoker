@@ -81,8 +81,8 @@ public final class Server {
 	public void handleLogin(int clientId, Player player) {
 		String response = dbManager.loginUser(player.getUsername(), player.getPassword());
 
-		if (response.equals("OK")) {
-			clientHandlers.get(clientId).sendMessage(new Message(ControlType.LOGIN, null));
+		if (response.equals("Login effettuato.")) {
+			clientHandlers.get(clientId).sendMessage(new Message(ControlType.LOGIN, response));
 			
 			Player gamePlayer = new Player(player.getUsername(), response); 
 			
@@ -98,8 +98,8 @@ public final class Server {
 	public void handleRegister(int clientId, Player player) {
 		String response = dbManager.registerUser(player.getUsername(), player.getPassword());
 
-		if (response.equals("OK")) {
-			clientHandlers.get(clientId).sendMessage(new Message(ControlType.LOGIN, null));
+		if (response.equals("Registrazione effettuata.")) {
+			clientHandlers.get(clientId).sendMessage(new Message(ControlType.REGISTER, response));
 			
 			Player gamePlayer = new Player(player.getUsername());
 			registerPlayer(clientId, gamePlayer);

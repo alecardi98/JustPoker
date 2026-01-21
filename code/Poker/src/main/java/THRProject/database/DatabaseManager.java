@@ -7,12 +7,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import THRProject.server.Server;
+
 public class DatabaseManager {
 
     // Percorso del DB: Salva i nella cartella "data" del progetto
     private static final String DB_URL = "jdbc:h2:./data/pokerdb"; 
     private static final String USER = "sa";
     private static final String PASS = "";
+	private static final Logger logger = LogManager.getLogger(DatabaseManager.class);
 
     private Connection connection;
 
@@ -25,10 +31,10 @@ public class DatabaseManager {
     private boolean connect() {
         try {
             connection = DriverManager.getConnection(DB_URL, USER, PASS);
-            System.out.println("Connessione al Database H2 stabilita.");
+            logger.info("Connessione al Database H2 stabilita.");
             return true;
         } catch (SQLException e) {
-            System.err.println("Errore di connessione al Database: " + e.getMessage());
+        	logger.info("Errore di connessione al Database: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
@@ -42,13 +48,15 @@ public class DatabaseManager {
         try (Statement stmt = connection.createStatement()) {
             stmt.execute(sql);
         } catch (SQLException e) {
-            System.err.println("Errore creazione tabella: " + e.getMessage());
+        	logger.info("Errore creazione tabella: " + e.getMessage());
         }
     }
 
     public String registerUser(String username, String password) {
         if (userExists(username)) {
-            return "account esistente";
+        	String message = "ERRORE! Username già esistente.";
+        	logger.info(message);
+            return message;
         }
 
         String sql = "INSERT INTO users(username, password) VALUES(?, ?)";
@@ -57,7 +65,9 @@ public class DatabaseManager {
             pstmt.setString(1, username);
             pstmt.setString(2, password);
             pstmt.executeUpdate();
-            return "OK";
+            String message = "Registrazione effettuata.";
+        	logger.info(message);
+            return message;
         } catch (SQLException e) {
             e.printStackTrace();
             return "Errore Database";
@@ -74,12 +84,18 @@ public class DatabaseManager {
                 if (rs.next()) {
                     String storedPassword = rs.getString("password");
                     if (storedPassword.equals(password)) {
-                        return "OK";
+                    	String message = "Login effettuato.";
+                    	logger.info(message);
+                        return message;
                     } else {
-                        return "password errata";
+                    	String message = "ERRORE! Password errata.";
+                    	logger.info(message);
+                        return message;
                     }
                 } else {
-                    return "account inesistente";
+                	String message = "ERRORE! Account inesistente";
+                	logger.info(message);
+                    return message;
                 }
             }
         } catch (SQLException e) {
