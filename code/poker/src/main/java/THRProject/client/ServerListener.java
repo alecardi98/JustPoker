@@ -53,11 +53,10 @@ public class ServerListener implements Runnable {
 	 */
 	private void handleClientId(Object data) {
 		client.setClientId((int) data);
-		client.sendMessage(new Message(ControlType.PLAYER_JOIN, client.getPlayer()));
 	}
 
 	/*
-	 * Metodo che gestisce l'arrivo del lo START_GAME
+	 * Metodo che gestisce l'arrivo dello START_GAME
 	 */
 	private void handleStartGame() {
 		client.startGame();

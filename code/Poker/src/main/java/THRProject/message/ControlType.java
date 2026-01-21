@@ -1,7 +1,6 @@
 package THRProject.message;
 
-public enum ControlType implements MessageType{
-	PLAYER_JOIN, // primo step dei client, invio del player al server
+public enum ControlType implements MessageType {
 	CLIENT_ID, // il server invia il clientId al client
 	START_GAME, // il server invia il primo game ai client
 	INVALID_ACTION, // il server avvisa il client che l'azione non è valida
@@ -12,6 +11,6 @@ public enum ControlType implements MessageType{
 	WINNER, // il server invia al client il risultato di vittoria
 	LOSER, // il server invia al client il risultato di sconfitta
 	ENDGAME, // il server invia al client la bancarotta
-	LOGIN, 
-	REGISTER,
+	LOGIN, // il client invia il login al server
+	REGISTER, // il client invia il register al server
 }

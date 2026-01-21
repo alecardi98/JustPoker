@@ -26,7 +26,6 @@ public class Client implements Communicator {
 
 	private Game gameView; // variabile che contiene solo i dati personali del game
 	private int clientId;
-	private Player player;
 
 	public Client() {
 		// il Client viene inizializzato solo dopo la connessione al Server
@@ -36,10 +35,7 @@ public class Client implements Communicator {
 	 * Metodo per avviare il client
 	 */
 	public void startClient() {
-		player = dbConnection();
 		serverConnection();
-		// dopo la connessione sarà attivo solo il thread ServerListener, poichè Client
-		// è attivo ma ha finito
 	}
 
 	/*
@@ -47,14 +43,6 @@ public class Client implements Communicator {
 	 */
 	public void startGame() {
 		// TO DO il client ha tutto ciò che gli serve per stampare il campo
-	}
-
-	/*
-	 * Metodo che permette di creare un player valido da DB
-	 */
-	private Player dbConnection() {
-		// TO DO
-		return new Player("userName", "password"); // creazione Player con dati corretti
 	}
 
 	/*
@@ -70,7 +58,7 @@ public class Client implements Communicator {
 			serverListener = new ServerListener(in, this);
 			new Thread(serverListener).start();
 		} catch (IOException e) {
-			logger.error("ERRORE! Impossibile connettersi alla partita. Disconnessione.");
+			logger.error("ERRORE! Impossibile connettersi alla server. Disconnessione.");
 			System.exit(1);
 		}
 	}
@@ -187,9 +175,5 @@ public class Client implements Communicator {
 
 	public void setClientId(int clientId) {
 		this.clientId = clientId;
-	}
-
-	public Player getPlayer() {
-		return player;
 	}
 }
