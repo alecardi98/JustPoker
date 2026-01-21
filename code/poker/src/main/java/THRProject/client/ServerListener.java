@@ -32,8 +32,8 @@ public class ServerListener implements Runnable {
 					switch (control) {
 					case CLIENT_ID -> handleClientId(msg.getData());
 					case START_GAME -> handleStartGame();
-					case INVALID_ACTION -> handleInvalidAction((String) msg.getData());
-					case VALID_ACTION -> handleValidAction((String) msg.getData());
+					case INVALID_ACTION -> handleAction((String) msg.getData());
+					case VALID_ACTION -> handleAction((String) msg.getData());
 					case UPDATE -> handleUpdate(msg.getData());
 					case WINNER -> handleWinner();
 					case LOSER -> handleLoser();
@@ -64,33 +64,10 @@ public class ServerListener implements Runnable {
 	}
 
 	/*
-	 * Metodo che gestisce l'arrivo dell'INVALID_ACTION
+	 * Metodo che gestisce l'arrivo dell'INVALID_ACTION e del VALID_ACTION
 	 */
-	private void handleInvalidAction(String action) {
-		switch (action) {
-		case "apertura" -> logger.info("ERRORE! Apertura non valida.");
-		case "cambio" -> logger.info("ERRORE! Cambio non valido.");
-		case "puntata" -> logger.info("ERRORE! Puntata non valida.");
-		case "ready" -> logger.info("ERRORE! Hai già scelto.");
-		default -> logger.warn("Azione invalida sconosciuta: " + action);
-		}
-	}
-
-	/*
-	 * Metodo che gestisce l'arrivo del VALID_ACTION
-	 */
-	private void handleValidAction(String action) {
-		switch (action) {
-		case "invito" -> logger.info("Invito registrato.");
-		case "apertura" -> logger.info("Apertura registrata.");
-		case "passa" -> logger.info("Passa registrato.");
-		case "cambio" -> logger.info("Cambio registrato.");
-		case "servito" -> logger.info("Servito registrato.");
-		case "puntata" -> logger.info("Puntata registrata.");
-		case "fold" -> logger.info("Fold registrato.");
-		case "ready" -> logger.info("Ready registrato.");
-		default -> logger.warn("Azione valida sconosciuta: " + action);
-		}
+	private void handleAction(String action) {
+		logger.info(action);
 	}
 
 	/*
