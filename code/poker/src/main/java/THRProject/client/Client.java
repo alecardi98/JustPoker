@@ -111,7 +111,7 @@ public class Client implements Communicator {
 	 * Metodo che serve per inviare l'invito al server
 	 */
 	public void invioInvito() {
-		Message msg = getGameView().getPlayers().get(clientId).invito();
+		Message msg = gameView.getPlayers().get(clientId).invito();
 		sendMessage(msg);
 	}
 
@@ -119,7 +119,7 @@ public class Client implements Communicator {
 	 * Metodo che serve per inviare la puntata al server
 	 */
 	public void invioPuntata(int puntata) {
-		Message msg = getGameView().getPlayers().get(clientId).punta(puntata);
+		Message msg = gameView.getPlayers().get(clientId).punta(puntata);
 		sendMessage(msg);
 	}
 
@@ -127,7 +127,7 @@ public class Client implements Communicator {
 	 * Metodo che serve per inviare l'apertura al server
 	 */
 	public void invioApertura(int puntata) {
-		Message msg = getGameView().getPlayers().get(clientId).apri(puntata);
+		Message msg = gameView.getPlayers().get(clientId).apri(puntata);
 		sendMessage(msg);
 	}
 
@@ -135,7 +135,7 @@ public class Client implements Communicator {
 	 * Metodo che serve per inviare il passa al server
 	 */
 	public void invioPassa() {
-		Message msg = getGameView().getPlayers().get(clientId).passa();
+		Message msg = gameView.getPlayers().get(clientId).passa();
 		sendMessage(msg);
 	}
 
@@ -144,7 +144,7 @@ public class Client implements Communicator {
 	 * mancava nella versione originale
 	 */
 	public void invioLascia() {
-		Message msg = getGameView().getPlayers().get(clientId).lascia();
+		Message msg = gameView.getPlayers().get(clientId).lascia();
 		sendMessage(msg);
 	}
 
@@ -152,7 +152,7 @@ public class Client implements Communicator {
 	 * Metodo che serve per inviare il cambio al server
 	 */
 	public void invioCambio(ArrayList<Card> cards) {
-		Message msg = new Message(ActionType.CAMBIO, cards);
+		Message msg = gameView.getPlayers().get(clientId).cambio(cards);
 		sendMessage(msg);
 	}
 
@@ -160,7 +160,7 @@ public class Client implements Communicator {
 	 * Metodo che serve per inviare il servito al server
 	 */
 	public void invioServito() {
-		Message msg = getGameView().getPlayers().get(clientId).servito();
+		Message msg = gameView.getPlayers().get(clientId).servito();
 		sendMessage(msg);
 	}
 
