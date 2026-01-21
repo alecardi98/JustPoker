@@ -69,11 +69,7 @@ public class RegisterPane extends VBox {
             // Registrazione in thread separato
             new Thread(() -> {
                 try {
-                    // TODO: Implementare registrazione tramite Client
-                    // client.tryRegister(username, password);
-                    
-                    // PER ORA: Simulazione registrazione con successo
-                    Thread.sleep(1000); // Simula attesa server
+                    manager.getClient().tryRegister(username, password);
                     
                     javafx.application.Platform.runLater(() -> {
                         messageLabel.setStyle("-fx-text-fill: green;");

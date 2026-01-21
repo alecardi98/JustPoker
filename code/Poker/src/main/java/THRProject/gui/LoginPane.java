@@ -56,19 +56,16 @@ public class LoginPane extends VBox {
             // LOGIN tramite Client - eseguito in thread separato per non bloccare la GUI
             new Thread(() -> {
                 try {
-                    // Tenta il login (metodo ancora da implementare nel Client)
-                    // client.tryLogin(username, password);
-                    
-                    // PER ORA: Simulazione login con successo
-                    // In futuro: il client dovrà comunicare con il server per validare le credenziali
-                    Thread.sleep(1000); // Simula attesa server
-                    
-                    // Se il login ha successo, mostra il menu principale
-                    javafx.application.Platform.runLater(() -> {
-                        messageLabel.setStyle("-fx-text-fill: green;");
-                        messageLabel.setText("Login effettuato con successo!");
-                        manager.showMainMenu();
-                    });
+                    manager.getClient().tryLogin(username, password);
+                    Thread.sleep(500);
+                    if(manager.getClient().isLogin()) {
+                    	// Se il login ha successo, mostra il menu principale
+                        javafx.application.Platform.runLater(() -> {
+                            messageLabel.setStyle("-fx-text-fill: green;");
+                            messageLabel.setText("Login effettuato con successo!");
+                            manager.showMainMenu();
+                        });
+                    }
                     
                 } catch (Exception ex) {
                     javafx.application.Platform.runLater(() -> {

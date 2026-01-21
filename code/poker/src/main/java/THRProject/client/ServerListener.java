@@ -39,8 +39,6 @@ public class ServerListener implements Runnable {
 				if (msg.getType() instanceof ControlType control) {
 					switch (control) {
 					case CLIENT_ID -> handleClientId(msg.getData());
-					case LOGIN -> handleLogin();
-					case REGISTER -> handleRegister();
 					case START_GAME -> handleStartGame();
 					case INVALID_ACTION -> handleAction((String) msg.getData());
 					case VALID_ACTION -> handleAction((String) msg.getData());
@@ -56,14 +54,6 @@ public class ServerListener implements Runnable {
 			logger.error("ERRORE! Comunicazione con il Server persa.");
 			cleanUp();
 		}
-	}
-
-	private void handleRegister() {
-		logger.info("Registrazione completata.");
-	}
-
-	private void handleLogin() {
-		logger.info("Login effettuato.");
 	}
 
 	/*
@@ -86,13 +76,16 @@ public class ServerListener implements Runnable {
 	 * Metodo che gestisce l'arrivo dell'INVALID_ACTION e del VALID_ACTION
 	 */
 	private void handleAction(String action) {
+		if(action.equals("Login effettuato.")) {
+			client.setLogin(true);
+		}
 		logger.info(action);
 		// Mostra notifica GUI
 		javafx.application.Platform.runLater(() -> {
 			Alert alert = new Alert(Alert.AlertType.WARNING);
-			alert.setTitle("Azione non valida");
+			alert.setTitle("Attenzione");
 			alert.setHeaderText(null);
-			alert.setContentText("Azione " + action + " non valida in questo momento.");
+			alert.setContentText(action);
 			alert.showAndWait();
 		});
 	}

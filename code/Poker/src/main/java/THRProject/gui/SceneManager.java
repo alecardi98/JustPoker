@@ -23,8 +23,6 @@ public class SceneManager {
 	
 	private Thread gameWatcher;
 	private volatile boolean running;
-	private Thread startGameWatcher;
-	private volatile boolean running2;
 
 	public SceneManager(Stage stage, Client client) {
 		this.stage = stage;
@@ -38,6 +36,7 @@ public class SceneManager {
 	}
 
 	public void showLoginScene() {
+		startGameWatcher();
 		LoginPane loginPane = new LoginPane(this);
 		Scene scene = new Scene(loginPane, 400, 350);
 		stage.setScene(scene);
@@ -60,7 +59,6 @@ public class SceneManager {
 	}
 
 	public void showLobby() {
-		startGameWatcher();
 		LobbyPane lobbyPane = new LobbyPane();
 		Scene scene = new Scene(lobbyPane, 600, 400);
 		stage.setScene(scene);
@@ -82,12 +80,14 @@ public class SceneManager {
 	    running = true;
 	    
 	    gameWatcher = new Thread(() -> {
-	    	Game lastGame = client.getGameView();
+	    	Game lastGame = null;
+            Game currentGame = null;
 
 	        while (running) {
-	            Game currentGame = client.getGameView();
+	        	lastGame = currentGame;
+	        	currentGame = client.getGameView();
 	            
-	            if (currentGame != null && lastGame == null) {
+	            if (currentGame != lastGame && lastGame == null) {
 	                Platform.runLater(() -> {
 	                    if (gameTablePane == null) 
 	                        showGameTable();
