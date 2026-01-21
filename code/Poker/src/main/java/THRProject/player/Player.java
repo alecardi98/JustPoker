@@ -22,6 +22,13 @@ public class Player implements Serializable {
 		status = new PlayerStatus();
 	}
 
+	public Player(String username) {
+		this.username = username;
+		this.password = ""; // Password vuota, tanto non serve durante il gioco
+		hand = new Hand();
+		status = new PlayerStatus();
+	}
+
 	/*
 	 * Metodo per creare l'invito (fisso a MINBET)
 	 */
@@ -100,5 +107,17 @@ public class Player implements Serializable {
 
 	public void setHand(Hand hand) {
 		this.hand = hand;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getUsername() {
+		return username;
 	}
 }

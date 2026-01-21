@@ -1,7 +1,6 @@
 package THRProject.message;
 
-public enum ControlType implements MessageType{
-	PLAYER_JOIN, // primo step dei client, invio del player al server
+public enum ControlType implements MessageType {
 	CLIENT_ID, // il server invia il clientId al client
 	LOGIN,	// viene confrontata la coppia username password nel database
 	REGISTER, //viene creata una tupla con l'utente nuovo
@@ -13,5 +12,7 @@ public enum ControlType implements MessageType{
 	QUIT, // il client il quit al server per uscire dalla partita
 	WINNER, // il server invia al client il risultato di vittoria
 	LOSER, // il server invia al client il risultato di sconfitta
-	ENDGAME // il server invia al client la bancarotta
+	ENDGAME, // il server invia al client la bancarotta
+	LOGIN, // il client invia il login al server
+	REGISTER, // il client invia il register al server
 }

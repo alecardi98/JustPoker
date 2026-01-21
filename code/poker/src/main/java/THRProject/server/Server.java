@@ -1,5 +1,7 @@
 package THRProject.server;
 
+import THRProject.database.DatabaseManager;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -35,6 +37,7 @@ public final class Server {
 	private static int countId = 0; // assegazione id incrementale a partire da 0
 	private static int readyCount = 0; // giocatori pronti per il prossimo game
 	private Game game = new Game(MINBET);
+	private DatabaseManager dbManager = new DatabaseManager();
 
 	private Server() {
 	}
@@ -85,6 +88,39 @@ public final class Server {
 		//FA LEO
 	}
 
+	
+	/*
+	 * Gestisce il Login verificando i dati nel DB
+	 */
+	public void handleLogin(int clientId, Player player) {
+		String response = dbManager.loginUser(player.getUsername(), player.getPassword());
+
+		if (response.equals("Login effettuato.")) {
+			clientHandlers.get(clientId).sendMessage(new Message(ControlType.VALID_ACTION, response));
+			
+			Player gamePlayer = new Player(player.getUsername(), response); 
+			
+			registerPlayer(clientId, gamePlayer);
+		} else {
+			clientHandlers.get(clientId).sendMessage(new Message(ControlType.INVALID_ACTION, response));
+		}
+	}
+
+	/*
+	 * Gestisce la Registrazione salvando i dati nel DB
+	 */
+	public void handleRegister(int clientId, Player player) {
+		String response = dbManager.registerUser(player.getUsername(), player.getPassword());
+
+		if (response.equals("Registrazione effettuata.")) {
+			clientHandlers.get(clientId).sendMessage(new Message(ControlType.VALID_ACTION, response));
+			
+			Player gamePlayer = new Player(player.getUsername());
+			registerPlayer(clientId, gamePlayer);
+		} else {
+			clientHandlers.get(clientId).sendMessage(new Message(ControlType.INVALID_ACTION, response));
+		}
+	}
 	/*
 	 * Metodo per aggiungere i Player al Game
 	 */
@@ -124,7 +160,8 @@ public final class Server {
 		synchronized (game) {
 			Player player = game.getPlayers().get(clientId);
 			ClientHandler clientHandler = clientHandlers.get(clientId);
-			if (clientId == game.getCurrentTurn() && player.getStatus().isActive()) {
+			if (game.getPhase().equals(GamePhase.INVITO) && clientId == game.getCurrentTurn()
+					&& player.getStatus().isActive()) {
 				int invito = MINBET;
 				if (invito >= player.getStatus().getFiches()) {
 					logger.info("All-in Client " + clientId + " registrato.");
@@ -133,7 +170,7 @@ public final class Server {
 				}
 				game.punta(player, invito);
 				game.nextTurn();
-				clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "invito"));
+				clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "Invito registrato."));
 				checkNextPhase();
 				broadcastSafeGameView();
 			} else
@@ -162,12 +199,14 @@ public final class Server {
 		synchronized (game) {
 			Player player = game.getPlayers().get(clientId);
 			ClientHandler clientHandler = clientHandlers.get(clientId);
-			if (clientId == game.getCurrentTurn() && player.getStatus().isActive()) {
+			if (game.getPhase().equals(GamePhase.APERTURA) && clientId == game.getCurrentTurn()
+					&& player.getStatus().isActive()) {
 				player.getHand().checkRank();
 				if (player.canOpen()) { // controllo almeno coppia di Jack
 					if (!valorePuntataValido(puntata, player)) {
 						logger.info("ERRORE! Apertura Client " + clientId + " non valida.");
-						clientHandler.sendMessage(new Message(ControlType.INVALID_ACTION, "apertura"));
+						clientHandler.sendMessage(
+								new Message(ControlType.INVALID_ACTION, "ERRORE! Valore apertura errato."));
 					} else {
 						if (puntata >= player.getStatus().getFiches()) {
 							logger.info("All-in Client " + clientId + " registrato.");
@@ -177,7 +216,7 @@ public final class Server {
 						game.punta(player, puntata);
 						game.setOpen(true);
 						game.nextTurn();
-						clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "apertura"));
+						clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "Apertura registrata."));
 						for (Map.Entry<Integer, Player> p : game.getPlayers().entrySet()) {
 							if (p.getKey() != clientId) {
 								p.getValue().getStatus().resetOpen();
@@ -189,7 +228,7 @@ public final class Server {
 					}
 				} else {
 					logger.info("ERRORE! Client " + clientId + " non possiede almeno una coppia di J");
-					clientHandler.sendMessage(new Message(ControlType.INVALID_ACTION, "apertura"));
+					clientHandler.sendMessage(new Message(ControlType.INVALID_ACTION, "ERRORE! Non puoi aprire."));
 				}
 			} else
 				logger.info("ERRORE! Client " + clientId + " non può giocare.");
@@ -203,10 +242,12 @@ public final class Server {
 		synchronized (game) {
 			Player player = game.getPlayers().get(clientId);
 			ClientHandler clientHandler = clientHandlers.get(clientId);
-			if (clientId == game.getCurrentTurn() && player.getStatus().isActive()) {
+			if ((game.getPhase().equals(GamePhase.INVITO) || game.getPhase().equals(GamePhase.APERTURA))
+					&& clientId == game.getCurrentTurn() && player.getStatus().isActive()) {
 				if (!valorePuntataValido(puntata, player)) {
 					logger.info("ERRORE! Puntata Client " + clientId + " non valida.");
-					clientHandler.sendMessage(new Message(ControlType.INVALID_ACTION, "puntata"));
+					clientHandler
+							.sendMessage(new Message(ControlType.INVALID_ACTION, "ERRORE! Valore puntata errato."));
 				} else {
 					if (puntata >= player.getStatus().getFiches()) {
 						logger.info("All-in Client " + clientId + " registrato.");
@@ -215,7 +256,7 @@ public final class Server {
 					}
 					game.punta(player, puntata);
 					game.nextTurn();
-					clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "puntata"));
+					clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "Puntata registrata."));
 					game.resetBet(clientId);
 					checkNextPhase();
 					broadcastSafeGameView();
@@ -239,13 +280,14 @@ public final class Server {
 		synchronized (game) {
 			Player player = game.getPlayers().get(clientId);
 			ClientHandler clientHandler = clientHandlers.get(clientId);
-			if (clientId == game.getCurrentTurn() && player.getStatus().isActive()) {
+			if (game.getPhase().equals(GamePhase.INVITO) && clientId == game.getCurrentTurn()
+					&& player.getStatus().isActive()) {
 				// registra passa
 				logger.info("Passa Client " + clientId + " registrato.");
 				player.getStatus().setEnd(true);
 				player.getStatus().setPass(true);
 				game.nextTurn();
-				clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "passa"));
+				clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "Passa registrato."));
 				checkRestart();
 				checkNextPhase();
 				broadcastSafeGameView();
@@ -261,10 +303,11 @@ public final class Server {
 		synchronized (game) {
 			Player player = game.getPlayers().get(clientId);
 			ClientHandler clientHandler = clientHandlers.get(clientId);
-			if (clientId == game.getCurrentTurn() && player.getStatus().isActive()) {
+			if (game.getPhase().equals(GamePhase.ACCOMODO) && clientId == game.getCurrentTurn()
+					&& player.getStatus().isActive()) {
 				if (cardsToRemove.isEmpty() || cardsToRemove.size() > 3) {
 					logger.info("ERRORE! Cambio Client " + clientId + " non valido.");
-					clientHandler.sendMessage(new Message(ControlType.INVALID_ACTION, "cambio"));
+					clientHandler.sendMessage(new Message(ControlType.INVALID_ACTION, "ERRORE! Cambio errato."));
 				} else {
 					logger.info("Cambio Client " + clientId + " registrato.");
 					// rimuovo le carte
@@ -279,7 +322,7 @@ public final class Server {
 					}
 					player.getStatus().setEnd(true);
 					game.nextTurn();
-					clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "cambio"));
+					clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "Cambio registrato."));
 					checkNextPhase();
 					broadcastSafeGameView();
 				}
@@ -296,11 +339,12 @@ public final class Server {
 		synchronized (game) {
 			Player player = game.getPlayers().get(clientId);
 			ClientHandler clientHandler = clientHandlers.get(clientId);
-			if (clientId == game.getCurrentTurn() && player.getStatus().isActive()) {
+			if (game.getPhase().equals(GamePhase.ACCOMODO) && clientId == game.getCurrentTurn()
+					&& player.getStatus().isActive()) {
 				logger.info("Servito Client " + clientId + " registrato.");
 				player.getStatus().setEnd(true);
 				game.nextTurn();
-				clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "servito"));
+				clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "Servito registrato."));
 				checkNextPhase();
 				broadcastSafeGameView();
 			} else
@@ -319,7 +363,7 @@ public final class Server {
 				logger.info("Fold Client " + clientId + " registrato.");
 				game.foldPlayer(player);
 				broadcastSafeGameView();
-				clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "fold"));
+				clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "Fold registrato."));
 			} else {
 				logger.info("ERRORE! Client " + clientId + " non può giocare.");
 			}
@@ -392,7 +436,7 @@ public final class Server {
 		for (Map.Entry<Integer, Player> p : players.entrySet()) {
 			Rank r = p.getValue().getHand().getRank();
 			if (r.getLevel() == maxLevel && r.getValue() == maxValue) {
-				winners.put(p.getKey(),p.getValue());
+				winners.put(p.getKey(), p.getValue());
 			}
 		}
 		return winners;
@@ -528,11 +572,11 @@ public final class Server {
 	public synchronized void countReady(int clientId) {
 		if (!game.getPlayers().get(clientId).getStatus().isEnd()) {
 			game.getPlayers().get(clientId).getStatus().setEnd(true);
-			clientHandlers.get(clientId).sendMessage(new Message(ControlType.VALID_ACTION, "ready"));
+			clientHandlers.get(clientId).sendMessage(new Message(ControlType.VALID_ACTION, "Ready registrato."));
 			readyCount++;
 			checkStart();
 		} else {
-			clientHandlers.get(clientId).sendMessage(new Message(ControlType.INVALID_ACTION, "ready"));
+			logger.info("ERRORE! Client " + clientId + " non può giocare.");
 		}
 	}
 

@@ -28,31 +28,23 @@ public class Client implements Communicator {
 	private ServerListener serverListener;
 	private Socket socket;
 
-	private static final String HOST = "localhost";
-//	private static final String HOST = "204.216.208.188";
+//	private static final String HOST = "localhost";
+	private static final String HOST = "204.216.208.188";
 	private static final int PORT = 443;
 
 	private Game gameView; // variabile che contiene solo i dati personali del game
 	private int clientId;
-	private Player player;
 
 	public Client() {
-		// il client viene fatto partire nel main e inizializzato appena si connette al server
+		// il client viene fatto partire nel main e inizializzato appena si connette al
+		// server
 	}
 
 	/*
 	 * Metodo per avviare il client
 	 */
 	public void startClient() {
-		// COMMENTATO: dbConnection() non è ancora implementato
-		// player = dbConnection();
-
-		// PER ORA: Creazione player temporaneo
-		player = new Player("Player" + System.currentTimeMillis(), "temp_password");
-
 		serverConnection();
-		// dopo la connessione sarà attivo solo il thread ServerListener, poichè Client
-		// è attivo ma ha finito
 	}
 
 	/*
@@ -93,7 +85,7 @@ public class Client implements Communicator {
 			serverListener = new ServerListener(in, this);
 			new Thread(serverListener).start();
 		} catch (IOException e) {
-			logger.error("ERRORE! Impossibile connettersi alla partita. Disconnessione.");
+			logger.error("ERRORE! Impossibile connettersi alla server. Disconnessione.");
 			System.exit(1);
 		}
 	}
@@ -218,8 +210,6 @@ public class Client implements Communicator {
 		return this.clientId;
 	}
 
-	
-
 	public Game getGameView() {
 		return gameView;
 	}
@@ -227,9 +217,4 @@ public class Client implements Communicator {
 	public void setGameView(Game gameView) {
 		this.gameView = gameView;
 	}
-
-	public Player getPlayer() {
-		return player;
-	}
-
 }
