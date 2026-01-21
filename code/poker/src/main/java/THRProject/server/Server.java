@@ -73,22 +73,7 @@ public final class Server {
 			}
 		}
 	}
-	
-	public void handleLogin(Player player) {
-//		 Fa Leo
-//		 if(trova la coppia username password){
-//				allora chiama register player
-//				manda messaggio di login sendMessage(new Message(ControlType.LOGIN, null))
-//		 }else
-//			clientHandlers.get(clientId).sendMessage(new Message(ControlType.INVALID_ACTION, "login"))
-//	     }
-	}
-	
-	public void handleRegister(Player data) {
-		//FA LEO
-	}
 
-	
 	/*
 	 * Gestisce il Login verificando i dati nel DB
 	 */
@@ -97,9 +82,9 @@ public final class Server {
 
 		if (response.equals("Login effettuato.")) {
 			clientHandlers.get(clientId).sendMessage(new Message(ControlType.VALID_ACTION, response));
-			
-			Player gamePlayer = new Player(player.getUsername(), response); 
-			
+
+			Player gamePlayer = new Player(player.getUsername(), response);
+
 			registerPlayer(clientId, gamePlayer);
 		} else {
 			clientHandlers.get(clientId).sendMessage(new Message(ControlType.INVALID_ACTION, response));
@@ -114,13 +99,14 @@ public final class Server {
 
 		if (response.equals("Registrazione effettuata.")) {
 			clientHandlers.get(clientId).sendMessage(new Message(ControlType.VALID_ACTION, response));
-			
+
 			Player gamePlayer = new Player(player.getUsername());
 			registerPlayer(clientId, gamePlayer);
 		} else {
 			clientHandlers.get(clientId).sendMessage(new Message(ControlType.INVALID_ACTION, response));
 		}
 	}
+
 	/*
 	 * Metodo per aggiungere i Player al Game
 	 */
@@ -242,7 +228,7 @@ public final class Server {
 		synchronized (game) {
 			Player player = game.getPlayers().get(clientId);
 			ClientHandler clientHandler = clientHandlers.get(clientId);
-			if ((game.getPhase().equals(GamePhase.INVITO) || game.getPhase().equals(GamePhase.APERTURA))
+			if ((game.getPhase().equals(GamePhase.PUNTATA) || game.getPhase().equals(GamePhase.APERTURA))
 					&& clientId == game.getCurrentTurn() && player.getStatus().isActive()) {
 				if (!valorePuntataValido(puntata, player)) {
 					logger.info("ERRORE! Puntata Client " + clientId + " non valida.");
@@ -280,7 +266,7 @@ public final class Server {
 		synchronized (game) {
 			Player player = game.getPlayers().get(clientId);
 			ClientHandler clientHandler = clientHandlers.get(clientId);
-			if (game.getPhase().equals(GamePhase.INVITO) && clientId == game.getCurrentTurn()
+			if (game.getPhase().equals(GamePhase.APERTURA) && clientId == game.getCurrentTurn()
 					&& player.getStatus().isActive()) {
 				// registra passa
 				logger.info("Passa Client " + clientId + " registrato.");
@@ -288,7 +274,7 @@ public final class Server {
 				player.getStatus().setPass(true);
 				game.nextTurn();
 				clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "Passa registrato."));
-				checkRestart();
+				restartPass();
 				checkNextPhase();
 				broadcastSafeGameView();
 			} else
@@ -362,8 +348,9 @@ public final class Server {
 			if (clientId == game.getCurrentTurn() && player.getStatus().isActive()) {
 				logger.info("Fold Client " + clientId + " registrato.");
 				game.foldPlayer(player);
-				broadcastSafeGameView();
 				clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "Fold registrato."));
+				checkNextPhase();
+				broadcastSafeGameView();
 			} else {
 				logger.info("ERRORE! Client " + clientId + " non può giocare.");
 			}
@@ -453,27 +440,13 @@ public final class Server {
 
 			if (winners.containsKey(playerId)) {
 				clientHandlers.get(playerId).sendMessage(new Message(ControlType.WINNER, null));
+				logger.info("Client " + playerId + " ha vinto!");
 				game.getPlayers().get(playerId).getStatus()
 						.setFiches(game.getPlayers().get(playerId).getStatus().getFiches() + potShare);
 			} else {
 				clientHandlers.get(playerId).sendMessage(new Message(ControlType.LOSER, null));
-			}
-		}
-	}
+				logger.info("Client " + playerId + " ha perso!");
 
-	/*
-	 * Metodo per passare direttamente all'ENDPASS se tutti foldano tranne uno
-	 */
-	private void checkFold() {
-		synchronized (game) {
-			int count = 0;
-			for (Map.Entry<Integer, Player> p : game.getPlayers().entrySet()) {
-				if (p.getValue().getStatus().isFold()) {
-					count++;
-				}
-			}
-			if (count == game.getPlayers().size() - 1) {
-				game.setPhase(GamePhase.PUNTATA);
 			}
 		}
 	}
@@ -486,8 +459,9 @@ public final class Server {
 		synchronized (game) {
 			for (Map.Entry<Integer, Player> p : game.getPlayers().entrySet()) {
 				if (p.getValue().getStatus().getFiches() <= 0) {
+					logger.info("Client " + p.getKey() + " in bancarotta.");
 					clientHandlers.get(p.getKey()).sendMessage(new Message(ControlType.ENDGAME, null));
-					clientHandlers.get(p.getKey()).cleanUp(p.getKey());
+					clientHandlers.get(p.getKey()).cleanUp();
 				}
 			}
 		}
@@ -508,7 +482,6 @@ public final class Server {
 					active++; // conta chi non ha foldato
 			}
 			if (count == active) {
-				checkFold();
 				nextPhase();
 			}
 		}
@@ -517,7 +490,7 @@ public final class Server {
 	/*
 	 * Metodo che controlla quando hanno passato tutti l'apertura e riavvia
 	 */
-	private void checkRestart() {
+	private void restartPass() {
 		synchronized (game) {
 			int count = 0;
 			int active = 0;
@@ -559,6 +532,10 @@ public final class Server {
 				broadcastSafeGameView();
 				startShowdown();
 				break;
+			case ENDPASS:
+				game.resetPhase();
+				broadcastSafeGameView();
+				break;
 			default:
 				logger.error("ERRORE! Fase di gioco non esistente.");
 			}
@@ -593,15 +570,20 @@ public final class Server {
 				readyCount = 0;
 				if (game.getPhase().equals(GamePhase.END)) {
 					game.setPhase(GamePhase.INVITO);
+					logger.info("Partita ricominciata: mano finita.");
 					startGame();
 				}
 				if (game.getPhase().equals(GamePhase.ENDPASS)) {
 					game.setPhase(GamePhase.INVITO);
+					logger.info("Partita ricominciata: tutti hanno passato.");
 					splitPot(getActivePlayers(), getActivePlayers());
 					startGame();
 				}
 			}
 		}
+		else
+			game.nextTurn();
+
 	}
 
 	/*
@@ -670,5 +652,9 @@ public final class Server {
 
 	public void setClientHandlers(ConcurrentHashMap<Integer, ClientHandler> clientHandlers) {
 		this.clientHandlers = clientHandlers;
+	}
+
+	public ConcurrentHashMap<Integer, ClientHandler> getClientHandlers() {
+		return clientHandlers;
 	}
 }
