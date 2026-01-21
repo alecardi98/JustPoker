@@ -167,6 +167,7 @@ public class GameTablePane extends VBox {
 		readyBtn.setOnAction(e -> {
 			manager.getClient().ready();
 			readyBtn.setDisable(true);
+			manager.showGameTable();
 		});
 
 		quitBtn.setOnAction(e -> {
@@ -176,7 +177,6 @@ public class GameTablePane extends VBox {
 
 			if (confirm.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
 				manager.getClient().quit();
-				manager.stopGameWatcher();
 			}
 		});
 

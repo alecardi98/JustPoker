@@ -38,10 +38,12 @@ public class Client implements Communicator {
 
 	private Game gameView; // variabile che contiene solo i dati personali del game
 	private int clientId;
+	private boolean login;
 
 	public Client() {
 		// il client viene fatto partire nel main e inizializzato appena si connette al
 		// server
+		login=false;
 	}
 
 	/*
@@ -217,5 +219,13 @@ public class Client implements Communicator {
 
 	public void setTornaMenu(int tornaMenu) {
 		this.tornaMenu = tornaMenu;
+	}
+
+	public boolean isLogin() {
+		return login;
+	}
+
+	public void setLogin(boolean login) {
+		this.login = login;
 	}
 }
