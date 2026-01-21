@@ -20,8 +20,11 @@ public class SceneManager {
 	private Client client;
 
 	private GameTablePane gameTablePane;
-	private AnimationTimer gameLoop;
-	private AnimationTimer gameStart;
+	
+	private Thread gameWatcher;
+	private volatile boolean running;
+	private Thread startGameWatcher;
+	private volatile boolean running2;
 
 	public SceneManager(Stage stage, Client client) {
 		this.stage = stage;
@@ -57,11 +60,11 @@ public class SceneManager {
 	}
 
 	public void showLobby() {
+		startGameWatcher();
 		LobbyPane lobbyPane = new LobbyPane();
 		Scene scene = new Scene(lobbyPane, 600, 400);
 		stage.setScene(scene);
 		stage.setTitle("Lobby - JustPoker™");
-		startGameStart();
 	}
 
 	public void showGameTable() {
@@ -71,69 +74,50 @@ public class SceneManager {
 			stage.setScene(new Scene(gameTablePane, 1000, 700));
 			stage.setTitle("Tavolo da gioco - JustPoker™");
 
-			startGameLoop(); // Avvia il game loop per aggiornamenti automatici
+			startGameWatcher();
 		});
 	}
 
-	private void startGameLoop() {
-		if (gameLoop != null) {
-			gameLoop.stop();
-		}
+	private void startGameWatcher() {
+	    running = true;
+	    
+	    gameWatcher = new Thread(() -> {
+	    	Game lastGame = client.getGameView();
 
-		gameLoop = new AnimationTimer() {
+	        while (running) {
+	            Game currentGame = client.getGameView();
+	            
+	            if (currentGame != null && lastGame == null) {
+	                Platform.runLater(() -> {
+	                    if (gameTablePane == null) 
+	                        showGameTable();
+	                });
+	            }else {
+	            	if (currentGame != lastGame) {
+	            		Platform.runLater(() -> {
+	            			gameTablePane.refresh();
+		                });
+	            	}
+	            }
+	            try {
+	                Thread.sleep(1000); // polling ogni 1000ms
+	            } catch (InterruptedException e) {
+	                Thread.currentThread().interrupt();
+	                break;
+	            }
+	        }
+	    });
 
-			private Game lastGame = client.getGameView(); // riferimento precedente
-
-			@Override
-			public void handle(long now) {
-				Game currentGame = client.getGameView();
-				if (currentGame == null)
-					return;
-
-				// aggiorna solo se cambia riferimento
-				if (currentGame != lastGame && gameTablePane != null) {
-					
-					if (gameTablePane != null) {
-						Platform.runLater(() -> gameTablePane.refresh());
-					}
-					lastGame = currentGame;
-				}
-			}
-		};
-		gameLoop.start();
-	}
-
-	public void stopGameLoop() {
-		if (gameLoop != null) {
-			gameLoop.stop();
-			gameLoop = null;
-		}
-	}
-	
-	private void startGameStart() {
-		if (gameStart != null) {
-			gameStart.stop();
-		}
-
-		gameStart = new AnimationTimer() {
-			
-			@Override
-			public void handle(long now) {				
-				// aggiorna solo se cambia riferimento
-				if (client.getGameView() != null) {
-					Platform.runLater(() -> showGameTable());
-					gameStart.stop();
-				}
-			}
-		};
-		gameStart.start();
+	    gameWatcher.setDaemon(true);
+	    gameWatcher.start();
 	}
 	
-	public void stopGameStart() {
-		if (gameStart != null) {
-			gameStart.stop();
-			gameStart = null;
-		}
+	public void stopGameWatcher() {
+	    running = false;
+	    if (gameWatcher != null) {
+	        gameWatcher.interrupt();
+	        gameWatcher = null;
+	    }
 	}
 
 	/*

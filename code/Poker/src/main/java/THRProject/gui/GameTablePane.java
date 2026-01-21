@@ -144,7 +144,7 @@ public class GameTablePane extends VBox {
 				alert.setContentText("Seleziona almeno una carta da cambiare.");
 				alert.showAndWait();
 			} else {
-				manager.getClient().invioCambio();
+				manager.getClient().invioCambio((ArrayList<Card>) selectedCards);
 				selectedCards.clear(); // Pulisci selezione dopo il cambio
 			}
 		});
@@ -173,10 +173,10 @@ public class GameTablePane extends VBox {
 			Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
 			confirm.setTitle("Conferma uscita");
 			confirm.setHeaderText("Sei sicuro di voler lasciare il tavolo?");
-			confirm.setContentText("Perderai eventuali fiches in gioco.");
 
 			if (confirm.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
 				manager.getClient().quit();
+				manager.stopGameWatcher();
 			}
 		});
 
@@ -280,6 +280,7 @@ public class GameTablePane extends VBox {
 					selectedCards.remove(card);
 					box.setStyle(
 							"-fx-border-color: black; -fx-padding: 5px; -fx-background-color: white; -fx-cursor: hand;");
+					
 				} else if (selectedCards.size() < 3) {
 					selectedCards.add(card);
 					box.setStyle(

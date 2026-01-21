@@ -4,11 +4,15 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
+
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
+import THRProject.card.model.Card;
 import THRProject.game.Game;
 import THRProject.message.Message;
+import THRProject.message.ActionType;
 import THRProject.message.Communicator;
 import THRProject.message.ControlType;
 import THRProject.player.Player;
@@ -147,8 +151,8 @@ public class Client implements Communicator {
 	/*
 	 * Metodo che serve per inviare il cambio al server
 	 */
-	public void invioCambio() {
-		Message msg = getGameView().getPlayers().get(clientId).cambio();
+	public void invioCambio(ArrayList<Card> cards) {
+		Message msg = new Message(ActionType.CAMBIO, cards);
 		sendMessage(msg);
 	}
 

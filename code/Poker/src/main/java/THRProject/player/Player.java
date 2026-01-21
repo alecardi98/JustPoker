@@ -67,14 +67,14 @@ public class Player implements Serializable {
 	/*
 	 * Metodo per creare il cambio
 	 */
-	public Message cambio() {
+	/*public Message cambio() {
 		return new Message(ActionType.CAMBIO, chooseCards());
 	}
 
 	/*
 	 * Metodo per scegliere le carte da cambiare
 	 */
-	public ArrayList<Card> chooseCards() {
+	/*public ArrayList<Card> chooseCards() {
 		ArrayList<Card> cards = new ArrayList<Card>();
 		// TO DO scelta carte
 		return cards;

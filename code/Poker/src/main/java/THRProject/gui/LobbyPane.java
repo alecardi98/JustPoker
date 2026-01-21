@@ -29,11 +29,4 @@ public class LobbyPane extends VBox {
 
 		getChildren().addAll(title, statusLabel);
 	}
-
-	/*
-	 * ========================= AGGIORNAMENTO DA SERVER =========================
-	 */
-	public void updateFromServer(String msg) {
-		statusLabel.setText(msg);
-	}
 }
