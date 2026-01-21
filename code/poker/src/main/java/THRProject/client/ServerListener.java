@@ -6,7 +6,6 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 import THRProject.game.Game;
-import THRProject.gui.SceneManager;
 import THRProject.message.ControlType;
 import THRProject.message.Message;
 import javafx.scene.control.Alert;
@@ -96,15 +95,13 @@ public class ServerListener implements Runnable {
 			alert.setContentText("Azione " + action + " non valida in questo momento.");
 			alert.showAndWait();
 		});
-
 	}
 
 	/*
 	 * Metodo che gestisce l'arrivo dell'UPDATE
 	 */
 	private void handleUpdate(Object data) {
-		client.setGame((Game) data);
-		client.getSceneManager().refreshGameTable(); // Aggiorna la GUI
+		client.setGameView((Game) data);
 	}
 
 	/*
@@ -153,7 +150,7 @@ public class ServerListener implements Runnable {
 			alert.showAndWait();
 
 			// Torna al menu principale
-			client.getSceneManager().showMainMenu();
+			client.setTornaMenu(1);
 		});
 
 	}

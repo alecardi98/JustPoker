@@ -21,6 +21,7 @@ public class SceneManager {
 
 	private GameTablePane gameTablePane;
 	private AnimationTimer gameLoop;
+	private AnimationTimer gameStart;
 
 	public SceneManager(Stage stage, Client client) {
 		this.stage = stage;
@@ -60,6 +61,7 @@ public class SceneManager {
 		Scene scene = new Scene(lobbyPane, 600, 400);
 		stage.setScene(scene);
 		stage.setTitle("Lobby - JustPoker™");
+		startGameStart();
 	}
 
 	public void showGameTable() {
@@ -80,17 +82,20 @@ public class SceneManager {
 
 		gameLoop = new AnimationTimer() {
 
-			private Game lastGame; // riferimento precedente
+			private Game lastGame = client.getGameView(); // riferimento precedente
 
 			@Override
 			public void handle(long now) {
-				Game currentGame = client.getGame();
+				Game currentGame = client.getGameView();
 				if (currentGame == null)
 					return;
 
 				// aggiorna solo se cambia riferimento
 				if (currentGame != lastGame && gameTablePane != null) {
-					refreshGameTable();
+					
+					if (gameTablePane != null) {
+						Platform.runLater(() -> gameTablePane.refresh());
+					}
 					lastGame = currentGame;
 				}
 			}
@@ -104,10 +109,30 @@ public class SceneManager {
 			gameLoop = null;
 		}
 	}
+	
+	private void startGameStart() {
+		if (gameStart != null) {
+			gameStart.stop();
+		}
 
-	public void refreshGameTable() {
-		if (gameTablePane != null) {
-			Platform.runLater(() -> gameTablePane.refresh());
+		gameStart = new AnimationTimer() {
+			
+			@Override
+			public void handle(long now) {				
+				// aggiorna solo se cambia riferimento
+				if (client.getGameView() != null) {
+					Platform.runLater(() -> showGameTable());
+					gameStart.stop();
+				}
+			}
+		};
+		gameStart.start();
+	}
+	
+	public void stopGameStart() {
+		if (gameStart != null) {
+			gameStart.stop();
+			gameStart = null;
 		}
 	}
 

@@ -1,6 +1,7 @@
 package THRProject.game;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -19,6 +20,7 @@ public class Game implements Serializable {
 	private boolean open; // indica che un giocatore ha aperto nella fase di apertura
 	private Pot pot; // il piatto del tavolo
 	private Deck deck; // deck che contiene le informazioni sulle carte da gioco
+	private LocalDateTime datestamp;
 
 	public Game(int minBet) {
 		phase = GamePhase.INVITO;
@@ -43,8 +45,6 @@ public class Game implements Serializable {
 		}
 	}
 	
-	
-
 	/*
 	 * Metodo con il quale il server cede il turno al giocatore successivo: gli ID
 	 * dei client vengono dati in modo incrementale in base al primo che arriva al
@@ -241,5 +241,14 @@ public class Game implements Serializable {
 	public void setPlayers(ConcurrentHashMap<Integer, Player> players) {
 		this.players = players;
 	}
+	
+	public LocalDateTime getDatestamp() {
+		return datestamp;
+	}
+
+	public void setDatestamp(LocalDateTime datestamp) {
+		this.datestamp = datestamp;
+	}
+
 
 }

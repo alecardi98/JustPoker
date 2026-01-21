@@ -43,7 +43,9 @@ public class MainMenuPane extends VBox {
 		playButton.setOnAction(e -> {
 			infoLabel.setStyle("-fx-text-fill: blue;");
 			infoLabel.setText("In attesa di altri giocatori...");
-			playButton.setDisable(true);			
+			playButton.setDisable(true);	
+			
+			//C
 		});
 
 		/*

@@ -18,6 +18,7 @@ public class MainGUI extends Application {
     @Override
     public void start(Stage stage) {
         client = new Client();
+        client.startClient();
         SceneManager manager = new SceneManager(stage, client);
         manager.showLoginScene();
     }

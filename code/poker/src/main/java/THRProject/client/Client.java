@@ -8,7 +8,6 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 import THRProject.game.Game;
-import THRProject.gui.SceneManager;
 import THRProject.message.Message;
 import THRProject.message.Communicator;
 import THRProject.message.ControlType;
@@ -27,6 +26,7 @@ public class Client implements Communicator {
 	private ObjectOutputStream out;
 	private ServerListener serverListener;
 	private Socket socket;
+	private int tornaMenu = 0;
 
 	private static final String HOST = "localhost";
 //	private static final String HOST = "204.216.208.188";
@@ -67,9 +67,6 @@ public class Client implements Communicator {
 	public void startGame() {
 		// TO DO il client ha tutto ciò che gli serve per stampare il campo
 		logger.info("Partita avviata per client " + clientId);
-
-		// Aggiorna la GUI per mostrare il tavolo da gioco
-		sceneManager.showGameTable();
 	}
 
 	/*
@@ -194,14 +191,6 @@ public class Client implements Communicator {
 	/*
 	 * Getter & Setter
 	 */
-	public Game getGame() {
-		return getGameView();
-	}
-
-	public void setGame(Game gameView) {
-		this.setGameView(gameView);
-	}
-
 	public void setClientId(int clientId) {
 		this.clientId = clientId;
 	}
@@ -216,5 +205,13 @@ public class Client implements Communicator {
 
 	public void setGameView(Game gameView) {
 		this.gameView = gameView;
+	}
+
+	public int getTornaMenu() {
+		return tornaMenu;
+	}
+
+	public void setTornaMenu(int tornaMenu) {
+		this.tornaMenu = tornaMenu;
 	}
 }
