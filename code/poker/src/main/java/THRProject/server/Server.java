@@ -15,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 
 import THRProject.card.model.Card;
 import THRProject.card.model.Rank;
+import THRProject.card.model.Suit;
 import THRProject.game.Game;
 import THRProject.game.GamePhase;
 import THRProject.message.Message;
@@ -79,12 +80,12 @@ public final class Server {
 	 */
 	public void handleLogin(int clientId, Player player) {
 		String response = dbManager.loginUser(player.getUsername(), player.getPassword());
+		clientHandlers.get(clientId).sendMessage(new Message(ControlType.LOGIN, response));
 
 		if (response.equals("Login effettuato.")) {
-			Player gamePlayer = new Player(player.getUsername(), response);
+			Player gamePlayer = new Player(player.getUsername());
 			registerPlayer(clientId, gamePlayer);
 		}
-		clientHandlers.get(clientId).sendMessage(new Message(ControlType.LOGIN, response));
 	}
 
 	/*
@@ -95,9 +96,6 @@ public final class Server {
 
 		if (response.equals("Registrazione effettuata.")) {
 			clientHandlers.get(clientId).sendMessage(new Message(ControlType.VALID_ACTION, response));
-
-			Player gamePlayer = new Player(player.getUsername());
-			registerPlayer(clientId, gamePlayer);
 		} else {
 			clientHandlers.get(clientId).sendMessage(new Message(ControlType.INVALID_ACTION, response));
 		}
@@ -111,8 +109,8 @@ public final class Server {
 			player.getStatus().setFiches(MAXFICHES);
 			game.getPlayers().put(clientId, player);
 			if (game.getPlayers().size() == MAXPLAYERS) {
-				startGame(); // sarà il ClientHandler che aggiunge l'ultimo Player a far partire il gioco
 				broadcast(new Message(ControlType.START_GAME, null));
+				startGame(); // sarà il ClientHandler che aggiunge l'ultimo Player a far partire il gioco
 			}
 		}
 	}
@@ -292,16 +290,27 @@ public final class Server {
 					clientHandler.sendMessage(new Message(ControlType.INVALID_ACTION, "ERRORE! Cambio errato."));
 				} else {
 					logger.info("Cambio Client " + clientId + " registrato.");
+
 					// rimuovo le carte
 					for (Card c : cardsToRemove) {
-						player.getHand().getCards().remove(c);
+						Suit seme = c.getSeme();
+						int valore = c.getValore();
+
+						for (int i = player.getHand().getCards().size() - 1; i >= 0; i--) {
+							if (player.getHand().getCards().get(i).getSeme().equals(seme)
+									&& player.getHand().getCards().get(i).getValore() == valore) {
+								player.getHand().getCards().remove(i);
+							}
+						}
 					}
+
 					// pesca le carte
 					for (int i = 0; i < cardsToRemove.size(); i++) {
 						Card c = game.getDeck().getCards().get(0);
 						player.getHand().getCards().add(c);
 						game.getDeck().getCards().remove(0);
 					}
+
 					player.getStatus().setEnd(true);
 					game.nextTurn();
 					clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "Cambio registrato."));
@@ -576,8 +585,7 @@ public final class Server {
 					startGame();
 				}
 			}
-		}
-		else
+		} else
 			game.nextTurn();
 
 	}

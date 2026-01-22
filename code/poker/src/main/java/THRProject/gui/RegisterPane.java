@@ -72,13 +72,10 @@ public class RegisterPane extends VBox {
                     manager.getClient().tryRegister(username, password);
                     
                     javafx.application.Platform.runLater(() -> {
-                        messageLabel.setStyle("-fx-text-fill: green;");
-                        messageLabel.setText("Registrazione completata con successo!");
-                        
-                        // Torna al login dopo 1 secondo
+                        // Torna al login dopo 2 secondi
                         new Thread(() -> {
                             try {
-                                Thread.sleep(1000);
+                                Thread.sleep(2000);
                                 javafx.application.Platform.runLater(() -> manager.showLoginScene());
                             } catch (InterruptedException ex) {
                                 ex.printStackTrace();

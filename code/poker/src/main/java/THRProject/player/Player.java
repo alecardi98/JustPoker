@@ -24,7 +24,7 @@ public class Player implements Serializable {
 
 	public Player(String username) {
 		this.username = username;
-		this.password = ""; // Password vuota, tanto non serve durante il gioco
+		password = ""; // Password vuota, tanto non serve durante il gioco
 		hand = new Hand();
 		status = new PlayerStatus();
 	}

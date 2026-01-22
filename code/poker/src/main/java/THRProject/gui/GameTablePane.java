@@ -2,7 +2,6 @@ package THRProject.gui;
 
 import THRProject.card.model.Card;
 import THRProject.card.model.Suit;
-import THRProject.client.ClientObserver;
 import THRProject.game.Game;
 import THRProject.game.GamePhase;
 import THRProject.player.Player;
@@ -22,13 +21,15 @@ import java.util.List;
  * Aggiunta visualizzazione piatto e fiches - Aggiunti pulsanti Quit e Pronto -
  * Corretto abilitazione/disabilitazione pulsanti
  */
-public class GameTablePane extends VBox implements ClientObserver{
+public class GameTablePane extends VBox {
 
 	private SceneManager manager;
 
 	private Label phaseLabel;
 	private Label turnLabel;
 	private Label potLabel;
+	private Label maxBetLabel;
+	private Label myMaxBetLabel;
 	private Label fichesLabel;
 
 	private HBox cardsPane;
@@ -71,10 +72,16 @@ public class GameTablePane extends VBox implements ClientObserver{
 		potLabel = new Label("Piatto: 0");
 		potLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: gold;");
 
+		maxBetLabel = new Label("Bet: 0");
+		maxBetLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
+
+		myMaxBetLabel = new Label("MyBet: 0");
+		myMaxBetLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
+
 		fichesLabel = new Label("Fiches: 0");
 		fichesLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
 
-		infoPane.getChildren().addAll(phaseLabel, turnLabel, potLabel, fichesLabel);
+		infoPane.getChildren().addAll(phaseLabel, turnLabel, potLabel, maxBetLabel, myMaxBetLabel, fichesLabel);
 
 		// Pannello carte del giocatore
 		cardsPane = new HBox(10);
@@ -145,7 +152,8 @@ public class GameTablePane extends VBox implements ClientObserver{
 				alert.setContentText("Seleziona almeno una carta da cambiare.");
 				alert.showAndWait();
 			} else {
-				manager.getClient().invioCambio((ArrayList<Card>) selectedCards);
+				ArrayList<Card> cards = new ArrayList<Card>(selectedCards);
+				manager.getClient().invioCambio((ArrayList<Card>) cards);
 				selectedCards.clear(); // Pulisci selezione dopo il cambio
 			}
 		});
@@ -204,6 +212,10 @@ public class GameTablePane extends VBox implements ClientObserver{
 		// Piatto
 		potLabel.setText("Piatto: " + game.getPot().getTotal());
 
+		maxBetLabel.setText("Bet: " + game.getPot().getMaxBet());
+
+		myMaxBetLabel.setText("MyBet: " + game.getPlayers().get(manager.getClient().getClientId()).getStatus().getTotalBet());
+
 		// Turno
 		Player me = game.getPlayers().get(manager.getClient().getClientId());
 		if (me != null) {
@@ -225,8 +237,8 @@ public class GameTablePane extends VBox implements ClientObserver{
 		}
 
 		// Abilita/disabilita pulsanti in base alla fase e allo stato del giocatore
-		boolean myTurn = game.getCurrentTurn() == manager.getClient().getClientId() && me != null && !me.getStatus().isFold()
-				&& !me.getStatus().isEnd();
+		boolean myTurn = game.getCurrentTurn() == manager.getClient().getClientId() && me != null
+				&& !me.getStatus().isFold() && !me.getStatus().isEnd();
 		boolean isEndPhase = game.getPhase() == GamePhase.END || game.getPhase() == GamePhase.ENDPASS;
 
 		invitaBtn.setDisable(!myTurn || game.getPhase() != GamePhase.INVITO);
@@ -276,12 +288,13 @@ public class GameTablePane extends VBox implements ClientObserver{
 		// Se è la fase di accomodo, permetti la selezione delle carte
 		box.setOnMouseClicked(e -> {
 			Game game = manager.getClient().getGameView();
-			if (game != null && game.getPhase() == GamePhase.ACCOMODO && game.getCurrentTurn() == manager.getClient().getClientId()) {
+			if (game != null && game.getPhase() == GamePhase.ACCOMODO
+					&& game.getCurrentTurn() == manager.getClient().getClientId()) {
 				if (selectedCards.contains(card)) {
 					selectedCards.remove(card);
 					box.setStyle(
 							"-fx-border-color: black; -fx-padding: 5px; -fx-background-color: white; -fx-cursor: hand;");
-					
+
 				} else if (selectedCards.size() < 3) {
 					selectedCards.add(card);
 					box.setStyle(
@@ -292,34 +305,5 @@ public class GameTablePane extends VBox implements ClientObserver{
 
 		return box;
 	}
-	
-	@Override
-	public void onGameViewUpdate() {
-		refresh();
-		
-	}
 
-	@Override
-	public void onLoginResult(boolean success) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onStart() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onMessageReceived(String message) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onTornaMenu() {
-		// TODO Auto-generated method stub
-		
-	}
 }
