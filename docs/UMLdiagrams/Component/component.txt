@@ -1,0 +1,30 @@
+@startuml
+skinparam componentStyle rectangle
+
+package "Client " {
+ 
+  component "ServerListener" as ServerListener
+  component Client
+}
+
+package "Server " {
+  component Server
+  component "Client Handler" as ClientHandler
+}
+
+package "Database " {
+  component Server
+  component DatabaseManager
+}
+
+
+Client --> ServerListener : <<creates>>
+Server --> ClientHandler : <<creates>>
+
+ClientHandler --> Server : <<delegates>>
+Server <-- Client : <<connection>>
+
+Server --> DatabaseManager : <<accessDB>>
+
+ServerListener <--> ClientHandler : <<communicates>>
+@enduml
