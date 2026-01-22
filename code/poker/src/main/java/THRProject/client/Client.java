@@ -13,7 +13,6 @@ import org.apache.logging.log4j.LogManager;
 import THRProject.card.model.Card;
 import THRProject.game.Game;
 import THRProject.message.Message;
-import THRProject.message.ActionType;
 import THRProject.message.Communicator;
 import THRProject.message.ControlType;
 import THRProject.player.Player;
@@ -32,6 +31,7 @@ public class Client implements Communicator {
 	private ServerListener serverListener;
 	private Socket socket;
 	private final List<ClientObserver> observers = new ArrayList<>();
+
 
 	private static final String HOST = "localhost";
 //	private static final String HOST = "204.216.208.188";
@@ -76,6 +76,20 @@ public class Client implements Communicator {
 		for (ClientObserver observer : observers) {
 			observer.onStart();
 		}
+	}
+	/*
+	 * Metodo per avvisare gli observer di tornare al menu
+	 */
+	public void notifyTornaMenu() {
+		for (ClientObserver observer : observers) {
+			observer.onTornaMenu();
+		}		
+	}
+	
+	public void notifyGameViewUpdate() {
+		for (ClientObserver observer : observers) {
+			observer.onGameViewUpdate();
+		}		
 	}
 
 	/*
@@ -229,5 +243,4 @@ public class Client implements Communicator {
 	public void setGameView(Game gameView) {
 		this.gameView = gameView;
 	}
-
 }

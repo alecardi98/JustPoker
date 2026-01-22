@@ -1,5 +1,6 @@
 package THRProject.gui;
 
+import THRProject.client.ClientObserver;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -11,28 +12,32 @@ import javafx.scene.layout.VBox;
  * MODIFICHE: - Integrato con metodo tryLogin del Client - Aggiunta gestione
  * stati di connessione - Aggiunto feedback visivo durante il login
  */
-public class LoginPane extends VBox {
+public class LoginPane extends VBox implements ClientObserver {
+	
+    private final SceneManager manager;
+    
+    Label messageLabel = new Label();
+    Button loginButton = new Button("Login");
+	Button registerButton = new Button("Registrati");
+	TextField usernameField = new TextField();
+	PasswordField passwordField = new PasswordField();
 
 	public LoginPane(SceneManager manager) {
 
+		this.manager = manager;
+		
 		setSpacing(15);
 		setPadding(new Insets(20));
 		setAlignment(Pos.CENTER);
 
 		Label title = new Label("JustPoker™");
 		title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
-
-		TextField usernameField = new TextField();
+		
 		usernameField.setPromptText("Username");
-
-		PasswordField passwordField = new PasswordField();
 		passwordField.setPromptText("Password");
-
-		Button loginButton = new Button("Login");
-		Button registerButton = new Button("Registrati");
-
-		Label messageLabel = new Label();
 		messageLabel.setStyle("-fx-text-fill: red;");
+		
+		manager.getClient().addObserver(this);
 
 		loginButton.setOnAction(e -> {
 			String username = usernameField.getText();
@@ -50,45 +55,56 @@ public class LoginPane extends VBox {
 			registerButton.setDisable(true);
 			messageLabel.setStyle("-fx-text-fill: blue;");
 			messageLabel.setText("Login in corso...");
-
-			// LOGIN tramite Client - eseguito in thread separato per non bloccare la GUI
-			new Thread(() -> {
-				try {
-					manager.getClient().tryLogin(username, password);
-
-					while (!manager.getClient().isLogin()) {
-						/*
-						 * Separerei il tasto login dall'effettivo avvenimento del login: il tasto serve
-						 * solo per inviare i dati. poi quando il client attiva l'observer, si avvia il
-						 * codice qui sotto 8=====D
-						 */
-					}
-
-					if (manager.getClient().isLogin()) {
-						// Se il login ha successo, mostra il menu principale
-						javafx.application.Platform.runLater(() -> {
-							messageLabel.setStyle("-fx-text-fill: green;");
-							messageLabel.setText("Login effettuato con successo!");
-							manager.showMainMenu();
-						});
-					}
-
-				} catch (Exception ex) {
-					javafx.application.Platform.runLater(() -> {
-						messageLabel.setStyle("-fx-text-fill: red;");
-						messageLabel.setText("Errore durante il login: " + ex.getMessage());
-						// Riabilita i campi
-						usernameField.setDisable(false);
-						passwordField.setDisable(false);
-						loginButton.setDisable(false);
-						registerButton.setDisable(false);
-					});
-				}
-			}).start();
+			
+			manager.getClient().tryLogin(username, password);
 		});
 
 		registerButton.setOnAction(e -> manager.showRegisterScene());
 
 		getChildren().addAll(title, usernameField, passwordField, loginButton, registerButton, messageLabel);
+	}
+
+	@Override
+	public void onLoginResult(boolean success) {
+		javafx.application.Platform.runLater(() -> {
+            if (success) {
+                messageLabel.setStyle("-fx-text-fill: green;");
+                messageLabel.setText("Login effettuato con successo!");
+                manager.showMainMenu();
+            } else {
+                messageLabel.setStyle("-fx-text-fill: red;");
+                messageLabel.setText("Username o password errati.");
+                usernameField.setDisable(false);
+                passwordField.setDisable(false);
+                loginButton.setDisable(false);
+                registerButton.setDisable(false);
+            }
+        });		
+	}
+	
+	@Override
+    public void onMessageReceived(String message) {
+        javafx.application.Platform.runLater(() -> {
+            // gestione messaggi generici
+            messageLabel.setText(message);
+        });
+	}
+
+	@Override
+	public void onStart() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onTornaMenu() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onGameViewUpdate() {
+		// TODO Auto-generated method stub
+		
 	}
 }

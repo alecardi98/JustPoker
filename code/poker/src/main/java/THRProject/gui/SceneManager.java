@@ -2,10 +2,12 @@ package THRProject.gui;
 
 import THRProject.client.Client;
 import THRProject.client.ClientObserver;
-import THRProject.game.Game;
-import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 /**
@@ -21,9 +23,6 @@ public class SceneManager implements ClientObserver {
 	private Client client;
 
 	private GameTablePane gameTablePane;
-	
-	private Thread gameWatcher;
-	private volatile boolean running;
 
 	public SceneManager(Stage stage, Client client) {
 		this.stage = stage;
@@ -37,19 +36,11 @@ public class SceneManager implements ClientObserver {
 	}
 
 	@Override
-	public void onLoginResult(boolean success) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void onStart() {
-		// TODO Auto-generated method stub
-		
+		showGameTable();
 	}
 
 	public void showLoginScene() {
-		startGameWatcher();
 		LoginPane loginPane = new LoginPane(this);
 		Scene scene = new Scene(loginPane, 400, 350);
 		stage.setScene(scene);
@@ -84,55 +75,7 @@ public class SceneManager implements ClientObserver {
 			gameTablePane = new GameTablePane(this);
 			stage.setScene(new Scene(gameTablePane, 1000, 700));
 			stage.setTitle("Tavolo da gioco - JustPoker™");
-
-			startGameWatcher();
 		});
-	}
-
-	private void startGameWatcher() {
-	    running = true;
-	    
-	    gameWatcher = new Thread(() -> {
-	    	Game lastGame = null;
-            Game currentGame = null;
-            boolean start = false;
-
-	        while (running) {
-	        	start = client.isStart(); //usa il metodo dell'observer
-	        	lastGame = currentGame;
-	        	currentGame = client.getGameView();
-	            
-	            if (start && lastGame == null) {
-	                Platform.runLater(() -> {
-	                    if (gameTablePane == null) 
-	                        showGameTable();
-	                });
-	            }else {
-	            	if (currentGame != lastGame) {
-	            		Platform.runLater(() -> {
-	            			gameTablePane.refresh();
-		                });
-	            	}
-	            }
-	            try {
-	                Thread.sleep(1000); // polling ogni 1000ms
-	            } catch (InterruptedException e) {
-	                Thread.currentThread().interrupt();
-	                break;
-	            }
-	        }
-	    });
-
-	    gameWatcher.setDaemon(true);
-	    gameWatcher.start();
-	}
-	
-	public void stopGameWatcher() {
-	    running = false;
-	    if (gameWatcher != null) {
-	        gameWatcher.interrupt();
-	        gameWatcher = null;
-	    }
 	}
 
 	/*
@@ -144,5 +87,28 @@ public class SceneManager implements ClientObserver {
 
 	public Client getClient() {
 		return client;
+	}
+	
+	@Override
+	public void onLoginResult(boolean success) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onMessageReceived(String message) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void onTornaMenu() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onGameViewUpdate() {
+		// TODO Auto-generated method stub
+		
 	}
 }

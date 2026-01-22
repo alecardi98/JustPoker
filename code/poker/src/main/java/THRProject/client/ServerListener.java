@@ -114,6 +114,7 @@ public class ServerListener implements Runnable {
 	 */
 	private void handleUpdate(Object data) {
 		client.setGameView((Game) data);
+		client.notifyGameViewUpdate();
 	}
 
 	/*
@@ -162,7 +163,7 @@ public class ServerListener implements Runnable {
 			alert.showAndWait();
 
 			// Torna al menu principale
-			client.setTornaMenu(1); //anche qui crea un metodo observer nel client!
+			client.notifyTornaMenu();
 		});
 
 	}

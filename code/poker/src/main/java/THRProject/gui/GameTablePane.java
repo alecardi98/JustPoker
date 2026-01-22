@@ -2,6 +2,7 @@ package THRProject.gui;
 
 import THRProject.card.model.Card;
 import THRProject.card.model.Suit;
+import THRProject.client.ClientObserver;
 import THRProject.game.Game;
 import THRProject.game.GamePhase;
 import THRProject.player.Player;
@@ -21,7 +22,7 @@ import java.util.List;
  * Aggiunta visualizzazione piatto e fiches - Aggiunti pulsanti Quit e Pronto -
  * Corretto abilitazione/disabilitazione pulsanti
  */
-public class GameTablePane extends VBox {
+public class GameTablePane extends VBox implements ClientObserver{
 
 	private SceneManager manager;
 
@@ -290,5 +291,35 @@ public class GameTablePane extends VBox {
 		});
 
 		return box;
+	}
+	
+	@Override
+	public void onGameViewUpdate() {
+		refresh();
+		
+	}
+
+	@Override
+	public void onLoginResult(boolean success) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onStart() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onMessageReceived(String message) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onTornaMenu() {
+		// TODO Auto-generated method stub
+		
 	}
 }
