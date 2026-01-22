@@ -39,11 +39,13 @@ public class Client implements Communicator {
 	private Game gameView; // variabile che contiene solo i dati personali del game
 	private int clientId;
 	private boolean login;
+	private boolean start;
 
 	public Client() {
 		// il client viene fatto partire nel main e inizializzato appena si connette al
 		// server
-		login=false;
+		login = false;
+		start = false;
 	}
 
 	/*
@@ -65,14 +67,6 @@ public class Client implements Communicator {
 	 */
 	public void tryRegister(String username, String password) {
 		sendMessage(new Message(ControlType.REGISTER, new Player(username, password)));
-	}
-
-	/*
-	 * Metodo per avviare la partita del client
-	 */
-	public void startGame() {
-		// TO DO il client ha tutto ciò che gli serve per stampare il campo
-		logger.info("Partita avviata per client " + clientId);
 	}
 
 	/*
@@ -227,5 +221,13 @@ public class Client implements Communicator {
 
 	public void setLogin(boolean login) {
 		this.login = login;
+	}
+
+	public boolean isStart() {
+		return start;
+	}
+
+	public void setStart(boolean start) {
+		this.start = start;
 	}
 }

@@ -57,7 +57,7 @@ public class LoginPane extends VBox {
             new Thread(() -> {
                 try {
                     manager.getClient().tryLogin(username, password);
-                    Thread.sleep(500);
+                    while(!manager.getClient().isLogin()) { }
                     if(manager.getClient().isLogin()) {
                     	// Se il login ha successo, mostra il menu principale
                         javafx.application.Platform.runLater(() -> {

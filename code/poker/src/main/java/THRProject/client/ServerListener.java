@@ -69,7 +69,7 @@ public class ServerListener implements Runnable {
 	 */
 	private void handleStartGame() {
 		logger.info("Ricevuto segnale START_GAME");
-		client.startGame();
+		client.setStart(true);
 	}
 
 	/*

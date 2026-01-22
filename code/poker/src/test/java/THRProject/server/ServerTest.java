@@ -8,7 +8,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import THRProject.card.model.Card;
@@ -19,13 +18,12 @@ import THRProject.player.Player;
 
 class ServerTest {
 	Logger logger = LogManager.getLogger("debug");
-	Server server;
-	Game game;
 
-	@BeforeEach
-	void setupAll() {
+	@Test
+	void testFlow1() {
 		Server.resetInstance();
-		server = Server.getServer();
+		Server server = Server.getServer();
+		Game game;
 
 		ConcurrentHashMap<Integer, ClientHandler> clientHandlers = new ConcurrentHashMap<Integer, ClientHandler>();
 		server.setClientHandlers(clientHandlers);
@@ -88,112 +86,37 @@ class ServerTest {
 		playersAll.put(2, p3);
 		playersAll.put(3, p4);
 
-	}
-
-	@Test
-	void testFlow() {
 		logger.info("INIZIO FASE DI INVITO");
-//		server.checkFold(0); // folda
-		server.checkInvito(0); 
+		server.checkInvito(0);
 		server.checkInvito(2); // fuori turno
 		server.checkInvito(1); // all-in
 		server.checkInvito(1); // doppio
 		server.checkInvito(2);
 		server.checkInvito(3);
 
-//		assertEquals(1000, game.getPlayers().get(0).getStatus().getFiches()); // fold
 		assertEquals(975, game.getPlayers().get(0).getStatus().getFiches()); // fold
 		assertEquals(0, game.getPlayers().get(1).getStatus().getFiches());// all-in
 		assertEquals(975, game.getPlayers().get(2).getStatus().getFiches());
 		assertEquals(975, game.getPlayers().get(3).getStatus().getFiches());
 
 		assertEquals(GamePhase.APERTURA, game.getPhase());
-//		assertEquals(75, game.getPot().getTotal());
 		assertEquals(100, game.getPot().getTotal());
-
 		logger.info("FINE FASE DI INVITO");
 
 		logger.info("INIZIO FASE DI APERTURA");
-//		server.checkApertura(0, 100); // ha foldato
-//		server.checkApertura(2, 25); // fuori turno
-//		server.checkApertura(1, 25); // non può aprire
-//		server.checkPassa(1);
-//		server.checkApertura(1, 200); // doppio
-//
-//		server.checkApertura(2, 10); // apre ma meno della minima
-//		server.checkApertura(2, 25);
-//		server.checkApertura(3, 100);
-//		server.checkApertura(1, 100);
-//		server.checkApertura(2, 75);
-		
 		server.checkPassa(0);
 		server.checkPassa(1);
 		server.checkPassa(2);
 		server.checkPassa(3);
-
-
-
-//		assertEquals(1000, game.getPlayers().get(0).getStatus().getFiches()); // fold
-//		assertEquals(-100, game.getPlayers().get(1).getStatus().getFiches());// all-in
-//		assertEquals(875, game.getPlayers().get(2).getStatus().getFiches());
-//		assertEquals(875, game.getPlayers().get(3).getStatus().getFiches());
-//
-//		assertEquals(GamePhase.ACCOMODO, game.getPhase());
-//		assertEquals(375, game.getPot().getTotal());
 		logger.info("FINE FASE DI APERTURA");
 
-//		logger.info("INIZIO FASE DI ACCOMODO");
-//		ArrayList<Card> cards = new ArrayList<Card>();
-//
-//		Card card = game.getPlayers().get(0).getHand().getCards().get(0);
-//		cards.add(card);
-//		server.checkCambio(0, cards); // ha foldato
-//
-//		cards.clear();
-//		card = game.getPlayers().get(2).getHand().getCards().get(0);
-//		cards.add(card);
-//		server.checkCambio(2, cards); // fuori turno
-//		
-//		cards.clear();
-//		card = game.getPlayers().get(1).getHand().getCards().get(0);
-//		cards.add(card);
-//		server.checkCambio(1, cards);
-//		server.checkCambio(1, cards); // doppio
-//
-//		cards.clear();
-//		card = game.getPlayers().get(2).getHand().getCards().get(0);
-//		cards.add(card);
-//		server.checkCambio(2, cards);
-//		
-//		server.checkServito(3);
-//		
-//		assertEquals(1000, game.getPlayers().get(0).getStatus().getFiches()); // fold
-//		assertEquals(-100, game.getPlayers().get(1).getStatus().getFiches());// all-in
-//		assertEquals(875, game.getPlayers().get(2).getStatus().getFiches());
-//		assertEquals(875, game.getPlayers().get(3).getStatus().getFiches());
-//
-//		assertEquals(GamePhase.PUNTATA, game.getPhase());
-//		assertEquals(375, game.getPot().getTotal());
-//		logger.info("FINE FASE DI ACCOMODO");
-//		
-//		server.checkFold(1);
-//		server.checkFold(2);
-//		//server.checkPuntata(2,100);
-//		server.checkPuntata(3, 100);
-
-		
-		
 		server.countReady(0);
 		server.countReady(1);
-		
-		//server.countReady(2);
 		server.getClientHandlers().get(2).cleanUp();
 		server.checkStart();
-		
+
 		server.getClientHandlers().get(3).cleanUp();
 		server.checkStart();
-		
+		//si ricomincia dopo che tutti hanno passato
 	}
-	
-
 }

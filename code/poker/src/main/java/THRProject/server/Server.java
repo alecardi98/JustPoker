@@ -593,16 +593,14 @@ public final class Server {
 	public void broadcastSafeGameView() {
 		synchronized (game) {
 			for (Map.Entry<Integer, ClientHandler> c : clientHandlers.entrySet()) {
-				Game gameView = new Game(MINBET);
-				gameView.setCurrentTurn(game.getCurrentTurn());
-				gameView.setPhase(game.getPhase());
-				for (Map.Entry<Integer, Player> p : game.getPlayers().entrySet()) {
-					if (Objects.equals(p.getKey(), c.getKey())) {
-						gameView.getPlayers().put(p.getKey(), p.getValue());
+				Game gameView = new Game(game);
+				gameView.setDeck(null);
+
+				for (Map.Entry<Integer, Player> p : gameView.getPlayers().entrySet()) {
+					if (!Objects.equals(p.getKey(), c.getKey())) {
+						gameView.getPlayers().remove(p.getKey());
 					}
 				}
-				gameView.setPot(game.getPot());
-				gameView.setDeck(null);
 				c.getValue().sendMessage(new Message(ControlType.UPDATE, gameView));
 			}
 		}

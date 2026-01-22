@@ -28,6 +28,13 @@ public class Player implements Serializable {
 		hand = new Hand();
 		status = new PlayerStatus();
 	}
+	
+	public Player(Player other) {
+		username = other.username;
+		password = other.password;
+		status = new PlayerStatus(other.status);
+		hand = new Hand(other.hand);
+	}
 
 	/*
 	 * Metodo per creare l'invito (fisso a MINBET)

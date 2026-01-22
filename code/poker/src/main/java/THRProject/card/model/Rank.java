@@ -12,6 +12,11 @@ public class Rank implements Serializable{
 		this.level=1;
 		this.value=7;
 	}
+	
+	public Rank(Rank other) {
+		level = other.level;
+		value = other.value;
+	}
 
 	/*
 	 * Getter & Setter

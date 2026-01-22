@@ -82,12 +82,14 @@ public class SceneManager {
 	    gameWatcher = new Thread(() -> {
 	    	Game lastGame = null;
             Game currentGame = null;
+            boolean start = false;
 
 	        while (running) {
+	        	start = client.isStart();
 	        	lastGame = currentGame;
 	        	currentGame = client.getGameView();
 	            
-	            if (currentGame != lastGame && lastGame == null) {
+	            if (start && lastGame == null) {
 	                Platform.runLater(() -> {
 	                    if (gameTablePane == null) 
 	                        showGameTable();

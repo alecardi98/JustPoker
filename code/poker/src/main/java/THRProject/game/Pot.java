@@ -13,6 +13,12 @@ public class Pot implements Serializable {
 		this.minBet = minBet;
 		maxBet = this.minBet;
 	}
+	
+	public Pot(Pot other) {
+		total = other.total;
+		maxBet = other.maxBet;
+		minBet = other.minBet;
+	}
 
 	/*
 	 * Getter & Setter

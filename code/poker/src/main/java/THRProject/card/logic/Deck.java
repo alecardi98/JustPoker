@@ -17,6 +17,11 @@ public class Deck implements Serializable {
 		createSample();
 		resetDeck();
 	}
+	
+	public Deck(Deck other) {
+		cards = new ArrayList<Card>(other.cards);
+		sample = new ArrayList<Card>(other.sample);
+	}
 
 	/*
 	 * Metodo che genera le carte all'interno del deck

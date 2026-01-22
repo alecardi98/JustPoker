@@ -15,6 +15,11 @@ public class Hand implements Serializable {
 		cards = new ArrayList<Card>();
 		rank = new Rank();
 	}
+	
+	public Hand(Hand other) {
+		cards = new ArrayList<Card>(other.cards);
+		rank = new Rank(other.rank);
+	}
 
 	/*
 	 * Calcola il Rank della mano, ovvero il valore del suo punteggio (carta alta 1,
