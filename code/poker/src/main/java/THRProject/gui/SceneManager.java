@@ -1,6 +1,7 @@
 package THRProject.gui;
 
 import THRProject.client.Client;
+import THRProject.client.ClientObserver;
 import THRProject.game.Game;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
@@ -14,7 +15,7 @@ import javafx.stage.Stage;
  * passaggio parametri a GameTablePane - Aggiunti metodi per gestione finestra
  * di gioco
  */
-public class SceneManager {
+public class SceneManager implements ClientObserver {
 
 	private Stage stage;
 	private Client client;
@@ -33,6 +34,18 @@ public class SceneManager {
 		stage.setOnCloseRequest(e -> {
 		Platform.exit();
 		});
+	}
+
+	@Override
+	public void onLoginResult(boolean success) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onStart() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	public void showLoginScene() {
@@ -85,7 +98,7 @@ public class SceneManager {
             boolean start = false;
 
 	        while (running) {
-	        	start = client.isStart();
+	        	start = client.isStart(); //usa il metodo dell'observer
 	        	lastGame = currentGame;
 	        	currentGame = client.getGameView();
 	            

@@ -81,14 +81,11 @@ public final class Server {
 		String response = dbManager.loginUser(player.getUsername(), player.getPassword());
 
 		if (response.equals("Login effettuato.")) {
-			clientHandlers.get(clientId).sendMessage(new Message(ControlType.VALID_ACTION, response));
-
 			Player gamePlayer = new Player(player.getUsername(), response);
-
 			registerPlayer(clientId, gamePlayer);
-		} else {
-			clientHandlers.get(clientId).sendMessage(new Message(ControlType.INVALID_ACTION, response));
 		}
+		clientHandlers.get(clientId).sendMessage(new Message(ControlType.LOGIN, response));
+		
 	}
 
 	/*

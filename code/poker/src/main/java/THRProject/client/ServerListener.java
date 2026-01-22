@@ -38,8 +38,9 @@ public class ServerListener implements Runnable {
 
 				if (msg.getType() instanceof ControlType control) {
 					switch (control) {
-					case CLIENT_ID -> handleClientId(msg.getData());
+					case CLIENT_ID -> handleClientId((int) msg.getData());
 					case START_GAME -> handleStartGame();
+					case LOGIN -> handleLogin((String) msg.getData());
 					case INVALID_ACTION -> handleAction((String) msg.getData());
 					case VALID_ACTION -> handleAction((String) msg.getData());
 					case UPDATE -> handleUpdate(msg.getData());
@@ -59,9 +60,9 @@ public class ServerListener implements Runnable {
 	/*
 	 * Metodo che gestisce l'arrivo del CLIENT_ID
 	 */
-	private void handleClientId(Object data) {
-		client.setClientId((int) data);
-		logger.info("Ricevuto ID client: " + (int) data);
+	private void handleClientId(int clientId) {
+		client.setClientId(clientId);
+		logger.info("Ricevuto ID client: " + clientId);
 	}
 
 	/*
@@ -69,16 +70,13 @@ public class ServerListener implements Runnable {
 	 */
 	private void handleStartGame() {
 		logger.info("Ricevuto segnale START_GAME");
-		client.setStart(true);
+		client.notifyStartGame();
 	}
 
 	/*
 	 * Metodo che gestisce l'arrivo dell'INVALID_ACTION e del VALID_ACTION
 	 */
 	private void handleAction(String action) {
-		if(action.equals("Login effettuato.")) {
-			client.setLogin(true);
-		}
 		logger.info(action);
 		// Mostra notifica GUI
 		javafx.application.Platform.runLater(() -> {
@@ -86,6 +84,27 @@ public class ServerListener implements Runnable {
 			alert.setTitle("Attenzione");
 			alert.setHeaderText(null);
 			alert.setContentText(action);
+			alert.showAndWait();
+		});
+	}
+
+	/*
+	 * Metodo che gestisce l'arrivo del LOGIN
+	 */
+	private void handleLogin(String result) {
+		logger.info(result);
+		if (result.equals("Login effettuato.")) {
+			client.notifyLoginResult(true);
+		} else {
+			client.notifyLoginResult(false);
+		}
+
+		// Mostra notifica GUI
+		javafx.application.Platform.runLater(() -> {
+			Alert alert = new Alert(Alert.AlertType.WARNING);
+			alert.setTitle("Autenticazione");
+			alert.setHeaderText(null);
+			alert.setContentText(result);
 			alert.showAndWait();
 		});
 	}
@@ -143,7 +162,7 @@ public class ServerListener implements Runnable {
 			alert.showAndWait();
 
 			// Torna al menu principale
-			client.setTornaMenu(1);
+			client.setTornaMenu(1); //anche qui crea un metodo observer nel client!
 		});
 
 	}

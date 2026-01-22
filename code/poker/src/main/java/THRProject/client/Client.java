@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
@@ -30,7 +31,7 @@ public class Client implements Communicator {
 	private ObjectOutputStream out;
 	private ServerListener serverListener;
 	private Socket socket;
-	private int tornaMenu = 0;
+	private final List<ClientObserver> observers = new ArrayList<>();
 
 	private static final String HOST = "localhost";
 //	private static final String HOST = "204.216.208.188";
@@ -38,14 +39,10 @@ public class Client implements Communicator {
 
 	private Game gameView; // variabile che contiene solo i dati personali del game
 	private int clientId;
-	private boolean login;
-	private boolean start;
 
 	public Client() {
 		// il client viene fatto partire nel main e inizializzato appena si connette al
 		// server
-		login = false;
-		start = false;
 	}
 
 	/*
@@ -53,6 +50,32 @@ public class Client implements Communicator {
 	 */
 	public void startClient() {
 		serverConnection();
+	}
+
+	public void addObserver(ClientObserver observer) {
+		observers.add(observer);
+	}
+
+	public void removeObserver(ClientObserver observer) {
+		observers.remove(observer);
+	}
+
+	/*
+	 * Metodo per avvisare gli observer del login
+	 */
+	public void notifyLoginResult(boolean result) {
+		for (ClientObserver observer : observers) {
+			observer.onLoginResult(result);
+		}
+	}
+
+	/*
+	 * Metodo per avvisare gli observer dello START_GAME
+	 */
+	public void notifyStartGame() {
+		for (ClientObserver observer : observers) {
+			observer.onStart();
+		}
 	}
 
 	/*
@@ -207,27 +230,4 @@ public class Client implements Communicator {
 		this.gameView = gameView;
 	}
 
-	public int getTornaMenu() {
-		return tornaMenu;
-	}
-
-	public void setTornaMenu(int tornaMenu) {
-		this.tornaMenu = tornaMenu;
-	}
-
-	public boolean isLogin() {
-		return login;
-	}
-
-	public void setLogin(boolean login) {
-		this.login = login;
-	}
-
-	public boolean isStart() {
-		return start;
-	}
-
-	public void setStart(boolean start) {
-		this.start = start;
-	}
 }

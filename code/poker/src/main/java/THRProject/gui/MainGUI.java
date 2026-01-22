@@ -20,6 +20,7 @@ public class MainGUI extends Application {
         client = new Client();
         client.startClient();
         SceneManager manager = new SceneManager(stage, client);
+        client.addObserver(manager);
         manager.showLoginScene();
     }
 
