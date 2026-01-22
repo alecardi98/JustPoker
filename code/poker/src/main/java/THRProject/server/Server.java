@@ -85,7 +85,6 @@ public final class Server {
 			registerPlayer(clientId, gamePlayer);
 		}
 		clientHandlers.get(clientId).sendMessage(new Message(ControlType.LOGIN, response));
-		
 	}
 
 	/*

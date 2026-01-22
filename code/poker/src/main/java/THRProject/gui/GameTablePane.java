@@ -231,7 +231,7 @@ public class GameTablePane extends VBox implements ClientObserver{
 
 		invitaBtn.setDisable(!myTurn || game.getPhase() != GamePhase.INVITO);
 		apriBtn.setDisable(!myTurn || game.getPhase() != GamePhase.APERTURA);
-		passaBtn.setDisable(!myTurn || game.getPhase() != GamePhase.APERTURA);
+		passaBtn.setDisable(!myTurn || game.getPhase() != GamePhase.APERTURA || game.isOpen());
 		cambioBtn.setDisable(!myTurn || game.getPhase() != GamePhase.ACCOMODO);
 		puntaBtn.setDisable(!myTurn || game.getPhase() != GamePhase.PUNTATA);
 		servitoBtn.setDisable(!myTurn || game.getPhase() != GamePhase.ACCOMODO);
