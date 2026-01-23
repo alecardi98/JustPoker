@@ -24,14 +24,6 @@ public class MainGUI extends Application {
         manager.showLoginScene();
     }
 
-    @Override
-    public void stop() throws Exception {
-        // Cleanup quando l'applicazione si chiude
-        if (client != null) {
-            client.quit();
-        }
-    }
-
     public static void main(String[] args) {
         launch(args);
     }

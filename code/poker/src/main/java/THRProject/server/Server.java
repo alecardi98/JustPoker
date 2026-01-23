@@ -33,6 +33,7 @@ public final class Server {
 	private static final int MAXPLAYERS = 2; // numero massimo di player
 	private static final int MAXFICHES = 1500; // valore fiches iniziali
 	private static final int MINBET = 25; // valore puntata minima
+	private static final int MAXBET = 500; // valore massimo puntata
 
 	private ConcurrentHashMap<Integer, ClientHandler> clientHandlers = new ConcurrentHashMap<Integer, ClientHandler>(); // concorrente
 	private static int countId = 0; // assegazione id incrementale a partire da 0
@@ -250,7 +251,8 @@ public final class Server {
 	 * Metodo per controllare se la puntata ha un valore esatto
 	 */
 	public boolean valorePuntataValido(int puntata, Player player) {
-		return player.getStatus().getTotalBet() + puntata >= game.getPot().getMaxBet();
+		int valore = player.getStatus().getTotalBet() + puntata;
+		return valore >= game.getPot().getMaxBet() && valore <= MAXBET;
 	}
 
 	/*
@@ -489,7 +491,7 @@ public final class Server {
 					active++; // conta chi non ha foldato
 			}
 			if (count == active) {
-				if (count == 1) { //hanno foldato tutti tranne uno
+				if (count == 1) { // hanno foldato tutti tranne uno
 					game.setPhase(GamePhase.ENDPASS);
 					splitPot(getActivePlayers(), getActivePlayers());
 				}
@@ -511,7 +513,7 @@ public final class Server {
 				if (!p.getValue().getStatus().isFold())
 					active++; // conta chi non ha foldato
 			}
-			if (count == active) { //hanno passato tutti
+			if (count == active) { // hanno passato tutti
 				game.setPhase(GamePhase.ENDPASS);
 				splitPot(getActivePlayers(), getActivePlayers());
 			}
@@ -581,8 +583,8 @@ public final class Server {
 			if (readyCount == game.getPlayers().size()) {
 				if (readyCount == 1) {
 					logger.warn("ERRORE! Partita terminata per mancanza di giocatori.");
-					clientHandlers.get(0).sendMessage(new Message(ControlType.ENDGAME, "Giocatori non sufficenti!"));
-					System.exit(1);
+					clientHandlers.get(clientHandlers.keySet().toArray()[0])
+							.sendMessage(new Message(ControlType.ENDGAME, "Giocatori non sufficenti!"));
 				} else {
 					readyCount = 0;
 					if (game.getPhase().equals(GamePhase.END)) {
@@ -592,7 +594,7 @@ public final class Server {
 					}
 					if (game.getPhase().equals(GamePhase.ENDPASS)) {
 						game.setPhase(GamePhase.INVITO);
-						logger.info("Partita ricominciata: tutti hanno passato.");
+						logger.info("Partita ricominciata: tutti hanno passato/foldato.");
 						startGame();
 					}
 				}

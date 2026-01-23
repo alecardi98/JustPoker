@@ -33,8 +33,8 @@ public class Client implements Communicator {
 	private final List<ClientObserver> observers = new ArrayList<>();
 
 
-	private static final String HOST = "localhost";
-//	private static final String HOST = "204.216.208.188";
+//	private static final String HOST = "localhost";
+	private static final String HOST = "204.216.208.188";
 	private static final int PORT = 443;
 
 	private Game gameView; // variabile che contiene solo i dati personali del game
@@ -127,11 +127,8 @@ public class Client implements Communicator {
 	 */
 	public void serverDisconnection() {
 		try {
-			if (out != null)
-				out.close();
-			if (socket != null)
-				socket.close();
-			serverListener = null;
+			out.close();
+			socket.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
