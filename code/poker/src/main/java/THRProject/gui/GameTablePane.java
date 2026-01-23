@@ -249,7 +249,7 @@ public class GameTablePane extends VBox {
 		cambioBtn.setDisable(!myTurn || game.getPhase() != GamePhase.ACCOMODO);
 		servitoBtn.setDisable(!myTurn || game.getPhase() != GamePhase.ACCOMODO);
 		puntaBtn.setDisable(!myTurn || game.getPhase() != GamePhase.PUNTATA);
-		foldBtn.setDisable(!myTurn || isEndPhase);
+		foldBtn.setDisable(!myTurn || isEndPhase || game.allFold());
 
 		readyBtn.setVisible(isEndPhase);
 		readyBtn.setDisable(false);

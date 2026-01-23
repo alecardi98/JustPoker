@@ -70,6 +70,7 @@ class ClientHandler implements Runnable, Communicator {
 					case READY -> Server.getServer().countReady(clientId);
 					case QUIT -> {
 						cleanUp();
+						logger.info("Quit Client " + clientId + " registrato.");
 						Server.getServer().checkStart();
 						return;
 					}
@@ -98,7 +99,7 @@ class ClientHandler implements Runnable, Communicator {
 		}
 		Server.getServer().removeClient(clientId);
 	}
-	
+
 	@Override
 	public void sendMessage(Object msg) {
 		try {

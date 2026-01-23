@@ -203,6 +203,16 @@ public class Game implements Serializable {
 		}
 	}
 
+	public boolean allFold() {
+		int fold = 0;
+		for (Map.Entry<Integer, Player> p : players.entrySet()) {
+			if (p.getValue().getStatus().isFold())
+				fold++;
+		}
+
+		return fold == players.size() - 1;
+	}
+
 	/*
 	 * Getter & Setter
 	 */

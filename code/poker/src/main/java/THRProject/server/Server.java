@@ -465,7 +465,8 @@ public final class Server {
 			for (Map.Entry<Integer, Player> p : game.getPlayers().entrySet()) {
 				if (p.getValue().getStatus().getFiches() <= 0) {
 					logger.info("Client " + p.getKey() + " in bancarotta.");
-					clientHandlers.get(p.getKey()).sendMessage(new Message(ControlType.ENDGAME, "Bancarotta! Hai perso."));
+					clientHandlers.get(p.getKey())
+							.sendMessage(new Message(ControlType.ENDGAME, "Bancarotta! Hai perso."));
 					clientHandlers.get(p.getKey()).cleanUp();
 				}
 			}
@@ -488,9 +489,10 @@ public final class Server {
 					active++; // conta chi non ha foldato
 			}
 			if (count == active) {
-				if(count == 1) {
+				if (count == 1) { //hanno foldato tutti tranne uno
 					game.setPhase(GamePhase.ENDPASS);
-				} 
+					splitPot(getActivePlayers(), getActivePlayers());
+				}
 				nextPhase();
 			}
 		}
@@ -509,8 +511,10 @@ public final class Server {
 				if (!p.getValue().getStatus().isFold())
 					active++; // conta chi non ha foldato
 			}
-			if (count == active)
+			if (count == active) { //hanno passato tutti
 				game.setPhase(GamePhase.ENDPASS);
+				splitPot(getActivePlayers(), getActivePlayers());
+			}
 		}
 	}
 
@@ -560,6 +564,7 @@ public final class Server {
 			if (!game.getPlayers().get(clientId).getStatus().isEnd()) {
 				game.getPlayers().get(clientId).getStatus().setEnd(true);
 				clientHandlers.get(clientId).sendMessage(new Message(ControlType.VALID_ACTION, "Ready registrato."));
+				logger.info("Ready Client " + clientId + " registrato.");
 				readyCount++;
 				checkStart();
 			} else {
@@ -588,7 +593,6 @@ public final class Server {
 					if (game.getPhase().equals(GamePhase.ENDPASS)) {
 						game.setPhase(GamePhase.INVITO);
 						logger.info("Partita ricominciata: tutti hanno passato.");
-						splitPot(getActivePlayers(), getActivePlayers());
 						startGame();
 					}
 				}
@@ -610,7 +614,7 @@ public final class Server {
 
 				for (Map.Entry<Integer, Player> p : gameView.getPlayers().entrySet()) {
 					if (!Objects.equals(p.getKey(), c.getKey())) {
-						gameView.getPlayers().remove(p.getKey());
+						gameView.getPlayers().get(p.getKey()).setHand(null);
 					}
 				}
 				c.getValue().sendMessage(new Message(ControlType.UPDATE, gameView));
