@@ -46,7 +46,7 @@ public class ServerListener implements Runnable {
 					case UPDATE -> handleUpdate(msg.getData());
 					case WINNER -> handleWinner();
 					case LOSER -> handleLoser();
-					case ENDGAME -> handleEndGame();
+					case ENDGAME -> handleEndGame((String) msg.getData());
 					default -> logger.error("ERRORE! Messaggio sconosciuto.");
 					}
 				}
@@ -152,20 +152,16 @@ public class ServerListener implements Runnable {
 	/*
 	 * Metodo che gestisce l'arrivo dell'ENDGAME
 	 */
-	private void handleEndGame() {
-		logger.info("Bancarotta! Hai perso.");
-
+	private void handleEndGame(String endgame) {
+		logger.info(endgame);
 		javafx.application.Platform.runLater(() -> {
 			Alert alert = new Alert(Alert.AlertType.ERROR);
 			alert.setTitle("Game Over");
 			alert.setHeaderText(null);
-			alert.setContentText("Bancarotta! Hai finito le fiches.");
+			alert.setContentText(endgame);
 			alert.showAndWait();
-
-			// Torna al menu principale
-			client.notifyTornaMenu();
 		});
-
+		client.notifyEndGame();
 	}
 
 	/*

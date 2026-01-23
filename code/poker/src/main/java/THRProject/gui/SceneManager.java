@@ -23,6 +23,7 @@ public class SceneManager implements ClientObserver {
 	private MainMenuPane mainMenuPane;
 	private LobbyPane lobbyPane;
 	private GameTablePane gameTablePane;
+	private EndPane endPane;
 
 	public SceneManager(Stage stage, Client client) {
 		this.stage = stage;
@@ -65,10 +66,17 @@ public class SceneManager implements ClientObserver {
 	}
 
 	public void showGameTable() {
-			// Creazione GameTablePane con parametri corretti
-			gameTablePane = new GameTablePane(this);
-			stage.setScene(new Scene(gameTablePane, 1000, 700));
-			stage.setTitle("Tavolo da gioco - JustPoker™");
+		// Creazione GameTablePane con parametri corretti
+		gameTablePane = new GameTablePane(this);
+		stage.setScene(new Scene(gameTablePane, 1000, 700));
+		stage.setTitle("Tavolo da gioco - JustPoker™");
+	}
+
+	public void showEndPane() {
+		endPane = new EndPane();
+		/*
+		 * Pannello di endgame, ti dice che il gioco è terminato e che devi uscire
+		 */
 	}
 
 	@Override
@@ -93,16 +101,16 @@ public class SceneManager implements ClientObserver {
 	}
 
 	@Override
-	public void onTornaMenu() {
+	public void onGameViewUpdate() {
 		javafx.application.Platform.runLater(() -> {
-			showLoginScene();
+			gameTablePane.refresh();
 		});
 	}
 
 	@Override
-	public void onGameViewUpdate() {
+	public void onEndGame() {
 		javafx.application.Platform.runLater(() -> {
-			gameTablePane.refresh();
+			showEndPane();
 		});
 	}
 
@@ -116,4 +124,5 @@ public class SceneManager implements ClientObserver {
 	public Client getClient() {
 		return client;
 	}
+
 }

@@ -28,7 +28,7 @@ public class GameTablePane extends VBox {
 	private Label phaseLabel;
 	private Label turnLabel;
 	private Label potLabel;
-	private Label maxBetLabel;
+	private Label minBetLabel;
 	private Label myMaxBetLabel;
 	private Label fichesLabel;
 
@@ -38,8 +38,8 @@ public class GameTablePane extends VBox {
 	private Button apriBtn;
 	private Button passaBtn;
 	private Button cambioBtn;
-	private Button puntaBtn;
 	private Button servitoBtn;
+	private Button puntaBtn;
 	private Button foldBtn;
 	private Button readyBtn;
 	private Button quitBtn;
@@ -72,8 +72,8 @@ public class GameTablePane extends VBox {
 		potLabel = new Label("Piatto: 0");
 		potLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: gold;");
 
-		maxBetLabel = new Label("Bet: 0");
-		maxBetLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
+		minBetLabel = new Label("MinBet: 0");
+		minBetLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
 
 		myMaxBetLabel = new Label("MyBet: 0");
 		myMaxBetLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
@@ -81,7 +81,7 @@ public class GameTablePane extends VBox {
 		fichesLabel = new Label("Fiches: 0");
 		fichesLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
 
-		infoPane.getChildren().addAll(phaseLabel, turnLabel, potLabel, maxBetLabel, myMaxBetLabel, fichesLabel);
+		infoPane.getChildren().addAll(phaseLabel, turnLabel, potLabel, minBetLabel, myMaxBetLabel, fichesLabel);
 
 		// Pannello carte del giocatore
 		cardsPane = new HBox(10);
@@ -108,8 +108,8 @@ public class GameTablePane extends VBox {
 		apriBtn = new Button("Apri");
 		passaBtn = new Button("Passa");
 		cambioBtn = new Button("Cambio");
-		puntaBtn = new Button("Punta");
 		servitoBtn = new Button("Servito");
+		puntaBtn = new Button("Punta");
 		foldBtn = new Button("Fold");
 		readyBtn = new Button("Pronto");
 		quitBtn = new Button("Abbandona");
@@ -120,8 +120,8 @@ public class GameTablePane extends VBox {
 		apriBtn.setStyle(buttonStyle + "-fx-background-color: #007bff; -fx-text-fill: white;");
 		passaBtn.setStyle(buttonStyle + "-fx-background-color: #6c757d; -fx-text-fill: white;");
 		cambioBtn.setStyle(buttonStyle + "-fx-background-color: #ffc107; -fx-text-fill: black;");
-		puntaBtn.setStyle(buttonStyle + "-fx-background-color: #dc3545; -fx-text-fill: white;");
 		servitoBtn.setStyle(buttonStyle + "-fx-background-color: #17a2b8; -fx-text-fill: white;");
+		puntaBtn.setStyle(buttonStyle + "-fx-background-color: #dc3545; -fx-text-fill: white;");
 		foldBtn.setStyle(buttonStyle + "-fx-background-color: #fd7e14; -fx-text-fill: white;");
 		readyBtn.setStyle(buttonStyle + "-fx-background-color: #20c997; -fx-text-fill: white;");
 		quitBtn.setStyle(buttonStyle + "-fx-background-color: #6f42c1; -fx-text-fill: white;");
@@ -158,6 +158,14 @@ public class GameTablePane extends VBox {
 			}
 		});
 
+		servitoBtn.setOnAction(e -> manager.getClient().invioServito());
+		foldBtn.setOnAction(e -> manager.getClient().invioLascia());
+		readyBtn.setOnAction(e -> {
+			manager.getClient().ready();
+			readyBtn.setDisable(true);
+			manager.showGameTable();
+		});
+
 		puntaBtn.setOnAction(e -> {
 			try {
 				int amount = Integer.parseInt(betAmountField.getText());
@@ -171,14 +179,6 @@ public class GameTablePane extends VBox {
 			}
 		});
 
-		servitoBtn.setOnAction(e -> manager.getClient().invioServito());
-		foldBtn.setOnAction(e -> manager.getClient().invioLascia());
-		readyBtn.setOnAction(e -> {
-			manager.getClient().ready();
-			readyBtn.setDisable(true);
-			manager.showGameTable();
-		});
-
 		quitBtn.setOnAction(e -> {
 			Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
 			confirm.setTitle("Conferma uscita");
@@ -186,10 +186,11 @@ public class GameTablePane extends VBox {
 
 			if (confirm.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
 				manager.getClient().quit();
+				manager.getStage().close();
 			}
 		});
 
-		HBox buttonsPane = new HBox(10, invitaBtn, apriBtn, passaBtn, cambioBtn, puntaBtn, servitoBtn, foldBtn);
+		HBox buttonsPane = new HBox(10, invitaBtn, apriBtn, passaBtn, cambioBtn, servitoBtn, puntaBtn, foldBtn);
 		buttonsPane.setAlignment(Pos.CENTER);
 
 		HBox endButtonsPane = new HBox(10, readyBtn, quitBtn);
@@ -212,9 +213,10 @@ public class GameTablePane extends VBox {
 		// Piatto
 		potLabel.setText("Piatto: " + game.getPot().getTotal());
 
-		maxBetLabel.setText("Bet: " + game.getPot().getMaxBet());
+		minBetLabel.setText("MinBet: " + game.getPot().getMaxBet());
 
-		myMaxBetLabel.setText("MyBet: " + game.getPlayers().get(manager.getClient().getClientId()).getStatus().getTotalBet());
+		myMaxBetLabel.setText(
+				"MyBet: " + game.getPlayers().get(manager.getClient().getClientId()).getStatus().getTotalBet());
 
 		// Turno
 		Player me = game.getPlayers().get(manager.getClient().getClientId());
@@ -245,8 +247,8 @@ public class GameTablePane extends VBox {
 		apriBtn.setDisable(!myTurn || game.getPhase() != GamePhase.APERTURA);
 		passaBtn.setDisable(!myTurn || game.getPhase() != GamePhase.APERTURA || game.isOpen());
 		cambioBtn.setDisable(!myTurn || game.getPhase() != GamePhase.ACCOMODO);
-		puntaBtn.setDisable(!myTurn || game.getPhase() != GamePhase.PUNTATA);
 		servitoBtn.setDisable(!myTurn || game.getPhase() != GamePhase.ACCOMODO);
+		puntaBtn.setDisable(!myTurn || game.getPhase() != GamePhase.PUNTATA);
 		foldBtn.setDisable(!myTurn || isEndPhase);
 
 		readyBtn.setVisible(isEndPhase);

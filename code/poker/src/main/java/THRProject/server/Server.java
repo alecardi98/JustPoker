@@ -465,7 +465,7 @@ public final class Server {
 			for (Map.Entry<Integer, Player> p : game.getPlayers().entrySet()) {
 				if (p.getValue().getStatus().getFiches() <= 0) {
 					logger.info("Client " + p.getKey() + " in bancarotta.");
-					clientHandlers.get(p.getKey()).sendMessage(new Message(ControlType.ENDGAME, null));
+					clientHandlers.get(p.getKey()).sendMessage(new Message(ControlType.ENDGAME, "Bancarotta! Hai perso."));
 					clientHandlers.get(p.getKey()).cleanUp();
 				}
 			}
@@ -473,7 +473,8 @@ public final class Server {
 	}
 
 	/*
-	 * Metodo che controlla quando cambiare la fase di gioco e la cambia
+	 * Metodo che controlla quando cambiare la fase di gioco e la cambia solo se
+	 * tutti gli attivi hanno fatto una scelta valida
 	 */
 	private void checkNextPhase() {
 		synchronized (game) {
@@ -487,6 +488,9 @@ public final class Server {
 					active++; // conta chi non ha foldato
 			}
 			if (count == active) {
+				if(count == 1) {
+					game.setPhase(GamePhase.ENDPASS);
+				} 
 				nextPhase();
 			}
 		}
@@ -551,43 +555,47 @@ public final class Server {
 	 * Metodo per incrementare il contatore dei client pronti per la prossima mano
 	 * in modo atomico
 	 */
-	public synchronized void countReady(int clientId) {
-		if (!game.getPlayers().get(clientId).getStatus().isEnd()) {
-			game.getPlayers().get(clientId).getStatus().setEnd(true);
-			clientHandlers.get(clientId).sendMessage(new Message(ControlType.VALID_ACTION, "Ready registrato."));
-			readyCount++;
-			checkStart();
-		} else {
-			logger.info("ERRORE! Client " + clientId + " non può giocare.");
+	public void countReady(int clientId) {
+		synchronized (game) {
+			if (!game.getPlayers().get(clientId).getStatus().isEnd()) {
+				game.getPlayers().get(clientId).getStatus().setEnd(true);
+				clientHandlers.get(clientId).sendMessage(new Message(ControlType.VALID_ACTION, "Ready registrato."));
+				readyCount++;
+				checkStart();
+			} else {
+				logger.info("ERRORE! Client " + clientId + " non può giocare.");
+			}
 		}
 	}
 
 	/*
 	 * Metodo per iniziare una partita se l'ultimo client a scegliere si disconnette
 	 */
-	public synchronized void checkStart() {
-		if (readyCount == game.getPlayers().size()) {
-			if (readyCount == 1) {
-				logger.warn("ERRORE! Partita terminata per mancanza di giocatori.");
-				clientHandlers.get(0).sendMessage(new Message(ControlType.WINNER, null));
-				System.exit(1);
-			} else {
-				readyCount = 0;
-				if (game.getPhase().equals(GamePhase.END)) {
-					game.setPhase(GamePhase.INVITO);
-					logger.info("Partita ricominciata: mano finita.");
-					startGame();
+	public void checkStart() {
+		synchronized (game) {
+			if (readyCount == game.getPlayers().size()) {
+				if (readyCount == 1) {
+					logger.warn("ERRORE! Partita terminata per mancanza di giocatori.");
+					clientHandlers.get(0).sendMessage(new Message(ControlType.ENDGAME, "Giocatori non sufficenti!"));
+					System.exit(1);
+				} else {
+					readyCount = 0;
+					if (game.getPhase().equals(GamePhase.END)) {
+						game.setPhase(GamePhase.INVITO);
+						logger.info("Partita ricominciata: mano finita.");
+						startGame();
+					}
+					if (game.getPhase().equals(GamePhase.ENDPASS)) {
+						game.setPhase(GamePhase.INVITO);
+						logger.info("Partita ricominciata: tutti hanno passato.");
+						splitPot(getActivePlayers(), getActivePlayers());
+						startGame();
+					}
 				}
-				if (game.getPhase().equals(GamePhase.ENDPASS)) {
-					game.setPhase(GamePhase.INVITO);
-					logger.info("Partita ricominciata: tutti hanno passato.");
-					splitPot(getActivePlayers(), getActivePlayers());
-					startGame();
-				}
-			}
-		} else
-			game.nextTurn();
+			} else
+				game.nextTurn();
 
+		}
 	}
 
 	/*
