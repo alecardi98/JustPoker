@@ -2,10 +2,8 @@ package THRProject.gui;
 
 import THRProject.client.Client;
 import THRProject.client.ClientObserver;
-import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 /**
  * Gestore delle scene per l'applicazione GUI
@@ -33,7 +31,7 @@ public class SceneManager implements ClientObserver {
 		// Configurazione finestra principale
 		stage.setResizable(false);
 		stage.setOnCloseRequest(e -> {
-			Platform.exit();
+			e.consume();
 		});
 	}
 
@@ -42,7 +40,6 @@ public class SceneManager implements ClientObserver {
 		Scene scene = new Scene(loginPane, 400, 350);
 		stage.setScene(scene);
 		stage.setTitle("Login - JustPoker™");
-		stage.initStyle(StageStyle.UNDECORATED);
 		stage.show();
 	}
 

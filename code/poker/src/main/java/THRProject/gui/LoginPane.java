@@ -1,6 +1,5 @@
 package THRProject.gui;
 
-import THRProject.client.ClientObserver;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;

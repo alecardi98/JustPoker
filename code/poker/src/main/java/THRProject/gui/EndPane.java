@@ -30,6 +30,6 @@ public class EndPane extends VBox {
 			System.exit(0);
 		});
 
-		getChildren().addAll(title, statusLabel);
+		getChildren().addAll(title, statusLabel, exitButton);
 	}
 }
