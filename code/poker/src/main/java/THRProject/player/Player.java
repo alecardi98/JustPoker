@@ -21,12 +21,20 @@ public class Player implements Serializable {
 		hand = new Hand();
 		status = new PlayerStatus();
 	}
+
 	public Player(String username) {
-        this.username = username;
-        this.password = ""; // Password vuota, tanto non serve durante il gioco
-        hand = new Hand();
-        status = new PlayerStatus();
-    }
+		this.username = username;
+		password = ""; // Password vuota, tanto non serve durante il gioco
+		hand = new Hand();
+		status = new PlayerStatus();
+	}
+	
+	public Player(Player other) {
+		username = other.username;
+		password = other.password;
+		status = new PlayerStatus(other.status);
+		hand = new Hand(other.hand);
+	}
 
 	/*
 	 * Metodo per creare l'invito (fisso a MINBET)
@@ -66,17 +74,8 @@ public class Player implements Serializable {
 	/*
 	 * Metodo per creare il cambio
 	 */
-	public Message cambio() {
-		return new Message(ActionType.CAMBIO, chooseCards());
-	}
-
-	/*
-	 * Metodo per scegliere le carte da cambiare
-	 */
-	public ArrayList<Card> chooseCards() {
-		ArrayList<Card> cards = new ArrayList<Card>();
-		// TO DO scelta carte
-		return cards;
+	public Message cambio(ArrayList<Card> cards) {
+		return new Message(ActionType.CAMBIO, cards);
 	}
 
 	/*
@@ -108,17 +107,15 @@ public class Player implements Serializable {
 		this.hand = hand;
 	}
 
-	public String getUsername() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public String getPassword() {
-		// TODO Auto-generated method stub
-		return null;
+		return password;
 	}
 
-	
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-	
+	public String getUsername() {
+		return username;
+	}
 }

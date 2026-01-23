@@ -10,8 +10,6 @@ import java.sql.Statement;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import THRProject.server.Server;
-
 public class DatabaseManager {
 
     // Percorso del DB: Salva i nella cartella "data" del progetto

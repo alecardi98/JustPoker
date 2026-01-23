@@ -17,6 +17,14 @@ public class PlayerStatus implements Serializable {
 		pass = false;
 		end = false;
 	}
+	
+	public PlayerStatus(PlayerStatus other) {
+		fiches = other.fiches;
+		totalBet = other.totalBet;
+		fold = other.fold;
+		pass = other.pass;
+		end = other.end;
+	}
 
 	/*
 	 * Metodo che serve per resettare il Player tra la fine di un game e l'altro

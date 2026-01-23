@@ -15,7 +15,7 @@ public class Game implements Serializable {
 
 	private int currentTurn; // indica a chi tocca (ID del player)
 	private GamePhase phase; // indica la fase di gioco
-	private ConcurrentHashMap<Integer, Player> players; // rappresenta i player abbinati al loro clientId
+	private ConcurrentMap<Integer, Player> players; // rappresenta i player abbinati al loro clientId
 	private boolean open; // indica che un giocatore ha aperto nella fase di apertura
 	private Pot pot; // il piatto del tavolo
 	private Deck deck; // deck che contiene le informazioni sulle carte da gioco
@@ -26,6 +26,20 @@ public class Game implements Serializable {
 		open = false;
 		pot = new Pot(minBet);
 		deck = new Deck();
+	}
+
+	public Game(Game other) {
+		currentTurn = other.currentTurn;
+		phase = other.phase;
+		open = other.open;
+
+		players = new ConcurrentHashMap<Integer, Player>();
+		for (Map.Entry<Integer, Player> p : other.getPlayers().entrySet()) {
+			players.put(p.getKey(), new Player(p.getValue()));
+		}
+
+		pot = new Pot(other.pot);
+		deck = new Deck(other.deck);
 	}
 
 	/*
@@ -42,8 +56,6 @@ public class Game implements Serializable {
 			currentTurn = min;
 		}
 	}
-	
-	
 
 	/*
 	 * Metodo con il quale il server cede il turno al giocatore successivo: gli ID
@@ -191,6 +203,16 @@ public class Game implements Serializable {
 		}
 	}
 
+	public boolean allFold() {
+		int fold = 0;
+		for (Map.Entry<Integer, Player> p : players.entrySet()) {
+			if (p.getValue().getStatus().isFold())
+				fold++;
+		}
+
+		return fold == players.size() - 1;
+	}
+
 	/*
 	 * Getter & Setter
 	 */
@@ -241,5 +263,4 @@ public class Game implements Serializable {
 	public void setPlayers(ConcurrentHashMap<Integer, Player> players) {
 		this.players = players;
 	}
-
 }

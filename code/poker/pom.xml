@@ -5,10 +5,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>THRProject</groupId>
-	<artifactId>poker</artifactId>
+	<artifactId>
+		poker</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>poker</name>
-	<url>https://github.com/alecardi98/JustPoker</url>
+	<url>
+		https://github.com/alecardi98/JustPoker</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -24,6 +26,17 @@
 			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-controls</artifactId>
+			<version>17.0.17</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-fxml</artifactId>
+			<version>21.0.2</version>
+		</dependency>
 		<!-- Log4j 2 API -->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
@@ -52,6 +65,20 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.13.0</version>
 			</plugin>
+			<!-- Jar Plugin -->
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.4.2</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-maven-plugin</artifactId>
+				<version>0.0.8</version>
+				<configuration>
+					<mainClass>THRProject.gui.MainGUI</mainClass>
+				</configuration>
+			</plugin>
 
 			<!-- Surefire Plugin per eseguire JUnit 5 -->
 			<plugin>
@@ -64,13 +91,6 @@
 				<artifactId>maven-clean-plugin</artifactId>
 				<version>3.4.0</version>
 			</plugin>
-
-			<!-- Jar Plugin -->
-			<plugin>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>3.4.2</version>
-			</plugin>
 		</plugins>
 	</build>
-
 </project>
