@@ -29,7 +29,7 @@ public final class Server {
 	private static Server server; // singleton Server
 	private static final int PORT = 443; // porta per la connessione
 
-	private static final int MAXPLAYERS = 3; // numero massimo di player
+	private static final int MAXPLAYERS = 2; // numero massimo di player
 	private static final int MAXFICHES = 1500; // valore fiches iniziali
 	private static final int MINBET = 25; // valore puntata minima
 	private static final int MAXBET = 500; // valore massimo puntata
@@ -615,8 +615,12 @@ public final class Server {
 				for (Map.Entry<Integer, Player> p : gameView.getPlayers().entrySet()) {
 					if (!Objects.equals(p.getKey(), c.getKey())) {
 						gameView.getPlayers().get(p.getKey()).setHand(null);
+					} else {
+						gameView.getPlayers().get(p.getKey()).getHand().order();
 					}
 				}
+				
+							
 				c.getValue().sendMessage(new Message(ControlType.UPDATE, gameView));
 			}
 		}

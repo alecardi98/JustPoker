@@ -2,7 +2,9 @@ package THRProject.card.logic;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 
+import THRProject.card.model.CardComparator;
 import THRProject.card.model.Card;
 import THRProject.card.model.Rank;
 
@@ -15,10 +17,17 @@ public class Hand implements Serializable {
 		cards = new ArrayList<Card>();
 		rank = new Rank();
 	}
-	
+
 	public Hand(Hand other) {
 		cards = new ArrayList<Card>(other.cards);
 		rank = new Rank(other.rank);
+	}
+
+	/*
+	 * Metodo che ordina le carte
+	 */
+	public void order() {
+		Collections.sort(cards, new CardComparator());
 	}
 
 	/*
