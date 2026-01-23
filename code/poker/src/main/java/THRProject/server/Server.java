@@ -29,8 +29,7 @@ public final class Server {
 	private static Server server; // singleton Server
 	private static final int PORT = 443; // porta per la connessione
 
-	// private static final int MAXPLAYERS = 4; // numero massimo di player
-	private static final int MAXPLAYERS = 2; // numero massimo di player
+	private static final int MAXPLAYERS = 3; // numero massimo di player
 	private static final int MAXFICHES = 1500; // valore fiches iniziali
 	private static final int MINBET = 25; // valore puntata minima
 	private static final int MAXBET = 500; // valore massimo puntata
