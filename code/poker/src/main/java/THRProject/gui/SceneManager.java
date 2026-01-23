@@ -5,6 +5,7 @@ import THRProject.client.ClientObserver;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  * Gestore delle scene per l'applicazione GUI
@@ -41,6 +42,7 @@ public class SceneManager implements ClientObserver {
 		Scene scene = new Scene(loginPane, 400, 350);
 		stage.setScene(scene);
 		stage.setTitle("Login - JustPoker™");
+		stage.initStyle(StageStyle.UNDECORATED);
 		stage.show();
 	}
 
@@ -73,10 +75,9 @@ public class SceneManager implements ClientObserver {
 	}
 
 	public void showEndPane() {
-		endPane = new EndPane();
-		/*
-		 * Pannello di endgame, ti dice che il gioco è terminato e che devi uscire
-		 */
+		endPane = new EndPane(this);
+		stage.setScene(new Scene(endPane, 600, 400));
+		stage.setTitle("Tavolo da gioco - JustPoker™");
 	}
 
 	@Override
