@@ -117,7 +117,7 @@ public class Client implements Communicator {
 			serverListener = new ServerListener(in, this);
 			new Thread(serverListener).start();
 		} catch (IOException e) {
-			logger.error("ERRORE! Impossibile connettersi alla server. Disconnessione.");
+			logger.error("ERRORE! Impossibile connettersi all server. Disconnessione.");
 			System.exit(1);
 		}
 	}

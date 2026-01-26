@@ -29,7 +29,7 @@ public class SceneManager implements ClientObserver {
 		this.client = client;
 
 		// Configurazione finestra principale
-		stage.setResizable(false);
+		stage.setResizable(true);
 		stage.setOnCloseRequest(e -> {
 			e.consume();
 		});
