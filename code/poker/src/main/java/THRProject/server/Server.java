@@ -35,7 +35,7 @@ public final class Server {
 	private static final int MAXBET = 500; // valore massimo puntata
 
 	private ConcurrentHashMap<Integer, ClientHandler> clientHandlers = new ConcurrentHashMap<Integer, ClientHandler>(); // concorrente
-	private static int countId = 0; // assegazione id incrementale a partire da 0
+	private static int countId = 0; // assegnazione id incrementale a partire da 0
 	private static int readyCount = 0; // giocatori pronti per il prossimo game
 	private Game game = new Game(MINBET);
 	private DatabaseManager dbManager = new DatabaseManager();
@@ -380,7 +380,7 @@ public final class Server {
 				game.foldPlayer(player);
 				clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "Fold registrato."));
 				checkNextPhase();
-				
+
 				if (game.getPhase().equals(GamePhase.END) || game.getPhase().equals(GamePhase.ENDPASS))
 					broadcastLastGameView();
 				else
@@ -491,13 +491,17 @@ public final class Server {
 	 */
 	private void checkBankrupt() {
 		synchronized (game) {
+			ArrayList<Integer> losers = new ArrayList<Integer>();
 			for (Map.Entry<Integer, Player> p : game.getPlayers().entrySet()) {
 				if (p.getValue().getStatus().getFiches() <= 0) {
 					logger.info("Client " + p.getKey() + " in bancarotta.");
 					clientHandlers.get(p.getKey())
 							.sendMessage(new Message(ControlType.ENDGAME, "Bancarotta! Hai perso."));
-					clientHandlers.get(p.getKey()).cleanUp();
+					losers.add(p.getKey());
 				}
+			}
+			for (Integer i : losers) {
+				clientHandlers.get(i).cleanUp();
 			}
 		}
 	}

@@ -227,11 +227,15 @@ public class GameTablePane extends VBox {
 
 		myMaxBetLabel.setText(
 				"MyBet: " + game.getPlayers().get(manager.getClient().getClientId()).getStatus().getTotalBet());
-		
-		if(game.getPlayers().get(manager.getClient().getClientId()).getStatus().getTotalBet() >= game.getPot().getMaxBet())
+
+		if (game.getPlayers().get(manager.getClient().getClientId()).getStatus().getTotalBet() >= game.getPot()
+				.getMaxBet())
 			myMaxBetLabel.setTextFill(Color.GREEN);
 		else
 			myMaxBetLabel.setTextFill(Color.RED);
+
+		betAmountField.setText("" + (game.getPot().getMaxBet()
+				- game.getPlayers().get(manager.getClient().getClientId()).getStatus().getTotalBet()));
 
 		// Turno
 		Player me = game.getPlayers().get(manager.getClient().getClientId());
@@ -240,12 +244,19 @@ public class GameTablePane extends VBox {
 				turnLabel.setText("È il tuo turno");
 				turnLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #28a745; -fx-font-weight: bold;");
 			} else {
-				turnLabel.setText("Turno di " + game.getPlayers().get(game.getCurrentTurn()).getUsername());
 				turnLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
+				if (!(game.getPhase().equals(GamePhase.END) || game.getPhase().equals(GamePhase.ENDPASS))) {
+					turnLabel.setText("Turno di " + game.getPlayers().get(game.getCurrentTurn()).getUsername());
+				} else {
+					turnLabel.setText("Turno ---");
+				}
 			}
 
 			// Fiches
-			fichesLabel.setText("Fiches: " + me.getStatus().getFiches());
+			if (me.getStatus().getFiches() > 0)
+				fichesLabel.setText("Fiches: " + me.getStatus().getFiches());
+			else
+				fichesLabel.setText("Fiches: ALL-IN");
 		}
 
 		// Carte (solo se è il tuo turno o se le carte sono visibili)
@@ -264,7 +275,7 @@ public class GameTablePane extends VBox {
 		cambioBtn.setDisable(!myTurn || game.getPhase() != GamePhase.ACCOMODO);
 		servitoBtn.setDisable(!myTurn || game.getPhase() != GamePhase.ACCOMODO);
 		puntaBtn.setDisable(!myTurn || game.getPhase() != GamePhase.PUNTATA);
-		foldBtn.setDisable(!myTurn || isEndPhase || game.allFold());
+		foldBtn.setDisable(!myTurn || isEndPhase || game.allFold() || me.getStatus().getFiches() <= 0);
 
 		readyBtn.setVisible(isEndPhase);
 		readyBtn.setDisable(false);
