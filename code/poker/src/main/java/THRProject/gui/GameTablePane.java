@@ -9,6 +9,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -226,6 +227,11 @@ public class GameTablePane extends VBox {
 
 		myMaxBetLabel.setText(
 				"MyBet: " + game.getPlayers().get(manager.getClient().getClientId()).getStatus().getTotalBet());
+		
+		if(game.getPlayers().get(manager.getClient().getClientId()).getStatus().getTotalBet() >= game.getPot().getMaxBet())
+			myMaxBetLabel.setTextFill(Color.GREEN);
+		else
+			myMaxBetLabel.setTextFill(Color.RED);
 
 		// Turno
 		Player me = game.getPlayers().get(manager.getClient().getClientId());

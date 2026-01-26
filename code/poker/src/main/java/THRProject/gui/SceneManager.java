@@ -67,7 +67,7 @@ public class SceneManager implements ClientObserver {
 	public void showGameTable() {
 		// Creazione GameTablePane con parametri corretti
 		gameTablePane = new GameTablePane(this);
-		stage.setScene(new Scene(gameTablePane, 1000, 700));
+		stage.setScene(new Scene(gameTablePane, 900, 500));
 		stage.setTitle("Tavolo da gioco - JustPoker™");
 	}
 
