@@ -29,7 +29,7 @@ public final class Server {
 	private static Server server; // singleton Server
 	private static final int PORT = 443; // porta per la connessione
 
-	private static final int MAXPLAYERS = 2; // numero massimo di player
+	private static final int MAXPLAYERS = 4; // numero massimo di player
 	private static final int MAXFICHES = 1500; // valore fiches iniziali
 	private static final int MINBET = 25; // valore puntata minima
 	private static final int MAXBET = 500; // valore massimo puntata
@@ -152,7 +152,11 @@ public final class Server {
 				game.nextTurn();
 				clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "Invito registrato."));
 				checkNextPhase();
-				broadcastSafeGameView();
+
+				if (game.getPhase().equals(GamePhase.END) || game.getPhase().equals(GamePhase.ENDPASS))
+					broadcastLastGameView();
+				else
+					broadcastSafeGameView();
 			} else
 				logger.info("ERRORE! Client " + clientId + " non può giocare.");
 		}
@@ -204,7 +208,11 @@ public final class Server {
 						}
 						game.resetBet(clientId);
 						checkNextPhase();
-						broadcastSafeGameView();
+
+						if (game.getPhase().equals(GamePhase.END) || game.getPhase().equals(GamePhase.ENDPASS))
+							broadcastLastGameView();
+						else
+							broadcastSafeGameView();
 					}
 				} else {
 					logger.info("ERRORE! Client " + clientId + " non possiede almeno una coppia di J");
@@ -239,7 +247,11 @@ public final class Server {
 					clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "Puntata registrata."));
 					game.resetBet(clientId);
 					checkNextPhase();
-					broadcastSafeGameView();
+
+					if (game.getPhase().equals(GamePhase.END) || game.getPhase().equals(GamePhase.ENDPASS))
+						broadcastLastGameView();
+					else
+						broadcastSafeGameView();
 				}
 			} else
 				logger.info("ERRORE! Client " + clientId + " non può giocare.");
@@ -271,7 +283,11 @@ public final class Server {
 				clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "Passa registrato."));
 				restartPass();
 				checkNextPhase();
-				broadcastSafeGameView();
+
+				if (game.getPhase().equals(GamePhase.END) || game.getPhase().equals(GamePhase.ENDPASS))
+					broadcastLastGameView();
+				else
+					broadcastSafeGameView();
 			} else
 				logger.info("ERRORE! Client " + clientId + " non può giocare.");
 		}
@@ -316,7 +332,11 @@ public final class Server {
 					game.nextTurn();
 					clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "Cambio registrato."));
 					checkNextPhase();
-					broadcastSafeGameView();
+
+					if (game.getPhase().equals(GamePhase.END) || game.getPhase().equals(GamePhase.ENDPASS))
+						broadcastLastGameView();
+					else
+						broadcastSafeGameView();
 				}
 			} else
 				logger.info("ERRORE! Client " + clientId + " non può giocare.");
@@ -338,7 +358,11 @@ public final class Server {
 				game.nextTurn();
 				clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "Servito registrato."));
 				checkNextPhase();
-				broadcastSafeGameView();
+
+				if (game.getPhase().equals(GamePhase.END) || game.getPhase().equals(GamePhase.ENDPASS))
+					broadcastLastGameView();
+				else
+					broadcastSafeGameView();
 			} else
 				logger.info("ERRORE! Client " + clientId + " non può giocare.");
 		}
@@ -356,7 +380,11 @@ public final class Server {
 				game.foldPlayer(player);
 				clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "Fold registrato."));
 				checkNextPhase();
-				broadcastSafeGameView();
+				
+				if (game.getPhase().equals(GamePhase.END) || game.getPhase().equals(GamePhase.ENDPASS))
+					broadcastLastGameView();
+				else
+					broadcastSafeGameView();
 			} else {
 				logger.info("ERRORE! Client " + clientId + " non può giocare.");
 			}
@@ -371,7 +399,7 @@ public final class Server {
 		checkWinner();
 		checkBankrupt();
 		game.setPhase(GamePhase.END);
-		broadcastSafeGameView();
+		broadcastLastGameView();
 	}
 
 	/*
@@ -541,14 +569,12 @@ public final class Server {
 				broadcastSafeGameView();
 				break;
 			case PUNTATA: // preparazione alla fase di Showdown
-				game.setPhase(GamePhase.SHOWDOWN);
 				game.resetPhase();
-				broadcastSafeGameView();
 				startShowdown();
 				break;
 			case ENDPASS:
 				game.resetPhase();
-				broadcastSafeGameView();
+				broadcastLastGameView();
 				break;
 			default:
 				logger.error("ERRORE! Fase di gioco non esistente.");
@@ -619,8 +645,25 @@ public final class Server {
 						gameView.getPlayers().get(p.getKey()).getHand().order();
 					}
 				}
-				
-							
+
+				c.getValue().sendMessage(new Message(ControlType.UPDATE, gameView));
+			}
+		}
+	}
+
+	/*
+	 * Metodo per creare ed inviare broadcast a tutti i client per mostrare le carte
+	 * di tutti
+	 */
+	public void broadcastLastGameView() {
+		synchronized (game) {
+			for (Map.Entry<Integer, ClientHandler> c : clientHandlers.entrySet()) {
+				Game gameView = new Game(game);
+
+				for (Map.Entry<Integer, Player> p : gameView.getPlayers().entrySet()) {
+					gameView.getPlayers().get(p.getKey()).getHand().order();
+				}
+
 				c.getValue().sendMessage(new Message(ControlType.UPDATE, gameView));
 			}
 		}

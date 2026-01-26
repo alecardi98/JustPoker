@@ -43,7 +43,7 @@ public class ServerListener implements Runnable {
 					case LOGIN -> handleLogin((String) msg.getData());
 					case INVALID_ACTION -> handleAction((String) msg.getData());
 					case VALID_ACTION -> handleAction((String) msg.getData());
-					case UPDATE -> handleUpdate(msg.getData());
+					case UPDATE -> handleUpdate((Game) msg.getData());
 					case WINNER -> handleWinner();
 					case LOSER -> handleLoser();
 					case ENDGAME -> handleEndGame((String) msg.getData());
@@ -112,8 +112,8 @@ public class ServerListener implements Runnable {
 	/*
 	 * Metodo che gestisce l'arrivo dell'UPDATE
 	 */
-	private void handleUpdate(Object data) {
-		client.setGameView((Game) data);
+	private void handleUpdate(Game gameView) {
+		client.setGameView(gameView);
 		client.notifyGameViewUpdate();
 	}
 

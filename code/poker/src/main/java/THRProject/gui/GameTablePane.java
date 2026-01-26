@@ -12,6 +12,7 @@ import javafx.scene.layout.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Pannello principale del tavolo da gioco
@@ -33,6 +34,7 @@ public class GameTablePane extends VBox {
 	private Label fichesLabel;
 
 	private HBox cardsPane;
+	private HBox opponentsCardsPane;
 
 	private Button invitaBtn;
 	private Button apriBtn;
@@ -88,6 +90,13 @@ public class GameTablePane extends VBox {
 		cardsPane.setAlignment(Pos.CENTER);
 		cardsPane.setStyle(
 				"-fx-border-color: white; -fx-border-width: 2px; -fx-padding: 15px; -fx-background-color: rgba(255,255,255,0.1);");
+
+		// Pannello carte degli avversari
+		opponentsCardsPane = new HBox(10);
+		opponentsCardsPane.setAlignment(Pos.CENTER);
+		opponentsCardsPane.setStyle(
+				"-fx-border-color: white; -fx-border-width: 2px; -fx-padding: 15px; -fx-background-color: rgba(255,255,255,0.1);");
+		getChildren().addAll(opponentsCardsPane);
 
 		// Pannello puntata
 		HBox betPane = new HBox(10);
@@ -225,7 +234,7 @@ public class GameTablePane extends VBox {
 				turnLabel.setText("È il tuo turno");
 				turnLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #28a745; -fx-font-weight: bold;");
 			} else {
-				turnLabel.setText("Turno avversario");
+				turnLabel.setText("Turno di " + game.getPlayers().get(game.getCurrentTurn()).getUsername());
 				turnLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
 			}
 
@@ -257,6 +266,54 @@ public class GameTablePane extends VBox {
 
 		betAmountField
 				.setDisable(!myTurn || (game.getPhase() != GamePhase.APERTURA && game.getPhase() != GamePhase.PUNTATA));
+
+		isEndPhase = game.getPhase() == GamePhase.END || game.getPhase() == GamePhase.ENDPASS;
+
+		if (isEndPhase) {
+			updateOtherPlayersCards(game);
+		} else {
+			opponentsCardsPane.getChildren().clear();
+		}
+
+	}
+
+	private void updateOtherPlayersCards(Game game) {
+		if (game == null)
+			return;
+
+		opponentsCardsPane.getChildren().clear();
+
+		for (Map.Entry<Integer, Player> entry : game.getPlayers().entrySet()) {
+
+			// Salta il giocatore locale
+			if (entry.getKey() == manager.getClient().getClientId())
+				continue;
+
+			Player player = entry.getValue();
+			if (player == null)
+				continue;
+
+			var hand = player.getHand();
+
+			if (hand == null)
+				continue;
+
+			Label name = new Label(player.getUsername());
+			name.setStyle("-fx-text-fill: white; -fx-font-weight: bold;");
+
+			HBox handPane = new HBox(5);
+			handPane.setAlignment(Pos.CENTER);
+
+			for (Card c : hand.getCards()) {
+				handPane.getChildren().add(createCardView(c));
+			}
+
+			VBox playerBox = new VBox(5, name, handPane);
+			playerBox.setAlignment(Pos.CENTER);
+			playerBox.setStyle("-fx-border-color: white; -fx-padding: 10px;");
+
+			opponentsCardsPane.getChildren().add(playerBox);
+		}
 	}
 
 	/**
