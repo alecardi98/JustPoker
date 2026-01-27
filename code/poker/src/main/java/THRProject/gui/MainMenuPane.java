@@ -1,5 +1,6 @@
 package THRProject.gui;
 
+import THRProject.server.Server;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -82,17 +83,20 @@ public class MainMenuPane extends VBox {
 
 				• Ogni giocatore riceve 5 carte
 				• Il mazzo è composto da 32 carte (dal 7 all'Asso)
+				• La puntata minima è di 25 e la massima è di 500 
+				  a fase, ma si può puntare solo fino alla somma 
+				  intera del piatto
 
 				FASI DEL GIOCO:
-				1. INVITO: puntata iniziale obbligatoria
+				1. INVITO: puntata iniziale fissa alla minima
 				2. APERTURA: si può aprire con almeno una coppia di Jack
-				3. PUNTATA: fase di rilanci fino al pareggio
+				3. PUNTATA: fase di rilanci
 				4. ACCOMODO: possibilità di cambiare fino a 3 carte
 				5. SHOWDOWN: confronto delle mani
 
 				AZIONI DISPONIBILI:
 				• Invito: partecipa alla mano con puntata minima
-				• Apri: apri il gioco con una puntata
+				• Apri: apri il gioco puntando
 				• Passa: passa il turno (solo in apertura)
 				• Punta: aumenta la posta in gioco
 				• Cambio: sostituisci fino a 3 carte
