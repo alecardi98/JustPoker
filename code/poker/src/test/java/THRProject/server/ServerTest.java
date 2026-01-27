@@ -21,7 +21,6 @@ class ServerTest {
 
 	@Test
 	void testFlow1() {
-		Server.resetInstance();
 		Server server = Server.getServer();
 		Game game;
 

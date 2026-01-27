@@ -27,20 +27,38 @@ public final class Server {
 	private static final Logger logger = LogManager.getLogger(Server.class);
 
 	private static Server server; // singleton Server
-	private static final int PORT = 443; // porta per la connessione
-
-	private static final int MAXPLAYERS = 4; // numero massimo di player
-	private static final int MAXFICHES = 1500; // valore fiches iniziali
-	private static final int MINBET = 25; // valore puntata minima
-	public static final int MAXBET = 500; // valore puntata massima possibile
-	
-	private ConcurrentHashMap<Integer, ClientHandler> clientHandlers = new ConcurrentHashMap<Integer, ClientHandler>(); // concorrente
-	private static int countId = 0; // assegnazione id incrementale a partire da 0
-	private static int readyCount = 0; // giocatori pronti per il prossimo game
-	private Game game = new Game(MINBET);
+	private final int PORT = 443; // porta per la connessione
 	private DatabaseManager dbManager = new DatabaseManager();
+	private ArrayList<ServerObserver> observers = new ArrayList<ServerObserver>();
+
+	private final int MAXPLAYERS = 4; // numero massimo di player
+	private final int MAXFICHES = 1500; // valore fiches iniziali
+	private final int MINBET = 25; // valore puntata minima
+	public static final int MAXBET = 500; // valore puntata massima possibile
+
+	private ConcurrentHashMap<Integer, ClientHandler> clientHandlers = new ConcurrentHashMap<Integer, ClientHandler>(); // concorrente
+	private int countId = 0; // assegnazione id incrementale a partire da 0
+	private int readyCount = 0; // giocatori pronti per il prossimo game
+	private Game game = new Game(MINBET);
 
 	private Server() {
+	}
+
+	public void addObserver(ServerObserver observer) {
+		observers.add(observer);
+	}
+
+	public void removeObserver(ServerObserver observer) {
+		observers.remove(observer);
+	}
+
+	/*
+	 * Metodo per avvisare il server manager dell'endgame
+	 */
+	public void notifyEndGame() {
+		for (ServerObserver observer : observers) {
+			observer.onEndGame();
+		}
 	}
 
 	/*
@@ -122,6 +140,9 @@ public final class Server {
 		synchronized (clientHandlers) {
 			clientHandlers.remove(clientId);
 			logger.info("ClientHandler " + clientId + " rimosso.");
+
+			if (clientHandlers.size() == 0)
+				notifyEndGame();
 		}
 	}
 
@@ -274,11 +295,10 @@ public final class Server {
 		int maxBet = game.getPot().getTotal();
 		if (maxBet == 0)
 			return game.getPot().getMinBet();
+		else if (maxBet < MAXBET)
+			return maxBet;
 		else
-			if(maxBet < MAXBET)
-				return maxBet;
-			else
-				return MAXBET;
+			return MAXBET;
 	}
 
 	/*
@@ -702,10 +722,12 @@ public final class Server {
 	}
 
 	/*
-	 * Metodo per il testing
+	 * Metodo per resettare gli attributi del vecchio game del singleton server
 	 */
-	static void resetInstance() {
-		server = null;
+	public void reset() {
+		clientHandlers = new ConcurrentHashMap<Integer, ClientHandler>();
+		readyCount = 0;
+		game = new Game(MINBET);
 	}
 
 	/*

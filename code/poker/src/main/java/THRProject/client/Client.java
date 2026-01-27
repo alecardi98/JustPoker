@@ -32,7 +32,6 @@ public class Client implements Communicator {
 	private Socket socket;
 	private final List<ClientObserver> observers = new ArrayList<>();
 
-
 //	private static final String HOST = "localhost";
 	private static final String HOST = "204.216.208.188";
 	private static final int PORT = 443;
@@ -52,10 +51,16 @@ public class Client implements Communicator {
 		serverConnection();
 	}
 
+	/*
+	 * Metodo per aggiungere un ClientObserver
+	 */
 	public void addObserver(ClientObserver observer) {
 		observers.add(observer);
 	}
 
+	/*
+	 * Metodo per rimuovere un ClientObserver
+	 */
 	public void removeObserver(ClientObserver observer) {
 		observers.remove(observer);
 	}
@@ -77,17 +82,23 @@ public class Client implements Communicator {
 			observer.onStart();
 		}
 	}
-	
+
+	/*
+	 * Metodo per avvisare gli observer dell'UPDATE
+	 */
 	public void notifyGameViewUpdate() {
 		for (ClientObserver observer : observers) {
 			observer.onGameViewUpdate();
-		}		
+		}
 	}
-	
+
+	/*
+	 * Metodo per avvisare gli observer dell'ENDGAME
+	 */
 	public void notifyEndGame() {
 		for (ClientObserver observer : observers) {
 			observer.onEndGame();
-		}		
+		}
 	}
 
 	/*
@@ -117,7 +128,7 @@ public class Client implements Communicator {
 			serverListener = new ServerListener(in, this);
 			new Thread(serverListener).start();
 		} catch (IOException e) {
-			logger.error("ERRORE! Impossibile connettersi all server. Disconnessione.");
+			logger.error("ERRORE! Impossibile connettersi al server. Disconnessione.");
 			System.exit(1);
 		}
 	}
@@ -210,6 +221,9 @@ public class Client implements Communicator {
 		serverDisconnection();
 	}
 
+	/*
+	 * Metodo per inviare messaggi
+	 */
 	@Override
 	public void sendMessage(Object msg) {
 		try {

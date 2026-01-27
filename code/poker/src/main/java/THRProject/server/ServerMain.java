@@ -4,8 +4,9 @@ public class ServerMain {
 
 	public static void main(String[] args) {
 
-		Server server = Server.getServer();
-		server.startServer();
+		ServerManager manager = new ServerManager();
+		Server.getServer().addObserver(manager);
+		manager.startManager();
 
 	}
 
