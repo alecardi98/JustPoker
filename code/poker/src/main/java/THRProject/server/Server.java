@@ -32,8 +32,8 @@ public final class Server {
 	private static final int MAXPLAYERS = 4; // numero massimo di player
 	private static final int MAXFICHES = 1500; // valore fiches iniziali
 	private static final int MINBET = 25; // valore puntata minima
-	private static final int MAXBET = 500; // valore massimo puntata
-
+	public static final int MAXBET = 500; // valore puntata massima possibile
+	
 	private ConcurrentHashMap<Integer, ClientHandler> clientHandlers = new ConcurrentHashMap<Integer, ClientHandler>(); // concorrente
 	private static int countId = 0; // assegnazione id incrementale a partire da 0
 	private static int readyCount = 0; // giocatori pronti per il prossimo game
@@ -263,7 +263,22 @@ public final class Server {
 	 */
 	public boolean valorePuntataValido(int puntata, Player player) {
 		int valore = player.getStatus().getTotalBet() + puntata;
-		return valore >= game.getPot().getMaxBet() && valore <= MAXBET;
+		return valore >= game.getPot().getMaxBet() && valore <= maxBet();
+	}
+
+	/*
+	 * Il valore massimo di ogni puntata deve essere inferiore alla somma del piatto
+	 * o della massima puntata fissata
+	 */
+	public int maxBet() {
+		int maxBet = game.getPot().getTotal();
+		if (maxBet == 0)
+			return game.getPot().getMinBet();
+		else
+			if(maxBet < MAXBET)
+				return maxBet;
+			else
+				return MAXBET;
 	}
 
 	/*
@@ -281,7 +296,6 @@ public final class Server {
 				player.getStatus().setPass(true);
 				game.nextTurn();
 				clientHandler.sendMessage(new Message(ControlType.VALID_ACTION, "Passa registrato."));
-				restartPass();
 				checkNextPhase();
 
 				if (game.getPhase().equals(GamePhase.END) || game.getPhase().equals(GamePhase.ENDPASS))
@@ -403,7 +417,7 @@ public final class Server {
 	}
 
 	/*
-	 * Metodo per dichiare il vincitore della mano
+	 * Metodo per dichiare il vincitore della mano e distribuire il piatto
 	 */
 	private void checkWinner() {
 		synchronized (game) {
@@ -467,7 +481,16 @@ public final class Server {
 	 * Metodo che distribuisce il piatto ai vincitori
 	 */
 	private void splitPot(Map<Integer, Player> activePlayers, Map<Integer, Player> winners) {
-		int potShare = game.getPot().getTotal() / winners.size();
+		// calcolo debiti
+		int debt = 0;
+		for (Map.Entry<Integer, Player> entry : activePlayers.entrySet()) {
+			if (entry.getValue().getStatus().getFiches() < 0 && !winners.containsKey(entry.getKey())) {
+				debt = debt + entry.getValue().getStatus().getFiches();
+			}
+		}
+
+		// calcolo e distribuzione quota vittoria
+		int potShare = (game.getPot().getTotal() + debt) / winners.size();
 
 		for (Map.Entry<Integer, Player> entry : activePlayers.entrySet()) {
 			int playerId = entry.getKey();
@@ -512,41 +535,28 @@ public final class Server {
 	 */
 	private void checkNextPhase() {
 		synchronized (game) {
-			int count = 0;
+			int endNotFold = 0;
+			int passNotFold = 0;
 			int active = 0;
+
 			for (Map.Entry<Integer, Player> p : game.getPlayers().entrySet()) {
 				if (p.getValue().getStatus().isEnd() && !p.getValue().getStatus().isFold())
-					count++; // conta chi ha finito il proprio turno e non ha foldato
+					endNotFold++; // conta chi ha finito il proprio turno e non ha foldato
+
+				if (p.getValue().getStatus().isPass() && !p.getValue().getStatus().isFold())
+					passNotFold++; // conta chi ha passato e non ha foldato
 
 				if (!p.getValue().getStatus().isFold())
 					active++; // conta chi non ha foldato
 			}
-			if (count == active) {
-				if (count == 1) { // hanno foldato tutti tranne uno
+			if (endNotFold == active) { // hanno finito tutti gli attivi
+				if (endNotFold == 1 || passNotFold == active) { // hanno foldato tutti tranne uno oppure hanno passato
+																// tutti gli attivi
 					game.setPhase(GamePhase.ENDPASS);
 					splitPot(getActivePlayers(), getActivePlayers());
 				}
-				nextPhase();
-			}
-		}
-	}
 
-	/*
-	 * Metodo che controlla quando hanno passato tutti l'apertura e riavvia
-	 */
-	private void restartPass() {
-		synchronized (game) {
-			int count = 0;
-			int active = 0;
-			for (Map.Entry<Integer, Player> p : game.getPlayers().entrySet()) {
-				if (p.getValue().getStatus().isPass() && !p.getValue().getStatus().isFold())
-					count++; // conta chi ha passato e non ha foldato
-				if (!p.getValue().getStatus().isFold())
-					active++; // conta chi non ha foldato
-			}
-			if (count == active) { // hanno passato tutti
-				game.setPhase(GamePhase.ENDPASS);
-				splitPot(getActivePlayers(), getActivePlayers());
+				nextPhase();
 			}
 		}
 	}

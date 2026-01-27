@@ -5,6 +5,7 @@ import THRProject.card.model.Suit;
 import THRProject.game.Game;
 import THRProject.game.GamePhase;
 import THRProject.player.Player;
+import THRProject.server.Server;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -30,9 +31,10 @@ public class GameTablePane extends VBox {
 	private Label phaseLabel;
 	private Label turnLabel;
 	private Label potLabel;
-	private Label minBetLabel;
 	private Label myMaxBetLabel;
 	private Label fichesLabel;
+	private Label minBet;
+	private Label maxBet;
 
 	private HBox cardsPane;
 	private HBox opponentsCardsPane;
@@ -75,16 +77,13 @@ public class GameTablePane extends VBox {
 		potLabel = new Label("Piatto: 0");
 		potLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: gold;");
 
-		minBetLabel = new Label("MinBet: 0");
-		minBetLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
-
 		myMaxBetLabel = new Label("MyBet: 0");
 		myMaxBetLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
 
 		fichesLabel = new Label("Fiches: 0");
 		fichesLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
 
-		infoPane.getChildren().addAll(phaseLabel, turnLabel, potLabel, minBetLabel, myMaxBetLabel, fichesLabel);
+		infoPane.getChildren().addAll(phaseLabel, turnLabel, potLabel, myMaxBetLabel, fichesLabel);
 
 		// Pannello carte del giocatore
 		cardsPane = new HBox(10);
@@ -111,7 +110,13 @@ public class GameTablePane extends VBox {
 		Label betLabel = new Label("Puntata:");
 		betLabel.setStyle("-fx-text-fill: white;");
 
-		betPane.getChildren().addAll(betLabel, betAmountField);
+		minBet = new Label("Min: 25");
+		minBet.setStyle("-fx-text-fill: white;");
+
+		maxBet = new Label("Max: ---");
+		maxBet.setStyle("-fx-text-fill: white;");
+
+		betPane.getChildren().addAll(betLabel, betAmountField, minBet, maxBet);
 
 		// Pulsanti azioni
 		invitaBtn = new Button("Invito");
@@ -214,6 +219,7 @@ public class GameTablePane extends VBox {
 	 */
 	public void refresh() {
 		Game game = manager.getClient().getGameView();
+		Player me = game.getPlayers().get(manager.getClient().getClientId());
 		if (game == null)
 			return;
 
@@ -222,8 +228,6 @@ public class GameTablePane extends VBox {
 
 		// Piatto
 		potLabel.setText("Piatto: " + game.getPot().getTotal());
-
-		minBetLabel.setText("MinBet: " + game.getPot().getMaxBet());
 
 		myMaxBetLabel.setText(
 				"MyBet: " + game.getPlayers().get(manager.getClient().getClientId()).getStatus().getTotalBet());
@@ -234,11 +238,19 @@ public class GameTablePane extends VBox {
 		else
 			myMaxBetLabel.setTextFill(Color.RED);
 
-		betAmountField.setText("" + (game.getPot().getMaxBet()
-				- game.getPlayers().get(manager.getClient().getClientId()).getStatus().getTotalBet()));
+		betAmountField.setText("" + (game.getPot().getMaxBet() - me.getStatus().getTotalBet())); // puntata minima
+
+		minBet.setText("( " + (game.getPot().getMaxBet() - me.getStatus().getTotalBet()));
+
+		if (game.getPot().getTotal() == 0)
+			maxBet.setText((game.getPot().getMinBet()) + " )");
+		else if (game.getPot().getTotal() > Server.MAXBET)
+			maxBet.setText((Server.MAXBET - me.getStatus().getTotalBet()) + " )");
+		else
+			maxBet.setText((game.getPot().getTotal() - me.getStatus().getTotalBet()) + " )");
 
 		// Turno
-		Player me = game.getPlayers().get(manager.getClient().getClientId());
+
 		if (me != null) {
 			if (game.getCurrentTurn() == manager.getClient().getClientId()) {
 				turnLabel.setText("È il tuo turno");
