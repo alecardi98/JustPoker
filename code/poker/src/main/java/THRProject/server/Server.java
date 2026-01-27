@@ -3,6 +3,7 @@ package THRProject.server;
 import THRProject.database.DatabaseManager;
 
 import java.io.IOException;
+import java.io.StreamCorruptedException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -62,26 +63,38 @@ public final class Server {
 	}
 
 	/*
-	 * Metodo che fa partire il Server permettendo la connessione dei Clients
+	 * Metodo che fa partire il Server permettendo la connessione dei Client
 	 */
 	public void startServer() {
 		ServerSocket serverSocket = null;
+
 		try {
 			serverSocket = new ServerSocket(PORT);
 			logger.info("Server avviato sulla porta " + PORT);
 			logger.info("In attesa di client...");
-			// attesa unione giocatori
-			do {
-				Socket clientSocket = serverSocket.accept(); // accetta nuovo client
+
+			while (clientHandlers.size() < MAXPLAYERS) {
+				Socket clientSocket = serverSocket.accept();
 				logger.info("Nuovo client connesso: " + clientSocket.getInetAddress());
 				ClientHandler handler = new ClientHandler(clientSocket, nextId());
-				logger.info("Creato Handler per Client " + handler.getClientId());
-				clientHandlers.put(handler.getClientId(), handler);
-				new Thread(handler).start();
-			} while (clientHandlers.size() < MAXPLAYERS); // giocano solo MAXPLAYERS giocatori
+
+				try {
+					handler.init();
+					clientHandlers.put(handler.getClientId(), handler);
+					new Thread(handler).start();
+				} catch (StreamCorruptedException e) {
+					logger.error("ERRORE! Connessione non valida, client rifiutato.");
+					clientSocket.close();
+				} catch (IOException e) {
+					logger.error("ERRORE! Errore I/O durante init client.");
+					clientSocket.close();
+				}
+			}
+
+			logger.info("Numero massimo di giocatori ( " + MAXPLAYERS + " ) raggiunto.");
+
 		} catch (IOException e) {
-			logger.warn("ERRORE! Il server non riesce a creare il socket.");
-			e.printStackTrace();
+			logger.error("ERRORE! Il server non riesce a creare il socket.");
 		} finally {
 			if (serverSocket != null && !serverSocket.isClosed()) {
 				try {

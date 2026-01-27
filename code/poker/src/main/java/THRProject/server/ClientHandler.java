@@ -29,20 +29,16 @@ class ClientHandler implements Runnable, Communicator {
 	public ClientHandler(Socket clientSocket, int clientId) {
 		this.clientId = clientId;
 		socket = clientSocket;
-		try {
-			out = new ObjectOutputStream(clientSocket.getOutputStream());
-			try {
-				in = new ObjectInputStream(clientSocket.getInputStream());
-			} catch (StreamCorruptedException e) {
-				// Se i dati non sono oggetti Java, chiudi subito il socket
-				logger.error("ERRORE! Connessione non valida, chiusura socket  " + clientId + ".");
-				socket.close();
-				return; // termina il thread clientHandler
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			return;
-		}
+	}
+
+	/*
+	 * Metodo che inizializza gli stream
+	 */
+	public void init() throws IOException {
+		out = new ObjectOutputStream(socket.getOutputStream());
+		out.flush(); 
+		in = new ObjectInputStream(socket.getInputStream());
+		logger.info("Creato Handler per Client " + clientId);
 		sendMessage(new Message(ControlType.CLIENT_ID, clientId));
 	}
 
